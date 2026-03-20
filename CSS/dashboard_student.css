@@ -17,12 +17,14 @@ body {
 .logo {
   font-size: 28px;
   font-weight: bold;
+  margin-top: 20px;
 }
 
 .right-header {
   display: flex;
   align-items: center;
   gap: 15px;
+  margin-top: 20px;
 }
 
 .avatar {
@@ -53,7 +55,10 @@ body {
   padding: 10px;
   color: black;
   margin-bottom: 20px;
+  width: 270px;
+  height: 255px;
 }
+
 
 /* RIGHT */
 .right-panel {
@@ -85,20 +90,28 @@ body {
   padding: 30px;
 }
 
+.courses-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+}
+
 .search {
   width: 300px;
   padding: 10px;
   border-radius: 20px;
   border: 1px solid #ccc;
-  margin-bottom: 20px;
 }
+
 
 .course-card {
   background: #c9cbe6;
   padding: 20px;
   border-radius: 20px;
   margin-top: 15px;
-}ล
+  margin: 15px 30px;
+}
 
 /* ===== CALENDAR CUSTOM ===== */
 
@@ -108,15 +121,15 @@ body {
 
 /* HEADER */
 .fc-toolbar-title {
-  font-size: 28px !important;
+  font-size: 20px !important;   /* 🔥 ปรับขนาดตรงนี้ */
   font-weight: bold;
 }
-
 /* ปุ่ม today */
 .fc-button {
-  border-radius: 10px !important;
+  border-radius: 8px !important;
   border: none !important;
-  padding: 6px 12px !important;
+  padding: 2px 6px !important;   /* 🔥 ลดตรงนี้ */
+  font-size: 12px !important;    /* 🔥 ลดตัวอักษร */
 }
 
 .fc-button-primary {
@@ -137,11 +150,37 @@ body {
   border: 1px solid #ddd !important;
 }
 
+
+
+
 /* วัน */
-.fc-daygrid-day-number {
-  font-size: 16px;
-  padding: 5px;
+.fc-daygrid-day-frame {
+  position: relative;
+  font-size: 12px;
+  padding: 2px;
 }
+
+/* event ลอยไปมุมล่างซ้าย */
+.fc-daygrid-event {
+  position: absolute !important;
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
+}
+
+/* ทำให้ event เล็กแบบ badge */
+.fc-event {
+  font-size: 10px !important;
+  padding: 2px 4px !important;
+  border-radius: 8px !important;
+}
+
+
+.fc {
+  font-size: 12px;
+}
+
+
 
 /* event */
 .fc-event {
