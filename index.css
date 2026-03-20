@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+  }
+  
+  /* container */
+  .login-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* LEFT SIDE */
+  .left {
+    flex: 1;
+    background: #5b5fc7;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .left h1 {
+    font-size: 36px;
+  }
+  
+  /* RIGHT SIDE */
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px;
+    background: white;
+  }
+  
+  .right h2 {
+    margin-bottom: 20px;
+  }
+  
+  .right input {
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .right button {
+    padding: 12px;
+    background: #5b5fc7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  #calendar {
+    background: #f7f7f7;
+    border-radius: 20px;
+    padding: 20px;
+  }
+  
+  /* ซ่อน border ข้างบน */
+  .fc-scrollgrid {
+    border: none !important;
+  }
+  
+  /* ทำหัววัน (Sun Mon Tue) */
+  .fc-col-header-cell {
+    font-weight: bold;
+    font-size: 14px;
+  }

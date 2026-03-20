@@ -1,0 +1,170 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+/* HEADER */
+.header {
+  background: #5658a7;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.right-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* TOP SECTION */
+.top-section {
+  display: flex;
+  background: #5658a7;
+  padding: 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  color: white;
+}
+
+/* LEFT */
+.left-panel {
+  width: 300px;
+}
+
+#calendar {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  color: black;
+  margin-bottom: 20px;
+}
+
+/* RIGHT */
+.right-panel {
+  flex: 1;
+  margin-left: 30px;
+}
+
+/* ANNOUNCEMENT */
+.announcement {
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  font-size: 20px;
+  background: #ddd;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+/* COURSES */
+.courses-section {
+  padding: 30px;
+}
+
+.search {
+  width: 300px;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.course-card {
+  background: #c9cbe6;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 15px;
+}ล
+
+/* ===== CALENDAR CUSTOM ===== */
+
+.fc {
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.fc-toolbar-title {
+  font-size: 28px !important;
+  font-weight: bold;
+}
+
+/* ปุ่ม today */
+.fc-button {
+  border-radius: 10px !important;
+  border: none !important;
+  padding: 6px 12px !important;
+}
+
+.fc-button-primary {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+/* ปุ่ม < > */
+.fc-prev-button,
+.fc-next-button {
+  background: #2f3b52 !important;
+  color: white !important;
+  border-radius: 10px !important;
+}
+
+/* ตาราง */
+.fc-daygrid-day {
+  border: 1px solid #ddd !important;
+}
+
+/* วัน */
+.fc-daygrid-day-number {
+  font-size: 16px;
+  padding: 5px;
+}
+
+/* event */
+.fc-event {
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  padding: 2px 6px !important;
+}
+
+/* สี event */
+.fc-event-title {
+  color: white;
+}
+
+/* custom event colors */
+.fc-event.red {
+  background-color: red !important;
+}
+
+.fc-event.orange {
+  background-color: orange !important;
+}
+
+/* highlight วันนี้ */
+.fc-day-today {
+  background: #f3ecd2 !important;
+}
