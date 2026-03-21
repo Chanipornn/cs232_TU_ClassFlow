@@ -94,6 +94,69 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
+/* ===== CALENDAR CUSTOM ===== */
+
+.fc {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+
+/* HEADER */
+.fc-toolbar-title {
+  font-size: 20px !important;
+  font-weight: bold;
+}
+
+/* BUTTON */
+.fc-button {
+  border-radius: 8px !important;
+  border: none !important;
+  padding: 2px 6px !important;
+  font-size: 12px !important;
+  transition: 0.3s;
+}
+
+.fc-button:hover {
+  transform: scale(1.1);
+}
+
+.fc-button-primary {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  background: #2f3b52 !important;
+  color: white !important;
+  border-radius: 10px !important;
+}
+
+/* DAY GRID */
+.fc-daygrid-day {
+  border: 1px solid #ddd !important;
+  height: 60px !important; /* 🔥 ทำให้ช่องเตี้ยลง */
+}
+
+.fc-daygrid-day-frame {
+  min-height: 60px !important; /* 🔥 คุมความสูง */
+  height: 60px !important;
+  padding: 2px !important;
+}
+
+/* DATE NUMBER */
+.fc-daygrid-day-number {
+  font-size: 12px;
+  padding: 2px;
+}
+
+/* TODAY */
+.fc-day-today {
+  background: #f0e5be !important;
+}
+
+
+
 
 /* RIGHT */
 .right-panel {
@@ -236,83 +299,3 @@ body {
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-/* ===== CALENDAR CUSTOM ===== */
-
-.fc {
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-}
-
-.fc-toolbar-title {
-  font-size: 20px !important;
-  font-weight: bold;
-}
-
-.fc-button {
-  border-radius: 8px !important;
-  border: none !important;
-  padding: 2px 6px !important;
-  font-size: 12px !important;
-  transition: 0.3s;
-}
-
-.fc-button:hover {
-  transform: scale(1.1);
-}
-
-.fc-button-primary {
-  background: #6c757d !important;
-  color: white !important;
-}
-
-.fc-prev-button,
-.fc-next-button {
-  background: #2f3b52 !important;
-  color: white !important;
-  border-radius: 10px !important;
-}
-
-.fc-daygrid-day {
-  border: 1px solid #ddd !important;
-}
-
-.fc-daygrid-day-frame {
-  position: relative;
-  font-size: 12px;
-  padding: 2px;
-}
-
-.fc-daygrid-event {
-  position: absolute !important;
-  bottom: 2px;
-  left: 2px;
-  right: 2px;
-}
-
-/* event */
-.fc-event {
-  border-radius: 6px !important;
-  font-size: 12px !important;
-  padding: 2px 6px !important;
-  transition: 0.2s;
-}
-
-.fc-event:hover {
-  transform: scale(1.1);
-}
-
-.fc-event-title {
-  color: white;
-}
-
-.fc-event.red {
-  background-color: red !important;
-}
-
-.fc-event.orange {
-  background-color: orange !important;
-}
-
-.fc-day-today {
-  background: #f3ecd2 !important;
-}

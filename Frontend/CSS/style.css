@@ -1,0 +1,94 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+}
+
+/* container */
+.login-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* LEFT SIDE */
+.left {
+  flex: 1;
+  background: #5658a7;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* TEXT */
+.left-content {
+  text-align: left;
+  z-index: 2;
+}
+
+.left h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.left p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* CIRCLES */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* วงใหญ่ */
+.circle.big {
+  width: 270px;
+  height: 270px;
+  background: #ffffff;
+  right: -100px;
+  bottom: 100px;
+}
+
+/* วงเล็ก */
+.circle.small {
+  width: 200px;
+  height: 200px;
+  background: #8c8fe6;
+  right: 80px;
+  bottom: 50px;
+}
+
+/* RIGHT SIDE */
+.right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  background: white;
+}
+
+.right h2 {
+  margin-bottom: 20px;
+}
+
+.right input {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.right button {
+  padding: 12px;
+  background: #5b5fc7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
