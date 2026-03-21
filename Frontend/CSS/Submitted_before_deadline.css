@@ -1,0 +1,106 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+.header {
+    background: #5658a7;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+  align-items: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.avatar:hover {
+  transform: scale(1.1);
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.submission p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.submit-btn {
+    background: linear-gradient(to right, #0f7c05c1, #8af27ff5);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 12px;
+    display: block;
+    margin: 15px auto 0;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+  transform: scale(1.02);
+}
+
+.submission {
+    margin: 30px;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #0C0000;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2); ;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+tr:nth-child(even) {
+  background-color: #d1d1e657;
+}
+
+tr:nth-child(odd) {
+  background-color: #464a9b57;
+}
+
+.submission td:first-child {
+  border-right: 1px solid #ccc;
+}
+
+.edit-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: #464A9B;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+  transform: scale(1.02);
+}
+
+.note {
+    text-align: center;
+    font-size: 12px;
+    color: gray;
+    margin-bottom: 20px;
+}
