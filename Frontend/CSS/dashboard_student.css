@@ -18,6 +18,11 @@ body {
   font-size: 28px;
   font-weight: bold;
   margin-top: 20px;
+  transition: 0.3s;
+}
+
+.logo:hover {
+  opacity: 0.8;
 }
 
 .icon-bell {
@@ -27,10 +32,15 @@ body {
   cursor: pointer;
   margin-top: 20px;
   filter: brightness(0) invert(1);
+  transition: 0.3s;
+}
+
+.icon-bell:hover {
+  transform: scale(1.2);
 }
 
 .right-header span {
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .right-header {
@@ -45,6 +55,12 @@ body {
   background: white;
   border-radius: 50%;
   margin-top: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.avatar:hover {
+  transform: scale(1.1);
 }
 
 /* TOP SECTION */
@@ -71,6 +87,12 @@ body {
   margin-bottom: 20px;
   width: 270px;
   height: 255px;
+  transition: 0.3s;
+}
+
+#calendar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
 
 /* RIGHT */
@@ -110,13 +132,27 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.announcement:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 .arrow {
   font-size: 20px;
-  background: #ddd;
+  background: #e4e4ed;
   padding: 10px;
   border-radius: 50%;
+  transition: 0.3s;
+}
+
+.announcement:hover .arrow {
+  background: #5658a7;
+  color: white;
+  transform: translateX(5px);
 }
 
 /* COURSES */
@@ -131,18 +167,73 @@ body {
   padding: 1px 30px;
 }
 
-.search {
-  width: 300px;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
+.courses-header h2 {
+  margin-top: 30px;
 }
 
+/* SEARCH */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 25px;
+  padding: 5px;
+  width: 350px;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.search-box:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.search {
+  border: none;
+  outline: none;
+  padding: 10px;
+  flex: 1;
+  border-radius: 25px;
+}
+
+.search-icon-box {
+  background: #eee;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.search-box:hover .search-icon-box {
+  background: #5658a7;
+}
+
+.search-icon-box img {
+  width: 16px;
+  height: 16px;
+  transition: 0.3s;
+}
+
+.search-box:hover .search-icon-box img {
+  filter: brightness(0) invert(1);
+}
+
+/* COURSE CARD */
 .course-card {
   background: #c9cbe6;
   padding: 20px;
   border-radius: 20px;
   margin: 15px 30px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.course-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  background: #b4b6dd;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 /* ===== CALENDAR CUSTOM ===== */
@@ -152,18 +243,21 @@ body {
   font-size: 12px;
 }
 
-/* HEADER */
 .fc-toolbar-title {
   font-size: 20px !important;
   font-weight: bold;
 }
 
-/* ปุ่ม today */
 .fc-button {
   border-radius: 8px !important;
   border: none !important;
   padding: 2px 6px !important;
   font-size: 12px !important;
+  transition: 0.3s;
+}
+
+.fc-button:hover {
+  transform: scale(1.1);
 }
 
 .fc-button-primary {
@@ -171,7 +265,6 @@ body {
   color: white !important;
 }
 
-/* ปุ่ม < > */
 .fc-prev-button,
 .fc-next-button {
   background: #2f3b52 !important;
@@ -179,19 +272,16 @@ body {
   border-radius: 10px !important;
 }
 
-/* ตาราง */
 .fc-daygrid-day {
   border: 1px solid #ddd !important;
 }
 
-/* วัน */
 .fc-daygrid-day-frame {
   position: relative;
   font-size: 12px;
   padding: 2px;
 }
 
-/* event ลอยไปมุมล่างซ้าย */
 .fc-daygrid-event {
   position: absolute !important;
   bottom: 2px;
@@ -199,26 +289,22 @@ body {
   right: 2px;
 }
 
-/* ทำให้ event เล็กแบบ badge */
-.fc-event {
-  font-size: 10px !important;
-  padding: 2px 4px !important;
-  border-radius: 8px !important;
-}
-
 /* event */
 .fc-event {
   border-radius: 6px !important;
   font-size: 12px !important;
   padding: 2px 6px !important;
+  transition: 0.2s;
 }
 
-/* สี event */
+.fc-event:hover {
+  transform: scale(1.1);
+}
+
 .fc-event-title {
   color: white;
 }
 
-/* custom event colors */
 .fc-event.red {
   background-color: red !important;
 }
@@ -227,7 +313,6 @@ body {
   background-color: orange !important;
 }
 
-/* highlight วันนี้ */
 .fc-day-today {
   background: #f3ecd2 !important;
 }
