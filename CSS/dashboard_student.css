@@ -20,11 +20,23 @@ body {
   margin-top: 20px;
 }
 
+.icon-bell {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.right-header span {
+  margin-top: 20px; 
+}
+
 .right-header {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 10px;
 }
 
 .avatar {
@@ -32,6 +44,7 @@ body {
   height: 40px;
   background: white;
   border-radius: 50%;
+  margin-top: 20px;
 }
 
 /* TOP SECTION */
@@ -47,6 +60,7 @@ body {
 /* LEFT */
 .left-panel {
   width: 300px;
+  margin-top: -15px;
 }
 
 #calendar {
@@ -59,14 +73,34 @@ body {
   height: 255px;
 }
 
-
 /* RIGHT */
 .right-panel {
   flex: 1;
   margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin-top: -15px;
 }
 
 /* ANNOUNCEMENT */
+.announcement-scroll {
+  overflow-y: auto;
+  max-height: 370px;
+  padding-right: 6px;
+}
+
+.announcement-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.announcement-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+}
+.announcement-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .announcement {
   background: white;
   color: black;
@@ -87,14 +121,14 @@ body {
 
 /* COURSES */
 .courses-section {
-  padding: 30px;
+  padding: 15px 30px;
 }
 
 .courses-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30px;
+  padding: 1px 30px;
 }
 
 .search {
@@ -104,12 +138,10 @@ body {
   border: 1px solid #ccc;
 }
 
-
 .course-card {
   background: #c9cbe6;
   padding: 20px;
   border-radius: 20px;
-  margin-top: 15px;
   margin: 15px 30px;
 }
 
@@ -117,19 +149,21 @@ body {
 
 .fc {
   font-family: Arial, sans-serif;
+  font-size: 12px;
 }
 
 /* HEADER */
 .fc-toolbar-title {
-  font-size: 20px !important;   /* 🔥 ปรับขนาดตรงนี้ */
+  font-size: 20px !important;
   font-weight: bold;
 }
+
 /* ปุ่ม today */
 .fc-button {
   border-radius: 8px !important;
   border: none !important;
-  padding: 2px 6px !important;   /* 🔥 ลดตรงนี้ */
-  font-size: 12px !important;    /* 🔥 ลดตัวอักษร */
+  padding: 2px 6px !important;
+  font-size: 12px !important;
 }
 
 .fc-button-primary {
@@ -149,9 +183,6 @@ body {
 .fc-daygrid-day {
   border: 1px solid #ddd !important;
 }
-
-
-
 
 /* วัน */
 .fc-daygrid-day-frame {
@@ -174,13 +205,6 @@ body {
   padding: 2px 4px !important;
   border-radius: 8px !important;
 }
-
-
-.fc {
-  font-size: 12px;
-}
-
-
 
 /* event */
 .fc-event {

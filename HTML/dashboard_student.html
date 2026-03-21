@@ -3,11 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="dashboard_student.css">
-
-  <!-- FullCalendar -->
+  <link rel="stylesheet" href="../CSS/dashboard_student.css">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 </head>
@@ -17,9 +13,8 @@
   <!-- HEADER -->
   <div class="header">
     <div class="logo">TU ClassFlow</div>
-
     <div class="right-header">
-      <span>🔔</span>
+      <img src="/src/notification.png" alt="notification" class="icon-bell">
       <span>Sawadee Monday</span>
       <div class="avatar"></div>
     </div>
@@ -31,10 +26,7 @@
     <!-- LEFT -->
     <div class="left-panel">
       <h3>Calendar</h3>
-
-      <!-- CALENDAR -->
       <div id="calendar"></div>
-
       <h4>Upcoming Deadlines</h4>
       <ul>
         <li>⏰ Assignment 1 - 15 Mar</li>
@@ -47,51 +39,83 @@
     <div class="right-panel">
       <h2>Announcement</h2>
 
-      <div class="announcement">
-        <div>
-          <b>📢 Midterm Exam Announcement</b><br>
-          Instructor: Dr. Somchai<br>
-          Date: 10 Mar 2026<br>
-          Midterm exam will be held on 20 March.
+      <div class="announcement-scroll">
+        <div class="announcement">
+          <div>
+            <b>📢 Midterm Exam Announcement</b><br>
+            Instructor: Dr. Somchai<br>
+            Date: 10 Mar 2026<br>
+            Midterm exam will be held on 20 March.
+          </div>
+          <div class="arrow">→</div>
         </div>
-        <div class="arrow">→</div>
-      </div>
 
-      <div class="announcement">
-        <div>
-          <b>📢 Midterm Exam Announcement</b><br>
-          Instructor: Dr. Somchai<br>
-          Date: 10 Mar 2026<br>
-          Midterm exam will be held on 20 March.
+        <div class="announcement">
+          <div>
+            <b>📢 Midterm Exam Announcement</b><br>
+            Instructor: Dr. Somchai<br>
+            Date: 10 Mar 2026<br>
+            Midterm exam will be held on 20 March.
+          </div>
+          <div class="arrow">→</div>
         </div>
-        <div class="arrow">→</div>
+
+        <div class="announcement">
+          <div>
+            <b>📢 Midterm Exam Announcement</b><br>
+            Instructor: Dr. Somchai<br>
+            Date: 10 Mar 2026<br>
+            Midterm exam will be held on 20 March.
+          </div>
+          <div class="arrow">→</div>
+        </div>
+
+        <div class="announcement">
+          <div>
+            <b>📢 Midterm Exam Announcement</b><br>
+            Instructor: Dr. Somchai<br>
+            Date: 10 Mar 2026<br>
+            Midterm exam will be held on 20 March.
+          </div>
+          <div class="arrow">→</div>
+        </div>
+
+        <div class="announcement">
+          <div>
+            <b>📢 Midterm Exam Announcement</b><br>
+            Instructor: Dr. Somchai<br>
+            Date: 10 Mar 2026<br>
+            Midterm exam will be held on 20 March.
+          </div>
+          <div class="arrow">→</div>
+        </div>
       </div>
 
     </div>
-  </div>
+    <!-- ปิด right-panel ตรงนี้ -->
 
-  <!-- COURSES -->
-  <div class="courses-header">
-    <h2>Courses</h2>
-    <input class="search" placeholder="Search...">
   </div>
-  
-  </div>
+  <!-- ปิด top-section ตรงนี้ -->
+
+  <!-- COURSES (อยู่นอก top-section แล้ว) -->
+  <div class="courses-section">
+    <div class="courses-header">
+      <h2>Courses</h2>
+      <input class="search" placeholder="Search...">
+    </div>
+
     <div class="course-card">
       <b>CS332/CS232 INTRODUCTION TO CLOUD COMPUTING TECHNOLOGY</b><br>
       Instructor: Ms. Prapaporn / Ms. Wanida<br>
       Assignments: 3<br>
       Next Deadline: 15 Mar
     </div>
-
     <div class="course-card"></div>
     <div class="course-card"></div>
     <div class="course-card"></div>
-
   </div>
 
-  <!-- JS -->
-  <script src="dashboard_student.js"></script>
+  <script src="../JS/dashboard_student.js"></script>
 
 </body>
 </html>
