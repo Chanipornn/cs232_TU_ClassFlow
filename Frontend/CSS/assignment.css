@@ -1,0 +1,174 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    background-color: #f5f5f5;
+  }
+  
+  /* HEADER */
+  .header {
+    background: #5a5bbf;
+    padding: 40px 0 80px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
+  
+  .header-inner {
+    max-width: 1100px;
+    margin: auto;
+    color: white;
+    padding: 0 20px;
+  }
+  
+  /* TOP BAR */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+  
+  /* BACK BUTTON */
+  .back-btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 15px;
+    flex-shrink: 0;
+  }
+  
+  .tab {
+    padding: 10px 28px;
+    border-radius: 30px;
+    border: none;
+    background: #dcdcff;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  }
+  
+  .tab.active {
+    background: white;
+    color: #5a5bbf;
+    font-weight: bold;
+  }
+  
+  /* SEARCH */
+  .search-box {
+    flex: 1; 
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .search-box input {
+    width: 100%;
+    max-width: 650px; 
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  }
+  
+  /* TEXT */
+  .header h2 {
+    font-size: 22px;
+    margin: 10px 0;
+    font-weight: bold;
+  }
+  
+  .header p {
+    margin: 5px 0;
+    font-size: 15px;
+  }
+  
+  /* PROGRESS BAR */
+  .progress-bar {
+    width: 300px;
+    height: 10px;
+    background: #ddd;
+    border-radius: 20px;
+    margin-top: 15px;
+  }
+  
+  .progress {
+    width: 65%;
+    height: 100%;
+    background: #28a745;
+    border-radius: 20px;
+  }
+  
+  /* CONTENT */
+  .container {
+    max-width: 1100px;
+    margin: -60px auto 0;
+    padding: 20px;
+  }
+  
+  /* CARD */
+  .card {
+    background: white;
+    border-radius: 25px;
+    padding: 25px 30px;
+    margin-bottom: 25px;
+  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    border: 1px solid #ddd;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  }
+  
+  /* TEXT IN CARD */
+  .card h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .card p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* STATUS */
+  .status {
+    width: 150px;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .status.red {
+    background: #ff4d4d;
+    color: white;
+  }
+  
+  .status.green {
+    background: #28a745;
+    color: white;
+  }
+  
+  .status.yellow {
+    background: #ffc107;
+    color: black;
+  }
