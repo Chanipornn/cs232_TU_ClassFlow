@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+.header {
+    background: #5658a7;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.circle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.circle-btn:hover {
+  transform: scale(1.1);
+}
+
+/* card */
+.card {
+  background: #f2f2f2;
+  margin: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #0c000079;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* active card */
+.card.active {
+  background: #d9d9f2;
+}
+
+/* top row */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card:hover{
+  transform: translateY(3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* today + dot */
+.today {
+  font-weight: bold;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  background: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+/* time */
+.time {
+  font-weight: bold;
+}
+
+/* text */
+.title {
+  font-weight: bold;
+  margin: 10px 0 5px;
+}
+
+.desc {
+  color: #333;
+  margin: 5px 0;
+}
+
+.time-small {
+  font-size: 12px;
+  color: gray;
+}
+
+/* line */
+.line {
+  height: 1px;
+  background: #ccc;
+  margin-top: 10px;
+  width: 80%;
+}
