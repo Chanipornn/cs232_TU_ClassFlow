@@ -39,12 +39,12 @@ body {
 
 /* card */
 .card {
-  background: #f2f2f2;
+  background: #ececec;
   margin: 30px;
   padding: 20px;
   border-radius: 12px;
   border: 1px solid #0c000079;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.101);
 }
 
 /* active card */
