@@ -67,10 +67,6 @@ body {
     cursor: pointer;
 }
 
-.submit-btn:hover {
-  transform: scale(1.02);
-}
-
 .submission {
     margin: 30px;
     padding: 15px;
@@ -82,6 +78,7 @@ body {
 .submission p {
     margin: 5px 0;
     font-size: 14px;
+    color: #5658a7;
 }
 
 table {
