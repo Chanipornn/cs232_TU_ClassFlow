@@ -1,0 +1,262 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f3f3;
+  }
+  
+  /* ================= HEADER ================= */
+  .header {
+    background: #5658a7;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+  }
+  
+  /* logo เหมือน dashboard */
+  .logo {
+    font-size: 28px;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: 20px;
+  }
+  
+  .logo:hover {
+    opacity: 0.8;
+  }
+  
+  .right-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  /* ไอคอน */
+  .icon-bell {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .icon-bell:hover {
+    transform: scale(1.2);
+  }
+  
+  /* ชื่อ */
+  .right-header span {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  /* avatar */
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .avatar:hover {
+    transform: scale(1.1);
+  }
+  
+  /* ================= TOP BOX ================= */
+  .top-box {
+    background: #5658a7;
+    padding: 20px 40px 30px 40px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+  
+  /* ================= TABS ================= */
+  .course-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    margin-top: -5px;
+    gap: 23px; 
+  }
+  
+  /* ปุ่ม */
+  .tab {
+    padding: 10px 22px;
+    border-radius: 25px;
+    border: none;
+    background: #e0e0e0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.25s;
+  }
+  
+  /* hover */
+  .tab:hover {
+    background: #c9c9f0;
+    transform: translateY(-2px);
+  }
+  
+  /* active */
+  .tab.active {
+    background: #d6d6f5;
+    color: #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  
+  .tab.active:hover {
+    background: #bfc2ff;
+  }
+  
+  /* ================= SEARCH ================= */
+/* ================= SEARCH ================= */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 25px;
+    padding: 5px;
+    width: 100%;              /* 👈 เต็มความกว้าง */
+    margin-top: 15px;
+    transition: 0.3s;
+  }
+  
+  /* hover ทั้งกล่อง */
+  .search-box:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  /* input */
+  .search {
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    flex: 1;                 /* 👈 ยืดเต็ม */
+    border-radius: 25px;
+    font-size: 14px;
+  }
+  
+  /* icon box */
+  .search-icon-box {
+    background: #eee;
+    border-radius: 50%;
+    width: 38px;             /* 👈 ใหญ่ขึ้นนิด */
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+  }
+  
+  /* hover icon */
+  .search-box:hover .search-icon-box {
+    background: #5658a7;
+  }
+  
+  /* icon */
+  .search-icon-box img {
+    width: 18px;
+    height: 18px;
+    transition: 0.3s;
+  }
+  
+  /* icon hover */
+  .search-box:hover .search-icon-box img {
+    filter: brightness(0) invert(1);
+  }
+  
+  /* ================= COURSE SECTION ================= */
+  .course-section {
+    padding: 20px 40px;
+  }
+  
+  /* header (Courses + Select All) */
+  .course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* title Courses */
+  .course-header h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  /* select all */
+  .course-header label {
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  /* ================= LIST ================= */
+  .course-list {
+    margin-top: 15px;
+  }
+  
+  /* row */
+  .course-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  /* checkbox */
+  .course-row input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  
+  /* card */
+  .course-card {
+    background: #c9cbe6;
+    padding: 20px;
+    border-radius: 20px;
+    width: 100%;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  
+  /* title ใน card */
+  .course-card b {
+    font-size: 14px;
+  }
+  
+  /* text ใน card */
+  .course-card {
+    font-size: 13px;
+  }
+  
+  /* hover card */
+  .course-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: #b4b6dd;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+  
+  /* ================= ENROLL BUTTON ================= */
+  .enroll-btn {
+    margin-top: 20px;
+    float: right;
+    padding: 10px 25px;
+    background: #5658a7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+  
+  .enroll-btn:hover {
+    background: #4749a0;
+    transform: translateY(-2px);
+  }
