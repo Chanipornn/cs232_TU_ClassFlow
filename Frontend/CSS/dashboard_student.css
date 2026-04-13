@@ -72,11 +72,51 @@ body {
   border-bottom-right-radius: 30px;
   color: white;
 }
+.course-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+/* ปุ่มทั่วไป */
+.tab {
+  padding: 10px 22px;          /* 👈 ใหญ่ขึ้น */
+  border-radius: 25px;
+  margin-left: 10px;
+  border: none;
+  background: #e0e0e0;
+  cursor: pointer;
+  font-weight: 600;           /* 👈 หนาขึ้น */
+  font-size: 14px;
+  transition: 0.25s;          /* 👈 ลื่น */
+}
+
+/* hover */
+.tab:hover {
+  background: #c9c9f0;
+  transform: translateY(-2px);   /* 👈 ลอยขึ้น */
+}
+
+/* ปุ่มที่เลือก */
+.tab.active {
+  background: #d6d6f5;
+  color: #000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* 👈 เด่นขึ้น */
+}
+
+/* hover ตอน active */
+.tab.active:hover {
+  background: #bfc2ff;
+}
 
 /* LEFT */
 .left-panel {
   width: 300px;
   margin-top: -15px;
+}
+
+.left-panel h3 {
+ margin-left: 10px;
 }
 
 #calendar {
@@ -97,6 +137,7 @@ body {
 /* ===== CALENDAR CUSTOM ===== */
 
 .fc {
+  margin-left: 10px;
   font-family: Arial, sans-serif;
   font-size: 12px;
 }
