@@ -98,6 +98,11 @@ body {
     border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.download-all-btn:hover {
+    text-decoration: underline;
 }
 
 /* Table */
@@ -153,4 +158,5 @@ body {
     padding: 10px 25px;
     border-radius: 10px;
     cursor: pointer;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }

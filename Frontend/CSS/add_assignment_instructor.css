@@ -4,49 +4,46 @@ body {
   background: #f3f3f3;
 }
 
-.header {
-    background: #5658a7;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 40px;
-  align-items: center;
+.main-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(111, 78, 78, 0.05);
+    padding-bottom: 20px;
 }
 
-.left {
-  display: flex;
-  align-items: center;
-  gap: 40px;
+/* Header */
+.header-blue {
+    background-color: #4f58a3;
+    color: white;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-radius: 0 0 30px 30px;
 }
 
-.circle-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid #ffffff;
-  background: transparent;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  cursor: pointer;
+.back-btn {
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid white;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
 }
-
-.circle-btn:hover {
+.back-btn:hover {
   transform: scale(1.1);
 }
 
-.avatar {
-  width: 40px;
-  height: 40px;
-  background: white;
-  border-radius: 50%;
-  transition: 0.3s;
-  cursor: pointer;
-}
+.header-info h1 { margin: 0; font-size: 24px; }
+.semester-tag { font-size: 14px; opacity: 0.8; }
+.user-profile { margin-left: auto; font-size: 40px; }
 
-.avatar:hover {
+.user-profile:hover {
   transform: scale(1.1);
 }
 
