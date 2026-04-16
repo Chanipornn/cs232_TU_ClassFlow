@@ -1,0 +1,153 @@
+let allSubmissions = []; 
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchSubmissions();
+    setupEventListeners();
+});
+
+async function fetchSubmissions() {
+    const API_URL = 'http://localhost:8080/api/submissions'; 
+
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลได้');
+        
+        allSubmissions = await response.json(); 
+        
+        renderTable(allSubmissions);
+        updateStatCards(allSubmissions);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('submission-list').innerHTML = 
+            '<tr><td colspan="4" style="text-align:center;">กรุณารอการเชื่อมต่อข้อมูลจากระบบ...</td></tr>';
+    }
+}
+
+function filterData(status) {
+    let filtered;
+    if (status === 'all') {
+        filtered = allSubmissions;
+    } else if (status === 'on-time') {
+        filtered = allSubmissions.filter(i => i.isLate === false || i.isLate === "false");
+    } else if (status === 'late') {
+        filtered = allSubmissions.filter(i => i.isLate === true || i.isLate === "true");
+    }
+    renderTable(filtered);
+}
+
+function renderTable(data) {
+    const tableBody = document.getElementById('submission-list');
+    tableBody.innerHTML = '';
+
+    if (data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">ไม่พบข้อมูลการส่งงาน</td></tr>';
+        return;
+    }
+
+    data.forEach(item => {
+        const dateClass = (item.isLate === true || item.isLate === "true") ? 'late-text' : '';
+
+        const row = `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td class="${dateClass}">${item.dueDate}</td>
+                <td>
+                    <a href="${item.fileUrl}" class="file-link" download="${item.fileName}">
+                        ${item.fileName} <i class="fas fa-download icon-red"></i>
+                    </a>
+                </td>
+            </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', row);
+    });
+}
+
+function updateStatCards(data) {
+    if (!data || !Array.isArray(data)) return;
+
+    const total = data.length;
+    const onTime = data.filter(i => i.isLate === false || i.isLate === "false").length;
+    const late = data.filter(i => i.isLate === true || i.isLate === "true").length;
+
+    const totalEl = document.querySelector('.stat-submitted .stat-number');
+    const onTimeEl = document.querySelector('.stat-ontime .stat-number');
+    const lateEl = document.querySelector('.stat-late .stat-number');
+
+    if (totalEl) totalEl.innerText = total;
+    if (onTimeEl) onTimeEl.innerText = onTime;
+    if (lateEl) lateEl.innerText = late;
+}
+
+function setupEventListeners() {
+    // 1. คลิกที่กล่อง Stat เพื่อกรองข้อมูล (On time / Late)
+    const cardAll = document.querySelector('.stat-submitted');
+    const cardOnTime = document.querySelector('.stat-ontime');
+    const cardLate = document.querySelector('.stat-late');
+
+    if(cardAll) cardAll.addEventListener('click', () => filterData('all'));
+    if(cardOnTime) cardOnTime.addEventListener('click', () => filterData('on-time'));
+    if(cardLate) cardLate.addEventListener('click', () => filterData('late'));
+
+    // 2. ปุ่ม Toolbar (All, A-Z, Date, ID)
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const type = this.innerText.trim();
+            
+            // เพิ่มเงื่อนไขการเรียกใช้ฟังก์ชันเรียงลำดับ
+            if (type === 'All') {
+                renderTable(allSubmissions); // แสดงทั้งหมดแบบไม่เรียง
+            } else if (type === 'A - Z') {
+                sortData('name');
+            } else if (type === 'Date') {
+                sortData('date');
+            } else if (type === 'ID') {
+                sortData('id');
+            }
+        });
+    });
+
+    // 3. ปุ่ม Download All
+    const downloadAllBtn = document.querySelector('.download-all-btn');
+    if (downloadAllBtn) {
+        downloadAllBtn.addEventListener('click', () => {
+            if (allSubmissions.length === 0) {
+                alert('ไม่มีไฟล์ให้ดาวน์โหลด');
+                return;
+            }
+            allSubmissions.forEach(item => {
+                const link = document.createElement('a');
+                link.href = item.fileUrl;
+                link.download = item.fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    }
+}
+
+function sortData(sortBy) {
+    let sortedData = [...allSubmissions];
+
+    if (sortBy === 'name') {
+        // เรียงตามชื่อตัวอักษร A-Z
+        sortedData.sort((a, b) => a.name.localeCompare(b.name));
+    } 
+    else if (sortBy === 'id') {
+        // เรียงตามรหัสนักศึกษาจากน้อยไปมาก
+        sortedData.sort((a, b) => a.id.localeCompare(b.id));
+    } 
+    else if (sortBy === 'date') {
+        // เรียงตามวันที่ (ต้องมั่นใจว่ารูปแบบวันที่ใน Java ส่งมาเป็นมาตรฐาน เช่น YYYY-MM-DD)
+        sortedData.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    }
+
+    // เมื่อเรียงเสร็จแล้ว สั่งให้ตารางแสดงผลใหม่
+    renderTable(sortedData);
+}

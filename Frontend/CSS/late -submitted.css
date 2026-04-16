@@ -46,6 +46,7 @@ body {
 .user-profile:hover {
   transform: scale(1.1);
 }
+
 .header h2 {
     margin: 0;
     font-size: 18px;
@@ -53,7 +54,7 @@ body {
 
 
 .submit-btn {
-    background: linear-gradient(to right, #0f7c05c1, #8af27ff5);
+    background: linear-gradient(to right, #EF0B0B, #FF8E8E);
     color: white;
     border: none;
     padding: 8px 15px;
@@ -100,28 +101,4 @@ tr:nth-child(odd) {
 .submission td:first-child {
   border-right: 1px solid #86868692;
   width: 40%;
-}
-
-.edit-btn {
-    margin: 20px auto;
-    padding: 10px 20px;
-    background: #464A9B;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-    width: fit-content;
-}
-
-.edit-btn:hover {
-  transform: scale(1.02);
-}
-
-.note {
-    text-align: center;
-    font-size: 12px;
-    color: gray;
-    margin-bottom: 20px;
 }

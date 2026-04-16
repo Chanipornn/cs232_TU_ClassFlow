@@ -61,6 +61,16 @@ body {
     border-radius: 15px;
     text-align: center;
     border: 1px solid #000000;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+.card:active {
+    transform: translateY(0);
 }
 
 .stat-submitted { background: #e2e5f5; color: #4f58a3; }
@@ -88,7 +98,17 @@ body {
     
 }
 
-.filter-btn.active { background: #4f58a3; color: white; }
+.filter-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+.filter-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+.filter-btn:active { background: #4f58a3; color: white; }
 
 .download-all-btn {
     border: 1px solid #d32f2f;
@@ -159,4 +179,20 @@ body {
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.file-link:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.download-all-btn:active {
+    background-color: #d32f2f;
+    color: white;
+    transform: translateY(2px);
+}
+
+.late-text {
+    color: #d32f2f !important;
+    font-weight: bold;
 }
