@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assignments - Active</title>
+  <link rel="stylesheet" href="../css/create_assignment.css" />
+  <script src="../js/create_assignment.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="top-row">
+        <a href="#" class="circle-btn" onclick="history.back(); return false;">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+
+        <div class="tabs">
+          <a href="create_assignments_all.html" class="tab-btn">All</a>
+          <a href="create_assignments_active.html" class="tab-btn active">Active</a>
+          <a href="create_assignments_closed.html" class="tab-btn">Closed</a>
+        </div>
+
+        <div class="search-box">
+          <input type="text" id="searchInput" />
+          <button type="button" class="search-icon-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="course-block">
+        <h1>CS332/CS232 INTRODUCTION TO CLOUD COMPUTING TECHNOLOGY</h1>
+        <p>Assignments: 5</p>
+        <p>Students : 120</p>
+      </div>
+
+      <div class="hero-action">
+        <a href="create_assignment_form.html" class="create-btn">
+          <i class="fa-solid fa-plus"></i> Create Assignment
+        </a>
+      </div>
+    </header>
+
+    <main class="content assignments-list" id="assignmentList">
+      <article class="assignment-card" data-title="Assignment 3 - Cloud Architecture">
+        <div class="assignment-main">
+          <div class="assignment-info">
+            <h2>Assignment 3 - Cloud Architecture</h2>
+            <p class="deadline-text">Deadline: 15 Mar 2026</p>
+            <p>deadline</p>
+            <p>จำนวนคนส่ง / ยังไม่ส่ง</p>
+          </div>
+
+          <div class="assignment-side">
+            <span class="status-badge active-status">Active</span>
+            <div class="action-row">
+              <a href="create_assignment_form.html" class="small-btn edit-btn">Edit</a>
+              <button class="small-btn delete-btn" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="create_assignment_detail.html" class="view-btn">View Submissions</a>
+        </div>
+      </article>
+
+      <article class="assignment-card" data-title="Assignment 2 - Cloud Architecture">
+        <div class="assignment-main">
+          <div class="assignment-info">
+            <h2>Assignment 2 - Cloud Architecture</h2>
+            <p class="deadline-text">Deadline: 15 Mar 2026</p>
+            <p>deadline</p>
+            <p>จำนวนคนส่ง / ยังไม่ส่ง</p>
+          </div>
+
+          <div class="assignment-side">
+            <span class="status-badge active-status">Active</span>
+            <div class="action-row">
+              <a href="create_assignment_form.html" class="small-btn edit-btn">Edit</a>
+              <button class="small-btn delete-btn" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="create_assignment_detail.html" class="view-btn">View Submissions</a>
+        </div>
+      </article>
+
+      <article class="assignment-card" data-title="Assignment 1 - Cloud Architecture">
+        <div class="assignment-main">
+          <div class="assignment-info">
+            <h2>Assignment 1 - Cloud Architecture</h2>
+            <p class="deadline-text">Deadline: 15 Mar 2026</p>
+            <p>deadline</p>
+            <p>จำนวนคนส่ง / ยังไม่ส่ง</p>
+          </div>
+
+          <div class="assignment-side">
+            <span class="status-badge active-status">Active</span>
+            <div class="action-row">
+              <a href="create_assignment_form.html" class="small-btn edit-btn">Edit</a>
+              <button class="small-btn delete-btn" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="create_assignment_detail.html" class="view-btn">View Submissions</a>
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <script src="js/create_assignment.js"></script>
+</body>
+</html>
