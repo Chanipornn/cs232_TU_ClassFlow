@@ -34,7 +34,12 @@ body {
     border-radius: 50%;
     font-size: 20px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
+
 .back-btn:hover {
   transform: scale(1.1);
 }
@@ -195,4 +200,16 @@ body {
 .late-text {
     color: #d32f2f !important;
     font-weight: bold;
+}
+
+#submission-list tr td:nth-child(2) a:hover {
+    text-decoration: underline !important;
+    color: #60669a83 !important;
+    cursor: pointer;
+}
+
+/* หรือถ้าอยากให้กดได้ทั้งแถว */
+#submission-list tr:hover {
+    background-color: #f0f2ff;
+    cursor: pointer;
 }

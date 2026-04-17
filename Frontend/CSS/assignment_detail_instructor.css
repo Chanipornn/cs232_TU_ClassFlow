@@ -34,6 +34,10 @@ body {
     border-radius: 50%;
     font-size: 20px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 .back-btn:hover {
   transform: scale(1.1);
@@ -106,27 +110,17 @@ tr:nth-child(odd) {
 
 .title-group {
     width: 100%;
-    overflow: hidden;    /* ช่วยดัก float ไม่ให้หลุดตำแหน่ง */
+    overflow: hidden;
     display: block;
-    margin-bottom: 10px; /* ระยะห่างระหว่างหัวข้อกับตาราง */
+    margin-bottom: 10px;
 }
 .title-group h3 {
     display: inline-block; /* ทำให้หัวข้อไม่จองพื้นที่เต็มบรรทัด */
     margin: 0;
 }
 
-.edit-btn {
-    font-size: 13px;
-    color: red;
-    text-decoration: none;
-}
-
-.edit-btn:hover {
-    text-decoration: underline;
-}
-
 .download-link {
-    color: #5d67b1; /* สีน้ำเงินม่วงตามธีมของคุณ */
+    color: #5d67b1;
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -137,8 +131,36 @@ tr:nth-child(odd) {
     text-decoration: underline;
 }
 
-/* เจาะจงให้ไอคอนเป็นสีแดง */
 .download-link i {
-    color: #ff4d4d; /* สีแดง */
+    color: #ff4d4d;
     font-size: 14px;
+}
+
+.edit-link {
+    color: #d32f2f;
+    font-size: 13px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.edit-link:hover {
+    text-decoration: underline;
+}
+
+input[type="number"], textarea {
+    border: 1px solid #4b50a8;
+    border-radius: 4px;
+    padding: 5px;
+    font-family: inherit;
+}
+
+#saveFeedback {
+    margin: 20px auto 0;
+    display: block;
+    background: #4b50a8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
 }

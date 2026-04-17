@@ -40,18 +40,18 @@ function renderTable(data) {
     const tableBody = document.getElementById('submission-list');
     tableBody.innerHTML = '';
 
-    if (data.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">ไม่พบข้อมูลการส่งงาน</td></tr>';
-        return;
-    }
-
     data.forEach(item => {
-        const dateClass = (item.isLate === true || item.isLate === "true") ? 'late-text' : '';
+        const isLate = (item.isLate === true || item.isLate === "true");
+        const dateClass = isLate ? 'late-text' : '';
 
         const row = `
             <tr>
                 <td>${item.id}</td>
-                <td>${item.name}</td>
+                <td>
+                    <a href="assignment_detail_instructor.html?studentId=${item.id}" style="text-decoration: none; color: inherit;">
+                        ${item.name}
+                    </a>
+                </td>
                 <td class="${dateClass}">${item.dueDate}</td>
                 <td>
                     <a href="${item.fileUrl}" class="file-link" download="${item.fileName}">

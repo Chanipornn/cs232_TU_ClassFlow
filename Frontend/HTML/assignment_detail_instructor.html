@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>assignment_detail_instructor</title>
     <link rel="stylesheet" href="../CSS/assignment_detail_instructor.css">
+    <script src="../JS/assignment_detail_instructor.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
         <header class="header-blue">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+            <a href="view_all_assignment_Instructor.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
             <div class="header-info">
                 <h1>Assignment 1 - Cloud Architecture</h1>
             </div>
@@ -68,23 +69,21 @@
     <!--Feedback-->
     <div class="submission">
         <div class="title-group">
-        <h3>Feedback</h3>
-        <a href="#" class="edit-btn">Edit ✎</a>
+        <h3>Feedback<span id="editFeedback" class="edit-link">Edit ✎</span></h3>
     </div>
         <table>
             <tr>
                 <td>Grade</td>
-                <td>50.0/50.0</td>
-            </tr>
+                <td id="grade-val">50.0/50.0</td> </tr>
             <tr>
                 <td>Comment</td>
-                <td>Great Job</td>
-            </tr>
+                <td id="comment-val">Great Job</td> </tr>
             <tr>
                 <td>Graded by</td>
                 <td>Nittikhol suksumrong</td>
             </tr>
         </table>
+        <button id="saveFeedback" style="display: none;">Save & Send</button>
     </div>
 
 
