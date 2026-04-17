@@ -8,10 +8,22 @@ body {
     max-width: 900px;
     margin: 0 auto;
     background: white;
-    border-radius: 30px;
+    border-radius: 0px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(111, 78, 78, 0.05);
     padding-bottom: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.empty-state {
+    height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #aaa;
+    font-size: 16px;
 }
 
 /* Header */
