@@ -43,6 +43,16 @@ textarea {
   flex-shrink: 0;
 }
 
+.circle-btn i,
+.profile-btn i,
+.search-icon-btn i,
+.create-btn i,
+.accordion-header i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .profile-btn {
   background: #ffffff;
   color: #222;
@@ -52,7 +62,7 @@ textarea {
 
 .content,
 .detail-content {
-  width: min(92%, 760px);
+  width: min(94%, 1380px);
   margin: 0 auto;
   padding-bottom: 40px;
 }
@@ -89,7 +99,7 @@ textarea {
   justify-content: center;
   font-size: 20px;
   font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .tab-btn.active {
@@ -98,14 +108,16 @@ textarea {
 
 .search-box {
   margin-left: auto;
-  width: min(310px, 100%);
+  width: clamp(250px, 28vw, 420px);
+  min-width: 220px;
+  max-width: 100%;
   height: 44px;
   background: #f5f5f5;
   border-radius: 999px;
   display: flex;
   align-items: center;
   padding: 0 14px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
 .search-box input {
@@ -157,7 +169,7 @@ textarea {
   border-radius: 999px;
   font-size: 20px;
   font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .assignments-list {
@@ -165,12 +177,13 @@ textarea {
 }
 
 .assignment-card {
+  width: 100%;
   background: #f8f8f8;
   border: 1.5px solid #6a6a6a;
   border-radius: 30px;
   padding: 24px 24px 22px;
   margin-bottom: 28px;
-  box-shadow: 0 3px 6px rgba(0,0,0,.18);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
 }
 
 .assignment-main {
@@ -179,10 +192,16 @@ textarea {
   gap: 22px;
 }
 
+.assignment-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .assignment-info h2 {
   margin: 0 0 4px;
   font-size: clamp(22px, 3vw, 26px);
   line-height: 1.2;
+  word-break: break-word;
 }
 
 .assignment-info p {
@@ -190,6 +209,7 @@ textarea {
   font-size: clamp(16px, 2vw, 18px);
   font-weight: 600;
   line-height: 1.35;
+  word-break: break-word;
 }
 
 .deadline-text {
@@ -239,7 +259,7 @@ textarea {
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0,0,0,.18);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 }
 
 .small-btn {
@@ -272,6 +292,31 @@ textarea {
   font-size: 18px;
 }
 
+.empty-state {
+  width: 100%;
+  background: #f8f8f8;
+  border: 1.5px dashed #9a9a9a;
+  border-radius: 30px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+.empty-state h3,
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state h3 + p,
+.empty-state p + p {
+  margin-top: 10px;
+}
+
+.error-hint {
+  color: #b42318;
+  word-break: break-word;
+}
+
 .detail-header {
   background: #4a4fa7;
   color: #fff;
@@ -301,7 +346,7 @@ textarea {
   border: 1.5px solid #6a6a6a;
   border-radius: 30px;
   padding: 30px;
-  box-shadow: 0 3px 6px rgba(0,0,0,.18);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
 }
 
 .detail-text p {
@@ -331,7 +376,7 @@ textarea {
   border-radius: 30px;
   margin-top: 28px;
   overflow: hidden;
-  box-shadow: 0 3px 6px rgba(0,0,0,.18);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
 }
 
 .accordion-card.open {
@@ -355,7 +400,7 @@ textarea {
 .accordion-header i {
   color: red;
   font-size: 18px;
-  transition: transform .2s ease;
+  transition: transform 0.2s ease;
 }
 
 .accordion-card.open .accordion-header i {
