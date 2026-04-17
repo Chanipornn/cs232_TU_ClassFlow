@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+.main-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(111, 78, 78, 0.05);
+    padding-bottom: 20px;
+}
+
+/* Header */
+.header-blue {
+    background-color: #4f58a3;
+    color: white;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-radius: 0 0 30px 30px;
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid white;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+.back-btn:hover {
+  transform: scale(1.1);
+}
+
+
+/* Content */
+.content {
+    height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ข้อความ Not Found */
+.not-found {
+    color: #aaa;
+    font-size: 16px;
+}
