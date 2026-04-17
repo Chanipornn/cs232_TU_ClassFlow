@@ -5,6 +5,10 @@
   font-family: 'Prompt', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background: #ececec;
@@ -28,19 +32,30 @@ textarea {
   min-height: 100vh;
 }
 
+/* ---------------- COMMON ICON BUTTONS ---------------- */
 .circle-btn,
 .profile-btn {
-  width: 56px;
-  height: 56px;
-  border: 3px solid #ffffff;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.circle-btn {
+  border: 3px solid #ffffff;
+  background: transparent;
   color: #ffffff;
   font-size: 28px;
-  background: transparent;
-  flex-shrink: 0;
+}
+
+.profile-btn {
+  background: #ffffff;
+  color: #1f1f1f;
+  border: none;
+  font-size: 30px;
 }
 
 .circle-btn i,
@@ -53,13 +68,6 @@ textarea {
   justify-content: center;
 }
 
-.profile-btn {
-  background: #ffffff;
-  color: #222;
-  border: none;
-  font-size: 34px;
-}
-
 .content,
 .detail-content {
   width: min(94%, 1380px);
@@ -67,6 +75,7 @@ textarea {
   padding-bottom: 40px;
 }
 
+/* ---------------- LIST PAGE ---------------- */
 .hero {
   background: #4a4fa7;
   color: #fff;
@@ -317,6 +326,7 @@ textarea {
   word-break: break-word;
 }
 
+/* ---------------- DETAIL / FORM PAGE ---------------- */
 .detail-header {
   background: #4a4fa7;
   color: #fff;
@@ -357,17 +367,21 @@ textarea {
   line-height: 1.35;
 }
 
+/* gradient button ตามรูป */
 .submission-warning,
 .form-warning {
   margin: 22px auto 0;
   width: fit-content;
-  background: #f3df66;
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 14px;
+  min-width: 410px;
+  max-width: 100%;
+  padding: 13px 24px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #e6c84f 0%, #f5ef6c 100%);
+  color: #ffffff;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
 }
 
 .accordion-card {
@@ -434,6 +448,10 @@ textarea {
 .label-col span {
   color: #7b7b7b;
   font-size: 16px;
+}
+
+.right-col {
+  text-align: right;
 }
 
 .form-top-fields {
@@ -540,8 +558,8 @@ textarea {
 
 .cancel-btn,
 .save-btn {
-  min-width: 120px;
-  height: 42px;
+  min-width: 130px;
+  height: 44px;
   border-radius: 8px;
   font-size: 18px;
 }
@@ -604,6 +622,16 @@ textarea {
     padding-top: 0;
     min-width: unset;
   }
+
+  .right-col {
+    text-align: left;
+  }
+
+  .submission-warning,
+  .form-warning {
+    min-width: unset;
+    width: 100%;
+  }
 }
 
 @media (max-width: 600px) {
@@ -633,5 +661,23 @@ textarea {
   .cancel-btn,
   .save-btn {
     width: 100%;
+  }
+
+  .circle-btn,
+  .profile-btn {
+    width: 52px;
+    height: 52px;
+  }
+
+  .circle-btn {
+    font-size: 24px;
+  }
+
+  .profile-btn {
+    font-size: 26px;
+  }
+
+  .detail-header h1 {
+    font-size: 22px;
   }
 }
