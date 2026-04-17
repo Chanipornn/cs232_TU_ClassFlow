@@ -94,12 +94,16 @@ body {
 .status-badge {
   width: fit-content;
   margin: 38px auto 0;
-  background: #f2df68;
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 14px;
+  padding: 14px 28px;
+  border-radius: 16px;
+
+  background: linear-gradient(90deg, #e6c84f 0%, #f5ef6c 100%);
+
+  color: #ffffff;
   font-weight: 700;
   font-size: clamp(14px, 1.2vw, 18px);
+
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
 .submission-card {
