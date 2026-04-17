@@ -4,19 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Assignment Detail</title>
+
   <link rel="stylesheet" href="../css/create_assignment.css" />
-  <script src="../js/create_assignment.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 <body>
   <div class="page-shell">
     <header class="detail-header">
-      <a href="create_assignments_all.html" class="circle-btn">
+      <a href="create_assignments_all.html" class="circle-btn" aria-label="Back">
         <i class="fa-solid fa-arrow-left"></i>
       </a>
 
       <h1>Assignment 1 - Cloud Architecture</h1>
 
-      <a href="#" class="profile-btn">
+      <a href="#" class="profile-btn" aria-label="Profile">
         <i class="fa-regular fa-user"></i>
       </a>
     </header>
@@ -40,7 +41,7 @@
       </section>
 
       <section class="accordion-card open">
-        <button class="accordion-header" type="button">
+        <button class="accordion-header nav-header" type="button" data-link="create_assignment_form.html">
           <span>Availability</span>
           <i class="fa-solid fa-caret-down"></i>
         </button>
@@ -51,7 +52,7 @@
               <p>Allow submission form</p>
               <p>13 / 02 / 2026</p>
             </div>
-            <div class="label-col">
+            <div class="label-col right-col">
               <p>Enable</p>
               <span>Allow to used</span>
             </div>
@@ -62,7 +63,7 @@
               <p>Due date</p>
               <p>26 / 02 / 2026</p>
             </div>
-            <div class="label-col">
+            <div class="label-col right-col">
               <p>Enable</p>
               <span>Allow to used</span>
             </div>
@@ -73,7 +74,7 @@
               <p>Cut off date</p>
               <p>26 / 02 / 2026</p>
             </div>
-            <div class="label-col">
+            <div class="label-col right-col">
               <p>Enable</p>
               <span>Allow to used</span>
             </div>
@@ -84,7 +85,7 @@
               <p>Remind me to grade</p>
               <p>26 / 02 / 2026</p>
             </div>
-            <div class="label-col">
+            <div class="label-col right-col">
               <p>Enable</p>
               <span>Allow to used</span>
             </div>
@@ -93,7 +94,7 @@
       </section>
 
       <section class="accordion-card">
-        <button class="accordion-header" type="button">
+        <button class="accordion-header nav-header" type="button" data-link="create_assignment_form.html">
           <span>Submission Type</span>
           <i class="fa-solid fa-caret-down"></i>
         </button>
@@ -134,6 +135,6 @@
     </main>
   </div>
 
-  <script src="js/create_assignment.js"></script>
+  <script src="../js/create_assignment.js"></script>
 </body>
 </html>
