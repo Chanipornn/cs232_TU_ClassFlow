@@ -12,6 +12,9 @@ body {
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(111, 78, 78, 0.05);
     padding-bottom: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
@@ -41,6 +44,16 @@ body {
 }
 .back-btn:hover {
   transform: scale(1.1);
+}
+
+.empty-state {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b5b5b5; /* สีเทาตามรูป Figma */
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .header-info h1 { margin: 0; font-size: 24px; }
