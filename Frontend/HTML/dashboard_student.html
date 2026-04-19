@@ -4,8 +4,12 @@
   <meta charset="UTF-8">
   <title>Dashboard</title>
   <link rel="stylesheet" href="../CSS/dashboard_student.css">
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+
+
+
 </head>
 
 <body>
@@ -13,9 +17,10 @@
   <!-- HEADER -->
   <div class="header">
     <div class="logo">TU ClassFlow</div>
+
     <div class="right-header">
       <img src="/Frontend/src/notification.png" alt="notification" class="icon-bell">
-      <span>Sawadee Monday</span>
+      <span id="username">Loading...</span>
       <div class="avatar"></div>
     </div>
   </div>
