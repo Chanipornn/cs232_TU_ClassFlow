@@ -96,15 +96,27 @@ body {
 .signup-text {
   margin-top: 15px;
   font-size: 14px;
-  text-align: center;
 }
 
 .signup-text a {
-  color: #4CAF50;
+  color: #5b5fc7;
   text-decoration: none;
   font-weight: bold;
 }
 
 .signup-text a:hover {
   text-decoration: underline;
+}
+
+.signup-text {
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: left;  
+}
+
+.signup-text a {
+  color: #5b5fc7;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 5px;
 }

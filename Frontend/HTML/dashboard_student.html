@@ -19,12 +19,14 @@
     <div class="logo">TU ClassFlow</div>
 
     <div class="right-header">
-      <img src="/Frontend/src/notification.png" alt="notification" class="icon-bell">
+      <img src="../src/notification.png" alt="notification" class="icon-bell">
+    
       <span id="username">Loading...</span>
-      <div class="avatar"></div>
+    
+      <img src="../src/avatar.png" alt="profile" class="avatar" id="avatar">
+    
+      <input type="file" id="uploadAvatar" accept="image/*" hidden>
     </div>
-  </div>
-
   <!-- TOP SECTION -->
   <div class="top-section">
 
@@ -79,7 +81,7 @@
     </div>
   </div>
 
-  <!-- 🔥 container สำหรับ JS เติม course -->
+  <!-- container สำหรับ JS เติม course -->
   <div id="myCoursesContainer"></div>
 
   <script src="../JS/dashboard_student.js"></script>

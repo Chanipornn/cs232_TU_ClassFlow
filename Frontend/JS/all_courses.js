@@ -1,19 +1,15 @@
-// select all checkbox
-const selectAll = document.querySelector('.course-header input');
-const checkboxes = document.querySelectorAll('.course-row input');
-
-if (selectAll) {
-  selectAll.addEventListener('change', () => {
-    checkboxes.forEach(cb => cb.checked = selectAll.checked);
-  });
-}
 document.addEventListener("DOMContentLoaded", function () {
+
   const list = document.querySelector(".course-list");
+  const selectAll = document.querySelector(".course-header input");
 
   let courses = JSON.parse(localStorage.getItem("courses")) || [];
 
+  console.log("Courses:", courses);
+
   list.innerHTML = "";
 
+  // ===== RENDER COURSES =====
   courses.forEach((c, index) => {
     const row = document.createElement("div");
     row.className = "course-row";
@@ -28,19 +24,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
     list.appendChild(row);
   });
+
+  // ===== SELECT ALL =====
+  if (selectAll) {
+    selectAll.addEventListener("change", () => {
+      document.querySelectorAll(".course-checkbox")
+        .forEach(cb => cb.checked = selectAll.checked);
+    });
+  }
+
 });
+
 
 // ===== ENROLL =====
 function enrollSelected() {
-  const checkboxes = document.querySelectorAll(".course-checkbox:checked");
+
+  const checked = document.querySelectorAll(".course-checkbox:checked");
+
+  if (checked.length === 0) {
+    alert("Please select at least one course");
+    return;
+  }
 
   let courses = JSON.parse(localStorage.getItem("courses")) || [];
   let enrolled = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
 
-  checkboxes.forEach(cb => {
+  checked.forEach(cb => {
     const course = courses[cb.dataset.index];
 
-    // กันซ้ำ
+    if (!course) return;
+
     if (!enrolled.some(c => c.code === course.code)) {
       enrolled.push(course);
     }
@@ -49,4 +62,9 @@ function enrollSelected() {
   localStorage.setItem("enrolledCourses", JSON.stringify(enrolled));
 
   alert("Enrolled successfully!");
+
+
+  localStorage.setItem("enroll_updated", Date.now());
+
+  window.location.href = "dashboard_student.html";
 }

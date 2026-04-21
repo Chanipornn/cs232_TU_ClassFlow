@@ -48,11 +48,6 @@ function closeModal() {
   document.getElementById('annModal').classList.remove('active');
 }
 
-function updateFileLabel(input) {
-  const label = input.files[0] ? input.files[0].name : '[ Upload file ]';
-  document.getElementById('fileLabel').textContent = label;
-}
-
 
 // ======= SAVE ANNOUNCEMENT + ADD ASSIGNMENT =======
 function saveAnnouncement() {
@@ -70,7 +65,7 @@ function saveAnnouncement() {
     ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
     : '—';
 
-  // ===== เพิ่ม assignment เข้า course =====
+  // ===== โหลด courses =====
   let courses = JSON.parse(localStorage.getItem("courses")) || [];
 
   let course = courses.find(c => c.code === courseCode);
@@ -80,7 +75,7 @@ function saveAnnouncement() {
       course.assignments = [];
     }
 
-    if (date) {
+    if (date && !course.assignments.some(a => a.title === title && a.dueDate === date)) {
       course.assignments.push({
         title: title,
         dueDate: date
@@ -90,12 +85,12 @@ function saveAnnouncement() {
     localStorage.setItem("courses", JSON.stringify(courses));
   }
 
-  // ===== UI Announcement =====
+  // ===== UI =====
   if (editingAnnEl) {
     editingAnnEl.querySelector('.announcement-info').innerHTML =
       `<b>📢 ${title}</b><br>
        Course: ${courseCode}<br>
-       Instructor: Prapaporn Rattamrong...<br>
+       Instructor: Prapaporn Rattamrong<br>
        Date: ${dateStr}<br>
        ${msg}`;
   } else {
@@ -108,13 +103,13 @@ function saveAnnouncement() {
       <div class="announcement-info">
         <b>📢 ${title}</b><br>
         Course: ${courseCode}<br>
-        Instructor: Prapaporn Rattamrong...<br>
+        Instructor: Prapaporn Rattamrong<br>
         Date: ${dateStr}<br>
         ${msg}
       </div>
       <div class="ann-actions">
-        <button class="btn-edit" onclick="openEditModal(this)">Edit</button>
-        <button class="btn-delete" onclick="deleteAnnouncement(this)">Delete</button>
+        <button onclick="openEditModal(this)">Edit</button>
+        <button onclick="deleteAnnouncement(this)">Delete</button>
       </div>
     `;
 
@@ -125,7 +120,7 @@ function saveAnnouncement() {
 }
 
 
-// ======= DELETE CONFIRM MODAL =======
+// ======= DELETE =======
 let deletingAnnEl = null;
 
 function deleteAnnouncement(btn) {
@@ -143,7 +138,6 @@ function confirmDelete() {
 
 function closeDeleteModal() {
   document.getElementById('deleteModal').classList.remove('active');
-  deletingAnnEl = null;
 }
 
 
@@ -153,7 +147,6 @@ function openCourseModal() {
 
   document.getElementById('courseName').value = '';
   document.getElementById('courseCode').value = '';
-  document.getElementById('courseDesc').value = '';
   document.getElementById('courseInstructor').value = '';
 }
 
@@ -162,7 +155,7 @@ function closeCourseModal() {
 }
 
 
-// ======= CREATE COURSE (สำคัญ) =======
+// ======= CREATE COURSE =======
 function createCourse() {
   const name = document.getElementById('courseName').value.trim();
   const code = document.getElementById('courseCode').value.trim();
@@ -173,20 +166,28 @@ function createCourse() {
     return;
   }
 
+  let courses = JSON.parse(localStorage.getItem("courses")) || [];
+
+  if (courses.some(c => c.code === code)) {
+    alert("Course already exists!");
+    return;
+  }
+
   const newCourse = {
     name,
     code,
     instructor,
-    assignments: []   // 🔥 สำคัญมาก
+    assignments: []
   };
-
-  let courses = JSON.parse(localStorage.getItem("courses")) || [];
 
   courses.push(newCourse);
 
   localStorage.setItem("courses", JSON.stringify(courses));
 
-  // แสดงใน UI
+  // 🔥 trigger ให้ student รู้ (optional)
+  localStorage.setItem("courses_updated", Date.now());
+
+  // ===== UI =====
   const list = document.getElementById('courseList');
 
   const div = document.createElement('div');
@@ -204,7 +205,7 @@ function createCourse() {
 }
 
 
-// ======= CLOSE MODAL WHEN CLICK OUTSIDE =======
+// ======= CLOSE MODAL =======
 document.addEventListener('DOMContentLoaded', function () {
 
   document.getElementById('deleteModal').addEventListener('click', function (e) {

@@ -7,6 +7,7 @@
 
   <!-- AWS Cognito -->
   <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.3.0/dist/amazon-cognito-identity.min.js"></script>
+
 </head>
 
 <body>
@@ -36,14 +37,14 @@
     <input id="confirmPassword" type="password" placeholder="Confirm Password">
 
     <button onclick="signUp()">Sign up</button>
+
+    <p class="signup-text">
+      Already have an account?
+      <a href="index.html">Sign in</a>
+    </p>
   </div>
 
 </div> 
-
-<p class="signup-text bottom-text">
-  Already have an account?
-  <a href="index.html">Sign in</a>
-</p>
 
 <!-- Cognito Config -->
 <script>
@@ -62,7 +63,6 @@ function signUp() {
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
-  // ===== validation =====
   if (!email.endsWith("@dome.tu.ac.th")) {
     alert("Use only @dome.tu.ac.th email");
     return;
@@ -78,7 +78,6 @@ function signUp() {
     return;
   }
 
-  // disable spam click (optional)
   const btn = document.querySelector("button");
   btn.disabled = true;
 
@@ -100,7 +99,6 @@ function signUp() {
     if (err) {
       console.error(err);
 
-      // ===== error message =====
       if (err.code === "UsernameExistsException") {
         alert("This email is already registered");
       } else if (err.code === "InvalidPasswordException") {
@@ -112,15 +110,10 @@ function signUp() {
       return;
     }
 
-    console.log("Signup success:", result);
-
     alert("Signup success! Check your email for OTP verification");
-
-    // safe redirect
     window.location.href = "confirm.html";
   });
 }
-
 </script>
 
 </body>

@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Assignment Detail</title>
+
   <link rel="stylesheet" href="../css/edit_submission.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
+
 <body>
 
   <header class="top-header">
@@ -46,7 +48,11 @@
       <h2>Submission</h2>
 
       <div class="submission-inner">
-        <div class="upload-box empty">
+
+        <!-- INPUT FILE -->
+        <input type="file" id="fileInput" hidden>
+
+        <div class="upload-box empty" id="uploadBox" onclick="openFile()">
           <div class="upload-note">Maximum size for files: 32MB</div>
 
           <div class="upload-empty-state">
@@ -58,22 +64,31 @@
 
             <span>PDF, PNG, JPEG, Document etc.</span>
           </div>
+
+          <!-- แสดงชื่อไฟล์ -->
+          <div id="fileName" style="margin-top:10px; font-weight:500;"></div>
         </div>
 
         <div class="upload-actions">
-          <button type="button"><i class="fa-solid fa-link"></i> link</button>
+          <button type="button"><i class="fa-solid fa-link"></i> Link</button>
           <button type="button"><i class="fa-brands fa-google-drive"></i> Drive</button>
-          <button type="button"><i class="fa-brands fa-dropbox"></i> Drop Box</button>
-          <button type="button"><i class="fa-solid fa-folder"></i> File</button>
+          <button type="button"><i class="fa-brands fa-dropbox"></i> Dropbox</button>
+
+          <!-- ปุ่มเปิด file -->
+          <button type="button" onclick="openFile()">
+            <i class="fa-solid fa-folder"></i> File
+          </button>
         </div>
       </div>
 
       <div class="submit-actions">
         <button class="primary-btn" type="button">Submit</button>
-        <button class="secondary-btn" type="button">Cancle</button>
+        <button class="secondary-btn" type="button">Cancel</button>
       </div>
     </section>
   </main>
+
+  <script src="../JS/assignment_detail.js"></script>
 
 </body>
 </html>

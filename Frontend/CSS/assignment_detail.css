@@ -257,7 +257,13 @@
     background: #e4e5ff;
     color: #4f54a8;
   }
-  
+  .upload-box {
+    cursor: pointer;
+  }
+  .upload-box:hover {
+    background: #f0f0ff;
+    border-color: #5658a7;
+  }
   /* TABLET */
   @media (max-width: 1024px) {
     .top-header {

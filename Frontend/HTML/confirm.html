@@ -11,33 +11,33 @@
 
 <body>
 
-<div class="login-container">
+  <div class="login-container">
 
-  <div class="left">
-    <div class="left-content">
-      <h1>Verify<br>Account</h1>
-      <p>Enter OTP from your email</p>
+    <div class="left">
+      <div class="left-content">
+        <h1>Verify<br>Account</h1>
+        <p>Enter OTP from your email</p>
+      </div>
+  
+      <div class="circle big"></div>
+      <div class="circle small"></div>
     </div>
+  
+    <div class="right">
+      <h2>Confirm OTP</h2>
+  
+      <input id="email" type="text" placeholder="Email">
+      <input id="code" type="text" placeholder="OTP Code">
+  
+      <button onclick="confirmUser()">Confirm</button>
+  
 
-    <div class="circle big"></div>
-    <div class="circle small"></div>
+      <p class="signup-text">
+        Back to <a href="index.html">Sign in</a>
+      </p>
+    </div>
+  
   </div>
-
-  <div class="right">
-    <h2>Confirm OTP</h2>
-
-    <input id="email" type="text" placeholder="Email">
-    <input id="code" type="text" placeholder="OTP Code">
-
-    <button onclick="confirmUser()">Confirm</button>
-  </div>
-
-</div>
-
-<p class="signup-text">
-  Back to <a href="index.html">Login</a>
-</p>
-
 <!-- Cognito Config -->
 <script>
 const poolData = {
