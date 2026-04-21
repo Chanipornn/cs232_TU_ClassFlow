@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Account</title>
+  <link rel="stylesheet" href="../CSS/style.css">
+
+  <!-- AWS Cognito -->
+  <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.3.0/dist/amazon-cognito-identity.min.js"></script>
+</head>
+
+<body>
+
+<div class="login-container">
+
+  <div class="left">
+    <div class="left-content">
+      <h1>Verify<br>Account</h1>
+      <p>Enter OTP from your email</p>
+    </div>
+
+    <div class="circle big"></div>
+    <div class="circle small"></div>
+  </div>
+
+  <div class="right">
+    <h2>Confirm OTP</h2>
+
+    <input id="email" type="text" placeholder="Email">
+    <input id="code" type="text" placeholder="OTP Code">
+
+    <button onclick="confirmUser()">Confirm</button>
+  </div>
+
+</div>
+
+<p class="signup-text">
+  Back to <a href="index.html">Login</a>
+</p>
+
+<!-- Cognito Config -->
+<script>
+const poolData = {
+  UserPoolId: "us-east-1_gFzKBoxUE",
+  ClientId: "deuj2keprro5a2icvna5ohbg"
+};
+
+const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+</script>
+
+<!-- Confirm OTP -->
+<script>
+function confirmUser() {
+  const email = document.getElementById("email").value;
+  const code = document.getElementById("code").value;
+
+  const userData = {
+    Username: email,
+    Pool: userPool
+  };
+
+  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+  cognitoUser.confirmRegistration(code, true, function(err, result) {
+    if (err) {
+      alert(err.message);
+      return;
+    }
+
+    alert("Confirm success! You can login now");
+    window.location.href = "index.html";
+  });
+}
+</script>
+
+</body>
+</html>

@@ -106,3 +106,39 @@ tr:nth-child(odd) {
   border-right: 1px solid #86868692;
   width: 40%;
 }
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.title-group {
+    width: 100%;
+    overflow: hidden;    /* ช่วยดัก float ไม่ให้หลุดตำแหน่ง */
+    display: block;
+    margin-bottom: 10px; /* ระยะห่างระหว่างหัวข้อกับตาราง */
+}
+.title-group h3 {
+    display: inline-block; /* ทำให้หัวข้อไม่จองพื้นที่เต็มบรรทัด */
+    margin: 0;
+}
+
+.title-group p {
+    display: inline-block; /* ทำให้หัวข้อไม่จองพื้นที่เต็มบรรทัด */
+    margin: 0;
+    
+}
+
+.edit-btn {
+    font-size: 13px;
+    color: red;
+    text-decoration: none;
+    float: right;
+}
+
+
+.edit-btn:hover {
+    text-decoration: underline;
+}

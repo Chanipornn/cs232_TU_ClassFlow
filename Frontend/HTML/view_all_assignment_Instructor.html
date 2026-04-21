@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View all assignment (Instructor)</title>
+    <link rel="stylesheet" href="../CSS/view_all_assignment_Instructor.css">
+    <script src="../JS/view_all_assignment_instructor.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header-blue">
+            <a href="create_assignments_all.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="header-info">
+                <span class="semester-tag">CS232 SEMESTER 2/2025</span>
+                <h1>Assignment 1 - Cloud Architecture</h1>
+            </div>
+            <div class="user-profile"><i class="fas fa-user-circle"></i></div>
+        </header>
+
+        <section class="stat-grid">
+            <div class="card stat-submitted">
+                <div class="stat-number">0</div> <div class="stat-label">Submitted</div>
+            </div>
+            <div class="card stat-ontime">
+                <div class="stat-number">0</div> <div class="stat-label">On time</div>
+            </div>
+            <div class="card stat-late">
+                <div class="stat-number">0</div> <div class="stat-label">Late</div>
+            </div>
+        </section>
+        <tbody id="submission-list">
+        </tbody>
+
+        <section class="toolbar">
+            <div class="filter-group">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">A - Z</button>
+                <button class="filter-btn">Date</button>
+                <button class="filter-btn">ID</button>
+            </div>
+            <button class="download-all-btn">
+                <i class="fas fa-download"></i> Download All
+            </button>
+        </section>
+
+        <section class="table-card">
+            <table class="assignment-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Due date</th>
+                        <th>File</th>
+                    </tr>
+                </thead>
+                <tbody id="submission-list">
+                    </tbody>
+            </table>
+        </section>
+
+        <footer class="pagination-footer">
+            <div class="pages">
+                <span class="page-link active">1</span>
+                <span class="page-link">2</span>
+                <span class="page-link">3</span>
+                <span class="page-link">4</span>
+            </div>
+            <button class="next-btn">Next <i class="fas fa-chevron-right"></i></button>
+        </footer>
+    </div>
+</body>
+</html>

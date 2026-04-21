@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assignments - Active</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+  <link rel="stylesheet" href="../css/create_assignment.css" />
+  <script src="../js/create_assignment.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="top-row">
+        <a href="#" class="circle-btn" onclick="history.back(); return false;" aria-label="Go back">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+
+        <div class="tabs">
+          <a href="create_assignments_all.html" class="tab-btn">All</a>
+          <a href="create_assignments_active.html" class="tab-btn active">Active</a>
+          <a href="create_assignments_closed.html" class="tab-btn">Closed</a>
+        </div>
+
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search assignment" />
+          <button type="button" class="search-icon-btn" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="course-block">
+        <h1>CS332/CS232 INTRODUCTION TO CLOUD COMPUTING TECHNOLOGY</h1>
+        <p>Assignments: <span id="assignmentCount">0</span></p>
+        <p>Students : 120</p>
+      </div>
+
+      <div class="hero-action">
+        <a href="create_assignment_form.html" class="create-btn">
+          <i class="fa-solid fa-plus"></i> Create Assignment
+        </a>
+      </div>
+    </header>
+
+    <main class="content assignments-list" id="assignmentList"></main>
+  </div>
+</body>
+</html>

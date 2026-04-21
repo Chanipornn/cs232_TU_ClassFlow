@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Assignments</title>
+  <link rel="stylesheet" href="../css/assignment.css">
+</head>
+
+<body onload="fetchAssignments('all')">
+
+<div class="header">
+  <div class="header-inner">
+
+    <div class="top-bar">
+      <div class="back-btn">←</div>
+
+      <div class="tabs">
+
+        <a href="assignment_all.html">
+          <button class="tab active">All</button>
+        </a>
+      
+        <a href="assignment_todo.html">
+          <button class="tab">To do</button>
+        </a>
+      
+        <a href="assignment_submitted.html">
+          <button class="tab">Submitted</button>
+        </a>
+      
+      </div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Search..."
+          oninput="searchAssignment(this.value,'all')">
+      </div>
+    </div>
+
+    <h2>CS332/CS232 INTRODUCTION TO CLOUD COMPUTING TECHNOLOGY</h2>
+    <p>Instructor: Ms. Prapaporn / Ms. Wanida</p>
+    <p id="totalAssignments">Assignments: 0</p>
+
+    <div class="progress-bar">
+      <div class="progress" id="progressBar"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="container" id="assignmentContainer"></div>
+
+<script src="../js/assignment.js"></script>
+<script>
+function goPage(page){ window.location.href = page; }
+</script>
+
+</body>
+</html>

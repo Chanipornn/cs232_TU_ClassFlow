@@ -8,22 +8,13 @@ body {
     max-width: 900px;
     margin: 0 auto;
     background: white;
-    border-radius: 0px;
+    border-radius: 30px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(111, 78, 78, 0.05);
     padding-bottom: 20px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-}
-
-.empty-state {
-    height: calc(100vh - 80px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #aaa;
-    font-size: 16px;
 }
 
 /* Header */
@@ -53,6 +44,16 @@ body {
 }
 .back-btn:hover {
   transform: scale(1.1);
+}
+
+.empty-state {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b5b5b5; /* สีเทาตามรูป Figma */
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .header-info h1 { margin: 0; font-size: 24px; }
