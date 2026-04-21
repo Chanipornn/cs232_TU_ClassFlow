@@ -11,7 +11,7 @@
 
   <header class="top-header">
     <div class="header-inner">
-      <a href="#" class="back-btn">
+      <a href="assignment_detail.html" class="back-btn">
         <i class="fa-solid fa-arrow-left"></i>
       </a>
 
@@ -40,7 +40,7 @@
         <p class="text-main">15 days</p>
       </div>
 
-      <div class="status-badge">YOU HAVE NOT MADE A SUBMISSION YET</div>
+      <div class="status-badge">SUBMISSION READY</div>
     </section>
 
     <section class="submission-card">
@@ -48,7 +48,7 @@
 
       <div class="submission-inner">
         <div class="upload-box filled" id="uploadBox">
-          <div class="upload-note">Maximum size for new files: 20 MB</div>
+          <div class="upload-note">Maximum size for new files: 32 MB</div>
 
           <div class="file-label">
             <i class="fa-solid fa-folder"></i>
@@ -66,11 +66,11 @@
 
             <div class="file-table-row" id="fileRow">
               <div class="file-name">
-                <a href="#" id="fileName">Csxx_xx_xxxxxxxxxxxx.pdf</a>
+                <a href="#" id="fileName">No file selected</a>
               </div>
-              <div id="fileDate">15/03/26</div>
-              <div id="fileSize">143 KB</div>
-              <div id="fileType">PDF Document</div>
+              <div id="fileDate">-</div>
+              <div id="fileSize">-</div>
+              <div id="fileType">-</div>
               <div class="delete-col">
                 <button id="deleteBtn" class="delete-btn" type="button">
                   <i class="fa-regular fa-trash-can"></i>
@@ -91,10 +91,10 @@
         <div class="upload-actions">
           <input type="file" id="fileInput" hidden>
 
-          <button type="button"><i class="fa-solid fa-link"></i> link</button>
-          <button type="button"><i class="fa-brands fa-google-drive"></i> Drive</button>
-          <button type="button"><i class="fa-brands fa-dropbox"></i> Drop Box</button>
-          <button type="button" onclick="document.getElementById('fileInput').click()">
+          <button type="button" id="linkBtn"><i class="fa-solid fa-link"></i> Link</button>
+          <button type="button" id="driveBtn"><i class="fa-brands fa-google-drive"></i> Drive</button>
+          <button type="button" id="dropboxBtn"><i class="fa-brands fa-dropbox"></i> Drop Box</button>
+          <button type="button" id="fileBtn">
             <i class="fa-solid fa-folder"></i> File
           </button>
         </div>
@@ -102,7 +102,7 @@
 
       <div class="submit-actions">
         <button id="submitBtn" class="primary-btn" type="button">Save changes</button>
-        <button class="secondary-btn" type="button">Cancle</button>
+        <button class="secondary-btn" type="button" id="cancelBtn">Cancel</button>
       </div>
     </section>
 
