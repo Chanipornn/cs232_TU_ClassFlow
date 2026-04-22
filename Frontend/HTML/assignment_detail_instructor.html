@@ -21,70 +21,63 @@
     <!--Description-->
     <div class="submission">
         <p><strong>Description</strong></p>
-        <p>Design a cloud architecture using AWS services.</p>
-        <br>
+        <p id="assignment-desc">กำลังโหลดข้อมูล...</p> <br>
 
         <p><strong>Requirements</strong></p>
-        <ul>
-            <li><p>Use at least 3 AWS services</p></li>
-            <li><p>Submit PDF report</p></li>
-        </ul>
-
+        <ul id="assignment-requirements">
+            </ul>
+    
         <p><strong>Due Date</strong></p>
-        <p>15 Mar 2026</p>
-        <br>
-
+        <p id="due-date">-</p>
+    
         <p><strong>Time remaining</strong></p>
-        <p>15 days</p>
-
+        <p id="time-remaining">-</p>
     </div>
 
     <!--Submission-->
     <div class="submission">
-        <div class="title-group">
-        <h3>Submission</h3>
-    </div>
-        <table>
-            <tr>
-                <td>Submission status</td>
-                <td>Submitted for grading</td>
-            </tr>
-            <tr>
-                <td>Due date</td>
-                <td>Sunday, 15 Mar 2026</td>
-            </tr>
-            <tr>
-                <td>Submission status</td>
-                <td>Done</td>
-            </tr>
-            <tr>
-                <td>File Submission</td>
-                <td><a href="#" class="download-link">
-            Csxx_xx_xxxxxxxxxx.pdf <i class="fa-solid fa-download"></i>
-            </a></td>
-            </tr>
-        </table>
-    </div>
+    <table>
+        <tr>
+            <td>Submission status</td>
+            <td id="sub-status-val">Loading...</td> 
+        </tr>
+        <tr>
+            <td>Due date</td>
+            <td id="due-date-val">Sunday, 15 Mar 2026</td>
+        </tr>
+        <tr>
+            <td>Last modified</td> <td id="last-modified-val">-</td>
+        </tr>
+        <tr>
+            <td>File Submission</td>
+            <td>
+                <a href="#" id="file-link" class="download-link">
+                    <span id="file-name-val">กำลังโหลดไฟล์...</span> 
+                    <i class="fa-solid fa-download"></i>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
 
     <!--Feedback-->
     <div class="submission">
-        <div class="title-group">
-        <h3>Feedback<span id="editFeedback" class="edit-link">Edit ✎</span></h3>
+    <div class="title-group">
+        <h3>Feedback <span id="editFeedback" class="edit-link">Edit <i class="fas fa-edit"></i></span></h3>
     </div>
-        <table>
-            <tr>
-                <td>Grade</td>
-                <td id="grade-val">50.0/50.0</td> </tr>
-            <tr>
-                <td>Comment</td>
-                <td id="comment-val">Great Job</td> </tr>
-            <tr>
-                <td>Graded by</td>
-                <td>Nittikhol suksumrong</td>
-            </tr>
-        </table>
-        <button id="saveFeedback" style="display: none;">Save & Send</button>
-    </div>
+    <table>
+        <tr>
+            <td>Grade</td>
+            <td id="grade-val">0.0 / 50.0</td> </tr>
+        <tr>
+            <td>Comment</td>
+            <td id="comment-val">-</td> </tr>
+        <tr>
+            <td>Graded by</td>
+            <td id="graded-by-val">Not graded yet</td> </tr>
+    </table>
+</div>
+<button id="saveFeedback" style="display: none;" class="btn-save">Save & Send</button>
 
 
 </div>
