@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
+
   <link rel="stylesheet" href="../CSS/dashboard_student.css">
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css">
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 
-
-
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 </head>
 
 <body>
@@ -19,14 +17,13 @@
     <div class="logo">TU ClassFlow</div>
 
     <div class="right-header">
-      <img src="../src/notification.png" alt="notification" class="icon-bell">
-    
-      <span id="username">Loading...</span>
-    
-      <img src="../src/avatar.png" alt="profile" class="avatar" id="avatar">
-    
-      <input type="file" id="uploadAvatar" accept="image/*" hidden>
+      <img src="../src/notification.png" class="icon-bell">
+      <span id="username">Guest</span>
+      <img src="../src/avatar.png" class="avatar" id="avatar">
+      <input type="file" id="uploadAvatar" hidden>
     </div>
+  </div> <!-- ปิดให้ถูก -->
+
   <!-- TOP SECTION -->
   <div class="top-section">
 
@@ -34,37 +31,33 @@
     <div class="left-panel">
 
       <div class="course-tabs">
-        <a href="dashboard_student.html">
-          <button class="tab active">My Courses</button>
-        </a>
-      
-        <a href="all_courses.html">
-          <button class="tab">All courses</button>
-        </a>
+        <button class="tab active">My Courses</button>
+        <button class="tab" onclick="goToAllCourses()">All courses</button>
       </div>
 
       <h3>Calendar</h3>
       <div id="calendar"></div>
-    
+
     </div>
 
     <!-- RIGHT -->
     <div class="right-panel">
       <h2>Announcement</h2>
 
-      <div class="announcement-scroll">
-        <!-- (ยังใช้ mock announcement ไปก่อน) -->
-        <div class="announcement">
+      <div class="student-announcement-scroll">
+
+        <div class="student-announcement">
           <div>
             <b>📢 Midterm Exam Announcement</b><br>
             Instructor: Dr. Somchai<br>
             Date: 10 Mar 2026<br>
             Midterm exam will be held on 20 March.
           </div>
+
           <div class="arrow">→</div>
         </div>
-      </div>
 
+      </div>
     </div>
 
   </div>
@@ -72,7 +65,7 @@
   <!-- COURSES -->
   <div class="courses-header">
     <h2>Courses</h2>
-  
+
     <div class="search-box">
       <input class="search" placeholder="Search...">
       <div class="search-icon-box">
@@ -81,7 +74,6 @@
     </div>
   </div>
 
-  <!-- container สำหรับ JS เติม course -->
   <div id="myCoursesContainer"></div>
 
   <script src="../JS/dashboard_student.js"></script>
