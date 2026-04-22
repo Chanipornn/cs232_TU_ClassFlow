@@ -1,47 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Student Login</title>
   <link rel="stylesheet" href="../CSS/style.css">
-</head>
-<body>
 
+   <!-- AWS Cognito -->
+  <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.3.0/dist/amazon-cognito-identity.min.js"></script>
+</head>
+
+<body>
   <div class="login-container">
 
     <div class="left">
       <div class="left-content">
-        <h1>Welcome !<br>Student</h1>
+        <h1>Welcome !<br>ClassFlow</h1>
         <p>To assignment update</p>
       </div>
-
-      <!-- วงกลม -->
+  
       <div class="circle big"></div>
       <div class="circle small"></div>
     </div>
-
+  
     <div class="right">
-      <h2>Student Sign In</h2>
-
-      <input type="text" placeholder="Email">
-      <input type="password" placeholder="Password">
-
+      <h2>Sign In</h2>
+  
+      <input id="email" name="email" type="text" placeholder="Email">
+      <input id="password" name="password" type="password" placeholder="Password">
+  
       <button onclick="login()">Sign In</button>
+  
+      <p class="signup-text">
+        Don't have an account?
+        <a href="Sign_up.html">Sign up</a>
+      </p>
     </div>
-
+  
   </div>
 
-  <p class="signup-text">
-    Don't have an account?
-    <a href="Sign_up.html">Sign up</a>
-  </p>
-</div>
 
-  <script>
-    function login() {
+
+<!-- Cognito Config -->
+<script>
+const poolData = {
+  UserPoolId: "us-east-1_gFzKBoxUE",
+  ClientId: "deuj2keprro5a2icvna5ohbg"
+};
+
+const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+</script>
+
+<!-- Login -->
+<script>
+function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  // ===== validation =====
+  if (!email.endsWith("@dome.tu.ac.th")) {
+    alert("Use only @dome.tu.ac.th email");
+    return;
+  }
+
+  if (!email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  const authenticationData = {
+    Username: email,
+    Password: password,
+  };
+
+  const authenticationDetails =
+    new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+
+  const userData = {
+    Username: email,
+    Pool: userPool,
+  };
+
+  const cognitoUser =
+    new AmazonCognitoIdentity.CognitoUser(userData);
+
+  cognitoUser.authenticateUser(authenticationDetails, {
+    onSuccess: function (result) {
+
+      //ตั้งค่า Token
+      const idToken = result.getIdToken().getJwtToken();
+      const accessToken = result.getAccessToken().getJwtToken();
+      const refreshToken = result.getRefreshToken().getToken();
+
+      localStorage.setItem("idToken", idToken);
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      console.log("Login success");
+
+      alert("Login success!");
+
       window.location.href = "dashboard_student.html";
-    }
-  </script>
+    },
+
+    //Failure
+    onFailure: function (err) {
+      console.error(err);
+
+      if (err.code === "UserNotConfirmedException") {
+        alert("Please verify your email first");
+      } else if (err.code === "NotAuthorizedException") {
+        alert("Incorrect email or password");
+      } else {
+        alert(err.message || "Login failed");
+      }
+    },
+  });
+}
+
+</script>
 
 </body>
 </html>

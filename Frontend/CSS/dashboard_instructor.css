@@ -543,3 +543,104 @@ body {
   }
   
   .btn-modal-save:hover { background: #3d3f8f; }
+
+  .delete-modal {
+    width: 320px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .delete-modal p {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin: 10px 0 20px;
+  }
+  
+  .modal-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .btn-modal-delete {
+    padding: 10px 22px;
+    border-radius: 20px;
+    border: none;
+    background: #e53935;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .btn-modal-delete:hover { background: #c62828; }
+
+  .form-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+    background: white;
+    margin-bottom: 4px;
+  }
+  
+  .form-input:focus {
+    border-color: #5658a7;
+  }
+  
+  .file-upload-box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #5658a7;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+  }
+  
+  .file-upload-box:hover {
+    border-color: #5658a7;
+    background: #f5f5ff;
+  }
+
+  @media (max-width: 768px) {
+
+    /* แก้ container หลัก */
+    .top-section {
+      display: block;   /* 🔥 เปลี่ยนจาก flex เป็น block */
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+  
+    /* left */
+    .left-panel {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    /* calendar */
+    #calendar {
+      width: 100%;
+    }
+  
+    /* right */
+    .right-panel {
+      width: 100%;
+      margin-left: 0;   /* 🔥 สำคัญมาก */
+    }
+  
+  }

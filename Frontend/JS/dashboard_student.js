@@ -1,31 +1,47 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const calendarEl = document.getElementById('calendar');
+document.addEventListener("DOMContentLoaded", function () {
 
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
+  const list = document.querySelector(".course-list");
+  let courses = JSON.parse(localStorage.getItem("courses")) || [];
 
-    events: [
-      {
-        title: '',
-        date: '2026-03-15',
-        className: 'dot-red'
-      },
-      {
-        title: '',
-        date: '2026-03-18',
-        className: 'dot-orange'
-      },
-      {
-        title: '',
-        date: '2026-03-22',
-        className: 'dot-green'
-      }
-    ],
+  list.innerHTML = "";
 
-    dateClick: function(info) {
-      alert("Clicked: " + info.dateStr);
+  courses.forEach((c, index) => {
+    const row = document.createElement("div");
+    row.className = "course-row";
+
+    row.innerHTML = `
+      <input type="checkbox" class="course-checkbox" data-index="${index}">
+      <div class="course-card">
+        <b>${c.code} ${c.name}</b><br>
+        Instructor: ${c.instructor}
+      </div>
+    `;
+
+    list.appendChild(row);
+  });
+
+});
+
+
+// ===== ENROLL =====
+function enrollSelected() {
+  const checkboxes = document.querySelectorAll(".course-checkbox:checked");
+
+  let courses = JSON.parse(localStorage.getItem("courses")) || [];
+  let enrolled = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+
+  checkboxes.forEach(cb => {
+    const course = courses[cb.dataset.index];
+
+    // กันซ้ำ
+    if (!enrolled.some(c => c.code === course.code)) {
+      enrolled.push(course);
     }
   });
 
-  calendar.render();
-});
+  localStorage.setItem("enrolledCourses", JSON.stringify(enrolled));
+
+  alert("Enrolled successfully!");
+
+  window.location.href = "dashboard_student.html";
+}
