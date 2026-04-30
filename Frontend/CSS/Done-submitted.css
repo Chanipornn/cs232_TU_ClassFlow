@@ -68,6 +68,17 @@ body {
     cursor: pointer;
 }
 
+.late-btn {
+    background: linear-gradient(to right, #EF0B0B, #FF8E8E);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 12px;
+    display: block;
+    margin: 15px auto 0;
+    cursor: pointer;
+}
+
 .submission {
     margin: 30px;
     padding: 15px;

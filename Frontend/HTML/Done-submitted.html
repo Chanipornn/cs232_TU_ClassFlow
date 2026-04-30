@@ -9,35 +9,19 @@
 </head>
 <body>
 
+        <div class="main-container">
         <header class="header-blue">
             <a href="assignment_all.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
             <div class="header-info">
-                <h1>Assignment 1 - Cloud Architecture</h1>
+                <h1 id="assign-title">Loading...</h1>
             </div>
             <div class="user-profile"><i class="fas fa-user-circle"></i></div>
         </header>
 
     <!--Description-->
-    <div class="submission">
-        <p><strong>Description</strong></p>
-        <p>Design a cloud architecture using AWS services.</p>
-        <br>
-
-        <p><strong>Requirements</strong></p>
-        <ul>
-            <li><p>Use at least 3 AWS services</p></li>
-            <li><p>Submit PDF report</p></li>
-        </ul>
-
-        <p><strong>Due Date</strong></p>
-        <p>15 Mar 2026</p>
-        <br>
-
-        <p><strong>Time remaining</strong></p>
-        <p>15 days</p>
-
-        <button class="submit-btn">SUBMITTED FOR GRADING</button>
-    </div>
+        <div class="submission" id="assignment-detail-container">
+            <p>Loading details...</p>
+        </div>
 
     <!--Submission-->
     <div class="submission">
@@ -45,19 +29,19 @@
         <table>
             <tr>
                 <td>Submission status</td>
-                <td>Submitted for grading</td>
+                <td id="sub-status-text">...</td>
             </tr>
             <tr>
                 <td>Due date</td>
-                <td>Sunday, 15 Mar 2026</td>
+                <td id="sub-due-date">...</td>
             </tr>
             <tr>
                 <td>Submission status</td>
-                <td>Done</td>
+                <td id="sub-done-status">...</td>
             </tr>
             <tr>
                 <td>File Submission</td>
-                <td><a href="#">Csxx_xx_xxxxxxxxxxx.pdf</a></td>
+                <td id="sub-file-link">...</td>
             </tr>
         </table>
     </div>
@@ -68,21 +52,21 @@
         <table>
             <tr>
                 <td>Grade</td>
-                <td>50.0/50.0</td>
+                <td id="fb-grade">...</td>
             </tr>
             <tr>
                 <td>Comment</td>
-                <td>Great Job</td>
+                <td id="fb-comment">...</td>
             </tr>
             <tr>
                 <td>Graded by</td>
-                <td>Nittikhol suksumrong</td>
+                <td id="fb-teacher">...</td>
             </tr>
         </table>
     </div>
 
 
 </div>
-
+    <script src="../JS/Done-submitted.js" defer></script>
 </body>
 </html>
