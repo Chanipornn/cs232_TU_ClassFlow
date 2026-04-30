@@ -22,7 +22,12 @@ async function fetchStudentNotifications() {
 
             // วนลูปสร้าง Card ตามปกติ
             notifications.forEach(notif => {
-                // ...โค้ดสร้าง Html เดิมของคุณ...
+                const cardHtml = `
+                    <div class="card">
+                        <div class="title">${notif.title}</div>
+                        <div class="desc">${notif.message}</div>
+                    </div>
+                `;
                 container.insertAdjacentHTML('beforeend', cardHtml);
             });
         }
@@ -34,3 +39,5 @@ async function fetchStudentNotifications() {
         document.getElementById('empty-state').innerHTML = '<p style="color:red;">Error loading notifications</p>';
     }
 }
+
+fetchStudentNotifications();

@@ -1,14 +1,23 @@
-function renderNotifications(notifications) {
+async function fetchInstructorNotifications() {
+    const API_URL = 'http://localhost:8080/api/notifications/instructor';
+
+try {
+    const response = await fetch(API_URL);
+    const notifications = await response.json();
+
     const container = document.getElementById('notification-container');
     const emptyState = document.getElementById('empty-state');
+
+    container.innerHTML = '';
 
     if (notifications.length === 0) {
         container.style.display = 'none';
         emptyState.style.display = 'flex';
-        return;
-    }
+    } else {
+        container.style.display = 'block';
+        emptyState.style.display = 'none';
 
-    container.innerHTML = ''; // ล้าง Loading
+
     notifications.forEach(notif => {
         const activeClass = notif.isNew ? 'active' : '';
         const dot = notif.isNew ? '<span class="dot"></span>' : '';
@@ -27,7 +36,13 @@ function renderNotifications(notifications) {
         `;
         container.insertAdjacentHTML('beforeend', html);
     });
-}
 
+} 
+}
+catch (error) {
+        console.error("Error:", error);
+        document.getElementById('notification-container').innerHTML = '<p style="text-align:center; color:red;">Error connecting to server</p>';
+    }
+}
 // รันฟังก์ชัน
-renderNotifications(mockData);
+fetchInstructorNotifications();
