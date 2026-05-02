@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>assignment_detail_instructor</title>
+    <link rel="stylesheet" href="../CSS/assignment_detail_instructor.css">
+    <script src="../JS/assignment_detail_instructor.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+        <header class="header-blue">
+            <a href="view_all_assignment_Instructor.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="header-info">
+                <h1>Assignment 1 - Cloud Architecture</h1>
+            </div>
+            <div class="user-profile"><i class="fas fa-user-circle"></i></div>
+        </header>
+
+    <!--Description-->
+    <div class="submission">
+        <p><strong>Description</strong></p>
+        <p id="assignment-desc">กำลังโหลดข้อมูล...</p> <br>
+
+        <p><strong>Requirements</strong></p>
+        <ul id="assignment-requirements">
+            </ul>
+    
+        <p><strong>Due Date</strong></p>
+        <p id="due-date">-</p>
+    
+        <p><strong>Time remaining</strong></p>
+        <p id="time-remaining">-</p>
+    </div>
+
+    <!--Submission-->
+    <div class="submission">
+    <table>
+        <tr>
+            <td>Submission status</td>
+            <td id="sub-status-val">Loading...</td> 
+        </tr>
+        <tr>
+            <td>Due date</td>
+            <td id="due-date-val">Sunday, 15 Mar 2026</td>
+        </tr>
+        <tr>
+            <td>Last modified</td> <td id="last-modified-val">-</td>
+        </tr>
+        <tr>
+            <td>File Submission</td>
+            <td>
+                <a href="#" id="file-link" class="download-link">
+                    <span id="file-name-val">กำลังโหลดไฟล์...</span> 
+                    <i class="fa-solid fa-download"></i>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+    <!--Feedback-->
+    <div class="submission">
+    <div class="title-group">
+        <h3>Feedback <span id="editFeedback" class="edit-link">Edit <i class="fas fa-edit"></i></span></h3>
+    </div>
+    <table>
+        <tr>
+            <td>Grade</td>
+            <td id="grade-val">0.0 / 50.0</td> </tr>
+        <tr>
+            <td>Comment</td>
+            <td id="comment-val">-</td> </tr>
+        <tr>
+            <td>Graded by</td>
+            <td id="graded-by-val">Not graded yet</td> </tr>
+    </table>
+</div>
+<button id="saveFeedback" style="display: none;" class="btn-save">Save & Send</button>
+
+
+</div>
+
+</body>
+</html>

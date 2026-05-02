@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Courses</title>
+  <link rel="stylesheet" href="../CSS/all_courses.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">TU ClassFlow</div>
+  
+    <div class="right-header">
+      <img src="../src/notification.png" class="icon-bell">
+  
+      <span>Sawadee Monday</span>
+  
+
+      <img src="../src/avatar.png" class="avatar" id="avatar">
+    </div>
+  </div>
+
+  <!-- TOP -->
+  <div class="top-box">
+
+    <div class="course-tabs">
+        <a href="dashboard_student.html">
+          <button class="tab">My Courses</button>
+        </a>
+      
+        <a href="all_courses.html">
+          <button class="tab active">All courses</button>
+        </a>
+      </div>
+
+      <div class="search-box">
+        <input class="search" placeholder="Search...">
+        <div class="search-icon-box">
+          <img src="../src/search-interface-symbol.png">
+        </div>
+      </div>
+
+  </div>
+
+  <!-- COURSE SECTION -->
+  <div class="course-section">
+
+    <div class="course-header">
+      <h2>Courses</h2>
+      <label><input type="checkbox"> Select All</label>
+    </div>
+
+    <!-- LIST -->
+    <div class="course-list">
+
+      <div class="course-row">
+        <input type="checkbox">
+        <div class="course-card">
+          <b>CS332/CS232 INTRODUCTION TO CLOUD COMPUTING TECHNOLOGY</b><br>
+          Instructor: Prapaporn / Wanida
+        </div>
+      </div>
+
+      <div class="course-row">
+        <input type="checkbox">
+        <div class="course-card">
+          <b>CS251 DATABASE SYSTEMS 1</b><br>
+          Instructor: Saowaluk
+        </div>
+      </div>
+
+      <div class="course-row">
+        <input type="checkbox">
+        <div class="course-card">
+          <b>CS234 NETWORK AND CYBER SECURITY</b><br>
+          Instructor: Prapaporn / Wanida
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BUTTON -->
+    <button class="enroll-btn" onclick="enrollSelected()">Enroll</button>
+
+  </div>
+  <script src="../JS/all_courses.js"></script>
+</body>
+</html>

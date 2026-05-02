@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Submission</title>
+  <link rel="stylesheet" href="../css/edit_submission.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+
+  <header class="top-header">
+    <div class="header-inner">
+      <a href="assignment_detail.html" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+
+      <h1>Assignment 1 - Cloud Architecture</h1>
+
+      <a href="#" class="profile-btn">
+        <i class="fa-regular fa-user"></i>
+      </a>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <section class="assignment-card">
+      <div class="assignment-content">
+        <p class="title-label">Description</p>
+        <p class="text-main">Design a cloud architecture using AWS services.</p>
+
+        <p class="title-label">Requirements</p>
+        <p class="text-main">• Use at least 3 AWS services<br>• Submit PDF report</p>
+
+        <p class="title-label">Due Date</p>
+        <p class="text-main">15 Mar 2026</p>
+
+        <p class="title-label">Time remaining</p>
+        <p class="text-main">15 days</p>
+      </div>
+
+      <div class="status-badge">SUBMISSION READY</div>
+    </section>
+
+    <section class="submission-card">
+      <h2>Submission</h2>
+
+      <div class="submission-inner">
+        <div class="upload-box filled" id="uploadBox">
+          <div class="upload-note">Maximum size for new files: 32 MB</div>
+
+          <div class="file-label">
+            <i class="fa-solid fa-folder"></i>
+            <span>File</span>
+          </div>
+
+          <div class="file-table">
+            <div class="file-table-header">
+              <div>Name</div>
+              <div>Last modified</div>
+              <div>Size</div>
+              <div>Type</div>
+              <div></div>
+            </div>
+
+            <div class="file-table-row" id="fileRow">
+              <div class="file-name">
+                <a href="#" id="fileName">No file selected</a>
+              </div>
+              <div id="fileDate">-</div>
+              <div id="fileSize">-</div>
+              <div id="fileType">-</div>
+              <div class="delete-col">
+                <button id="deleteBtn" class="delete-btn" type="button">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="upload-empty-state" id="emptyState" style="display: none;">
+            <div class="upload-icon">
+              <i class="fa-solid fa-box"></i>
+            </div>
+            <p>Drop file here</p>
+            <span>PDF, PNG, JPEG, Document etc.</span>
+          </div>
+        </div>
+
+        <div class="upload-actions">
+          <input type="file" id="fileInput" hidden>
+
+          <button type="button" id="linkBtn"><i class="fa-solid fa-link"></i> Link</button>
+          <button type="button" id="driveBtn"><i class="fa-brands fa-google-drive"></i> Drive</button>
+          <button type="button" id="dropboxBtn"><i class="fa-brands fa-dropbox"></i> Drop Box</button>
+          <button type="button" id="fileBtn">
+            <i class="fa-solid fa-folder"></i> File
+          </button>
+        </div>
+      </div>
+
+      <div class="submit-actions">
+        <button id="submitBtn" class="primary-btn" type="button">Save changes</button>
+        <button class="secondary-btn" type="button" id="cancelBtn">Cancel</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="../js/edit_submission.js"></script>
+</body>
+</html>

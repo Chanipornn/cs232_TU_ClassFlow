@@ -1,0 +1,415 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+/* HEADER */
+.header {
+  background: #5658a7;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: 0.3s;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.icon-bell {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  filter: brightness(0) invert(1);
+  transition: 0.3s;
+}
+
+.icon-bell:hover {
+  transform: scale(1.2);
+}
+
+.right-header span {
+  margin-top: 20px;
+}
+
+.right-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  margin-top: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.avatar:hover {
+  transform: scale(1.1);
+}
+
+/* TOP SECTION */
+.top-section {
+  display: flex;
+  background: #5658a7;
+  padding: 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  color: white;
+}
+.course-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+/* ปุ่มทั่วไป */
+.tab {
+  padding: 10px 22px;          /* 👈 ใหญ่ขึ้น */
+  border-radius: 25px;
+  margin-left: 10px;
+  border: none;
+  background: #e0e0e0;
+  cursor: pointer;
+  font-weight: 600;           /* 👈 หนาขึ้น */
+  font-size: 14px;
+  transition: 0.25s;          /* 👈 ลื่น */
+}
+
+/* hover */
+.tab:hover {
+  background: #c9c9f0;
+  transform: translateY(-2px);   /* 👈 ลอยขึ้น */
+}
+
+/* ปุ่มที่เลือก */
+.tab.active {
+  background: #d6d6f5;
+  color: #000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* 👈 เด่นขึ้น */
+}
+
+/* hover ตอน active */
+.tab.active:hover {
+  background: #bfc2ff;
+}
+
+/* LEFT */
+.left-panel {
+  width: 300px;
+  margin-top: -15px;
+}
+
+.left-panel h3 {
+ margin-left: 10px;
+}
+
+#calendar {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  color: black;
+  margin-bottom: 20px;
+  width: 270px;
+  height: 255px;
+  transition: 0.3s;
+}
+
+#calendar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+/* ===== CALENDAR CUSTOM ===== */
+
+.fc {
+  margin-left: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+
+/* HEADER */
+.fc-toolbar-title {
+  font-size: 20px !important;
+  font-weight: bold;
+}
+
+/* BUTTON */
+.fc-button {
+  border-radius: 8px !important;
+  border: none !important;
+  padding: 2px 6px !important;
+  font-size: 12px !important;
+  transition: 0.3s;
+}
+
+.fc-button:hover {
+  transform: scale(1.1);
+}
+
+.fc-button-primary {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  background: #2f3b52 !important;
+  color: white !important;
+  border-radius: 10px !important;
+}
+
+/* DAY GRID */
+.fc-daygrid-day {
+  border: 1px solid #ddd !important;
+  height: 60px !important; /* 🔥 ทำให้ช่องเตี้ยลง */
+}
+
+.fc-daygrid-day-frame {
+  min-height: 60px !important; /* 🔥 คุมความสูง */
+  height: 60px !important;
+  padding: 2px !important;
+}
+
+/* DATE NUMBER */
+.fc-daygrid-day-number {
+  font-size: 12px;
+  padding: 2px;
+}
+
+/* TODAY */
+.fc-day-today {
+  background: #f0e5be !important;
+}
+
+
+
+
+/* RIGHT */
+.right-panel {
+  flex: 1;
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin-top: -15px;
+}
+
+/* ===== ANNOUNCEMENT (STUDENT) ===== */
+.student-announcement-scroll {
+  overflow-y: auto;
+  max-height: 370px;
+  padding-right: 6px;
+}
+
+.student-announcement-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.student-announcement-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+}
+
+.student-announcement-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* FIX หลักอยู่ตรงนี้ */
+.student-announcement {
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 15px;
+
+  /* เอา flex ออก → ตัวพัง */
+  display: block;
+
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.student-announcement:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* ลูกศร */
+.student-announcement .arrow {
+  font-size: 20px;
+  background: #e4e4ed;
+  padding: 10px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.student-announcement:hover .arrow {
+  background: #5658a7;
+  color: white;
+  transform: translateX(5px);
+}
+
+/* COURSES */
+.courses-section {
+  padding: 15px 30px;
+}
+
+.courses-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1px 30px;
+}
+
+.courses-header h2 {
+  margin-top: 30px;
+}
+
+/* SEARCH */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 25px;
+  padding: 5px;
+  width: 350px;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.search-box:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.search {
+  border: none;
+  outline: none;
+  padding: 10px;
+  flex: 1;
+  border-radius: 25px;
+}
+
+.search-icon-box {
+  background: #eee;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.search-box:hover .search-icon-box {
+  background: #5658a7;
+}
+
+.search-icon-box img {
+  width: 16px;
+  height: 16px;
+  transition: 0.3s;
+}
+
+.search-box:hover .search-icon-box img {
+  filter: brightness(0) invert(1);
+}
+
+/* COURSE CARD */
+.course-card {
+  background: #c9cbe6;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 15px 30px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.course-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  background: #b4b6dd;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;     
+  object-fit: cover;     
+  margin-left: 10px;
+  cursor: pointer;
+  border: 2px solid white; /* optional */
+}
+
+.student-announcement {
+  display: flex;
+  align-items: center;
+}
+
+.arrow {
+  margin-left: auto;          /* ดันไปขวาสุด */
+  
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e4e4ed;
+  border-radius: 50%;         /* ทำให้เป็นวงกลม */
+  
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+/* hover */
+.student-announcement:hover .arrow {
+  background: #5658a7;
+  color: white;
+  transform: translateX(5px);
+}
+
+
+@media (max-width: 768px) {
+
+  /* แก้ container หลัก */
+  .top-section {
+    display: block;   /* 🔥 เปลี่ยนจาก flex เป็น block */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  /* left */
+  .left-panel {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  /* calendar */
+  #calendar {
+    width: 100%;
+  }
+
+  /* right */
+  .right-panel {
+    width: 100%;
+    margin-left: 0;   /* 🔥 สำคัญมาก */
+  }
+
+}
