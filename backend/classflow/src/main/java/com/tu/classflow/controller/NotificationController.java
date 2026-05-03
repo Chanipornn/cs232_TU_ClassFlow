@@ -1,11 +1,13 @@
 package com.tu.classflow.controller;
 
-import com.tu.classflow.model.Notification;
-import com.tu.classflow.repository.NotificationRepository;
+import com.tu.classflow.model.*;
+import com.tu.classflow.repository.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,29 +18,48 @@ public class NotificationController {
 
     @Autowired
     private NotificationRepository notificationRepository;
+    
 
-    // ดู notification ทั้งหมดของตัวเอง
+    @Autowired
+    private UserRepository userRepository;
+
+ // ✅ ดู notification ของตัวเอง
     @GetMapping
     public List<Notification> getMyNotifications(@AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId);
+
+        String email = jwt.getClaim("email");
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return notificationRepository
+                .findByUser_IdOrderByCreatedAtDesc(user.getId());
     }
 
-    // ดูจำนวน unread (สำหรับ badge)
+    // ✅ unread count
     @GetMapping("/unread-count")
     public Map<String, Long> getUnreadCount(@AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        long count = notificationRepository.countByUserIdAndIsReadFalse(userId);
+
+        String email = jwt.getClaim("email");
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        long count = notificationRepository
+                .countByUser_IdAndIsReadFalse(user.getId());
+
         return Map.of("count", count);
     }
 
-    // mark as read
+    // ✅ mark as read
     @PatchMapping("/{id}/read")
     public String markAsRead(@PathVariable Long id) {
+
         notificationRepository.findById(id).ifPresent(n -> {
-            n.setRead(true);
+            n.setIsRead(true); // ⚠️ ต้องใช้ isRead
             notificationRepository.save(n);
         });
+
         return "marked as read";
     }
 }

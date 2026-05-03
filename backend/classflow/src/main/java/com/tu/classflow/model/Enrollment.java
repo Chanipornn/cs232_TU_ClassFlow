@@ -10,14 +10,25 @@ public class Enrollment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String studentId; // cognito user_id
-    private Long courseId;
+    //private String studentId; // cognito user_id
+    //private Long courseId;
+    
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private User student;
+    
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+    
+
+    public Enrollment() {}
 
     public Long getId() { return id; }
-    public String getStudentId() { return studentId; }
-    public Long getCourseId() { return courseId; }
+    public User getStudent() { return student; }
+    public Course getCourse() { return course; }
 
-    public void setId(Long id) { this.id = id; }
-    public void setStudentId(String studentId) { this.studentId = studentId; }
-    public void setCourseId(Long courseId) { this.courseId = courseId; }
+    public void setStudent(User student) { this.student = student; }
+    public void setCourse(Course course) { this.course = course; }
+    
 }

@@ -1,24 +1,15 @@
 package com.tu.classflow.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
-import com.tu.classflow.model.Assignment;
-import com.tu.classflow.model.Enrollment;
-import com.tu.classflow.model.Notification;
-import com.tu.classflow.repository.AssignmentRepository;
-import com.tu.classflow.repository.EnrollmentRepository;
-import com.tu.classflow.repository.NotificationRepository;
+import com.tu.classflow.model.*;
+import com.tu.classflow.repository.*;
 
 @RestController
 @RequestMapping("/assignments")
@@ -33,6 +24,9 @@ public class AssignmentController {
 
     @Autowired
     private NotificationRepository notificationRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private com.tu.classflow.service.EventBridgeService eventBridgeService;
@@ -45,12 +39,19 @@ public class AssignmentController {
        eventBridgeService.sendAssignmentCreatedEvent(saved.getTitle());
 
         // สร้าง notification ให้นักศึกษาที่ enroll วิชานั้น
-        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(assignment.getCourseId());
+        List<Enrollment> enrollments = 
+        		enrollmentRepository.findByCourse_Id(saved.getCourse().getId());
+        		//enrollmentRepository.findByCourseId(assignment.getCourseId());
+        
         for (Enrollment e : enrollments) {
             Notification notif = new Notification();
-            notif.setUserId(e.getStudentId());
-            notif.setMessage("มี assignment ใหม่: " + assignment.getTitle());
+            notif.setUser(e.getStudent());
+            notif.setMessage("มี assignment ใหม่: " + saved.getTitle());
+            notif.setIsRead(false);
             notificationRepository.save(notif);
+            /*notif.setUserId(e.getStudentId());
+            notif.setMessage("มี assignment ใหม่: " + assignment.getTitle());
+            notificationRepository.save(notif);*/
         }
 
         return saved;
@@ -59,10 +60,25 @@ public class AssignmentController {
     // ดู assignment ของวิชาที่ตัวเองลงไว้
     @GetMapping("/my")
     public List<Assignment> getMyAssignments(@AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
+    	  String email = jwt.getClaim("email");
+
+          User user = userRepository.findByEmail(email)
+                  .orElseThrow(() -> new RuntimeException("User not found"));
+
+          List<Enrollment> enrollments =
+                  enrollmentRepository.findByStudent_Id(user.getId());
+
+              List<Long> courseIds = enrollments.stream()
+                      .map(e -> e.getCourse().getId())
+                      .collect(Collectors.toList());
+
+              return assignmentRepository.findByCourseIdIn(courseIds);
+              /*
+        //String userId = jwt.getSubject();
         List<Enrollment> enrollments = enrollmentRepository.findByStudentId(userId);
         List<Long> courseIds = enrollments.stream().map(Enrollment::getCourseId).toList();
         return assignmentRepository.findByCourseIdIn(courseIds);
+        */
     }
 
     // ดู assignment ของวิชานั้นๆ

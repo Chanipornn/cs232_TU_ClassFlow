@@ -11,20 +11,26 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long courseId;
+    //private Long courseId;
     private String title;
     private String description;
     private LocalDateTime deadline;
 
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
+    public Assignment() {}
+
     public Long getId() { return id; }
-    public Long getCourseId() { return courseId; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public LocalDateTime getDeadline() { return deadline; }
+    public Course getCourse() { return course; }
 
-    public void setId(Long id) { this.id = id; }
-    public void setCourseId(Long courseId) { this.courseId = courseId; }
     public void setTitle(String title) { this.title = title; }
     public void setDescription(String description) { this.description = description; }
     public void setDeadline(LocalDateTime deadline) { this.deadline = deadline; }
+    public void setCourse(Course course) { this.course = course; }
+    
 }
