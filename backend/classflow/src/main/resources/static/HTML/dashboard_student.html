@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Dashboard</title>
 
-  <link rel="stylesheet" href="../CSS/dashboard_student.css">
+  <link rel="stylesheet" href="/CSS/dashboard_student.css">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
@@ -18,10 +18,10 @@
 
     <div class="right-header">
       <a href="Notification.html">
-        <img src="../src/notification.png" class="icon-bell">
+        <img src="/src/notification.png" class="icon-bell">
       </a>
       <span id="username">Guest</span>
-      <img src="../src/avatar.png" class="avatar" id="avatar">
+      <img src="/src/avatar.png" class="avatar" id="avatar">
       <input type="file" id="uploadAvatar" hidden>
     </div>
   </div> <!-- ปิดให้ถูก -->
@@ -71,14 +71,34 @@
     <div class="search-box">
       <input class="search" placeholder="Search...">
       <div class="search-icon-box">
-        <img src="../src/search-interface-symbol.png">
+        <img src="/src/search-interface-symbol.png">
       </div>
     </div>
   </div>
 
   <div id="myCoursesContainer"></div>
 
-  <script src="../JS/dashboard_student.js"></script>
+  <script src="/JS/dashboard_student.js"></script>
 
+  <!-- Username -->
+  <script>
+  function getEmailFromToken() {
+    const token = localStorage.getItem("idToken");
+    if (!token) return "Guest";
+
+    // decode JWT
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    return payload.email || payload["cognito:username"] || "Guest";
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const email = getEmailFromToken();
+	const name = email.split("@")[0];
+	document.getElementById("username").textContent = name;
+    
+  });
+  </script>
+  
 </body>
 </html>
