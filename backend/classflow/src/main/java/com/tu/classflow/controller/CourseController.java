@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-//import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/courses")
@@ -49,6 +48,14 @@ public class CourseController {
                 });
     }
     
+    
+    @GetMapping("/{id}")
+    public Course getCourseById(@PathVariable Long id) {
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+    }
+    
+    
     // =============================
     // ดูวิชาทั้งหมด
     // =============================
@@ -57,6 +64,7 @@ public class CourseController {
         return courseRepository.findAll();
     }
 
+    
     // =============================
     // อาจารย์สร้างวิชา
     // =============================
@@ -75,6 +83,7 @@ public class CourseController {
         return courseRepository.save(course);
     }
     
+    
     // =============================
     // นักศึกษา enroll วิชา
     // =============================
@@ -85,7 +94,7 @@ public class CourseController {
         String email = jwt.getClaim("email");
         List<String> groups = jwt.getClaim("cognito:groups");
 
-        // 🔥 student เท่านั้น enroll ได้
+        // student เท่านั้น enroll ได้
         if (groups != null && groups.contains("INSTRUCTOR")) {
             throw new RuntimeException("Instructor cannot enroll");
         }
@@ -112,6 +121,7 @@ public class CourseController {
         return Map.of("message", "Enrolled successfully");
     }
 
+    
     // =============================
     // ดูวิชาที่ตัวเองลงทะเบียน
     // =============================
@@ -121,11 +131,11 @@ public class CourseController {
         User user = syncUserWithCognito(jwt);
 
         if ("INSTRUCTOR".equals(user.getRole())) {
-            // 👉 instructor: ดูวิชาที่ตัวเองสอน
+            // instructor: ดูวิชาที่ตัวเองสอน
             return courseRepository.findByInstructor_Id(user.getId());
         }
 
-        // 👉 student: ดูวิชาที่ enroll
+        // student: ดูวิชาที่ enroll
         List<Enrollment> enrollments =
                 enrollmentRepository.findByStudent_Id(user.getId());
 

@@ -148,29 +148,47 @@ async function createCourse() {
 		    Description: ${course.description || "-"}
 		  </div>
 		`;
+		div.style.cursor = "pointer";
+
+		 div.onclick = () => {
+		   window.location.href =
+		     `/HTML/create_assignments_all.html?courseId=${course.id}`;
+		 };
 
     list.prepend(div);
   }
 
 // ===== LOAD COURSE =====
 async function loadCourses() {
-  const token = getToken();
+	const token = getToken();
 
-  const res = await fetch(`${API_URL}/courses/my`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
+	  const res = await fetch(`${API_URL}/courses/my`, {
+	    headers: {
+	      "Authorization": `Bearer ${token}`
+	    }
+	  });
 
-  const courses = await res.json();
+	  console.log("status:", res.status);
 
-  const list = document.getElementById("courseList");
-  list.innerHTML = "";
+	  if (!res.ok) {
+	    const text = await res.text();
+	    console.error("API ERROR:", text);
+	    return;
+	  }
 
-  courses.forEach(renderCourse);
+	  const text = await res.text();
+	  if (!text) {
+	    console.warn("Empty response");
+	    return;
+	  }
+
+	  const courses = JSON.parse(text);
+
+	  const list = document.getElementById("courseList");
+	  list.innerHTML = "";
+
+	  courses.forEach(renderCourse);
 }
-
-document.addEventListener("DOMContentLoaded", loadCourses);
 
 
 // ======= SAVE ANNOUNCEMENT + ADD ASSIGNMENT =======
@@ -180,38 +198,23 @@ function saveAnnouncement() {
   const msg    = document.getElementById('annMessage').value.trim();
   const courseCode = document.getElementById('annCourse').value;
 
-  if (!title) {
-    alert('Please enter a title.');
-    return;
-  }
 
   const dateStr = date
     ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
     : '—';
-  }
   
-  // ===== UI =====
-  if (editingAnnEl) {
-    editingAnnEl.querySelector('.announcement-info').innerHTML =
-      `<b>📢 ${title}</b><br>
-       Course: ${courseCode}<br>
-       Instructor: Prapaporn Rattamrong<br>
-       Date: ${dateStr}<br>
-       ${msg}`;
-  } else {
+ 
     const list = document.getElementById('announcementList');
 
     const div = document.createElement('div');
     div.className = 'announcement';
 
 	div.innerHTML = `
-	  <div class="course-title">
-	    ${course.code} - ${course.name}
-	    <span class="section">Sec ${course.section || "-"}</span>
-	  </div>
-
-	  <div class="course-desc">
-	    Description: ${course.description || "-"}
+	  <div class="announcement-info">
+	    <b>📢 ${title}</b><br>
+	    Course: ${courseCode}<br>
+	    Date: ${dateStr}<br>
+	    ${msg}
 	  </div>
 	`;
 

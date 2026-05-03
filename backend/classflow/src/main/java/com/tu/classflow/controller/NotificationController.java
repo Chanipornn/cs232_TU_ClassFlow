@@ -1,4 +1,4 @@
-package com.tu.classflow.controller;
+/*package com.tu.classflow.controller;
 
 import com.tu.classflow.model.*;
 import com.tu.classflow.repository.*;
@@ -63,3 +63,4 @@ public class NotificationController {
         return "marked as read";
     }
 }
+*/

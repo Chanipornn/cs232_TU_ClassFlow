@@ -1,4 +1,4 @@
-package com.tu.classflow.service;
+/*package com.tu.classflow.service;
 
 import org.springframework.stereotype.Service;
 
@@ -30,3 +30,4 @@ public class EventBridgeService {
         client.putEvents(request);
     }
 }
+*/

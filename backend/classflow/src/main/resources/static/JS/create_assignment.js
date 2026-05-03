@@ -1,371 +1,241 @@
-const API_BASE_URL = window.ASSIGNMENT_API_BASE_URL || 'http://localhost:8080/api';
+const API_BASE_URL = "http://localhost:8080";
+const token = localStorage.getItem("idToken");
 
-const PAGE_MODE = (() => {
-  const fileName = window.location.pathname.split('/').pop() || '';
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("courseId");
 
-  if (fileName.includes('active')) return 'active';
-  if (fileName.includes('closed')) return 'closed';
-  return 'all';
-})();
-
-let allAssignments = [];
-
-window.addEventListener('DOMContentLoaded', async () => {
-  setupAccordions();
-  setupProfileButton();
-  setupSearch();
+// ================= INIT =================
+window.addEventListener("DOMContentLoaded", async () => {
+  setupBackButton();
   setupSaveButton();
+  setupSearch();
+  setupAccordions();
+  setupCancelButton();
+  
+  await loadCourseInfo();
 
-  if (document.getElementById('assignmentList')) {
+  if (document.getElementById("assignmentList")) {
     await loadAssignments();
   }
 
-  if (window.location.pathname.includes('create_assignment_form.html')) {
+  if (window.location.pathname.includes("create_assignment_form.html")) {
     await loadAssignmentForEdit();
   }
 });
 
+// ================= COURSE =================
+async function loadCourseInfo() {
+  if (!courseId) return;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error("Course not found");
+
+    const course = await res.json();
+
+    const el = document.getElementById("courseTitle");
+    if (el) {
+      el.textContent =
+        `${course.code || "-"} - ${course.name || "-"} (Sec ${course.section || "-"})`;
+    }
+
+    // set create btn link
+    const createBtn = document.querySelector(".create-btn");
+    if (createBtn) {
+      createBtn.href = `create_assignment_form.html?courseId=${courseId}`;
+    }
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// ================= BACK BUTTON =================
+function setupBackButton() {
+  const backBtn = document.getElementById("backBtn");
+
+  if (backBtn && courseId) {
+    backBtn.onclick = () => {
+      window.location.href = `create_assignments_all.html?courseId=${courseId}`;
+    };
+  }
+}
+
+// ================= ASSIGNMENTS =================
+let allAssignments = [];
+
 async function loadAssignments() {
-  const list = document.getElementById('assignmentList');
-  const countEl = document.getElementById('assignmentCount');
+  const list = document.getElementById("assignmentList");
+  const countEl = document.getElementById("assignmentCount");
 
   if (!list) return;
 
   showLoading(list);
 
   try {
-    const assignments = await fetchAssignments();
-    allAssignments = filterAssignmentsByPage(assignments, PAGE_MODE);
+    const res = await fetch(`${API_BASE_URL}/assignments/course/${courseId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
 
-    if (countEl) {
-      countEl.textContent = allAssignments.length;
-    }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+    allAssignments = Array.isArray(data) ? data : [];
+
+    if (countEl) countEl.textContent = allAssignments.length;
 
     renderAssignments(allAssignments);
-  } catch (error) {
-    console.error(error);
-    list.innerHTML = `
-      <div class="empty-state">
-        <h3>โหลดข้อมูลงานไม่สำเร็จ</h3>
-        <p>ตรวจสอบว่า backend ทำงานอยู่ และ API path ถูกต้อง</p>
-        <p class="error-hint">${escapeHtml(error.message)}</p>
-      </div>
-    `;
+
+  } catch (err) {
+    console.error(err);
+    list.innerHTML = `<p>โหลดข้อมูลไม่สำเร็จ</p>`;
   }
 }
 
-async function fetchAssignments() {
-  const response = await fetch(`${API_BASE_URL}/assignments`, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+function renderAssignments(data) {
+  const list = document.getElementById("assignmentList");
+  if (!list) return;
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  if (data.length === 0) {
+    list.innerHTML = `<p>ไม่มี assignment</p>`;
+    return;
   }
 
-  const data = await response.json();
-
-  if (Array.isArray(data)) return data;
-  if (Array.isArray(data.data)) return data.data;
-
-  return [];
+  list.innerHTML = data.map(a => `
+    <div class="assignment-card">
+      <h3>${a.title}</h3>
+      <p>${a.description}</p>
+      <p>Deadline: ${formatDate(a.deadline || a.dueDate)}</p>
+    </div>
+  `).join("");
 }
 
-function filterAssignmentsByPage(assignments, mode) {
-  if (mode === 'active') {
-    return assignments.filter((item) => normalizeStatus(item.status) === 'active');
-  }
-
-  if (mode === 'closed') {
-    return assignments.filter((item) => normalizeStatus(item.status) === 'closed');
-  }
-
-  return assignments;
-}
-
+// ================= SEARCH =================
 function setupSearch() {
-  const searchInput = document.getElementById('searchInput');
-  if (!searchInput) return;
+  const input = document.getElementById("searchInput");
+  if (!input) return;
 
-  searchInput.addEventListener('input', () => {
-    const keyword = searchInput.value.toLowerCase().trim();
+  input.addEventListener("input", () => {
+    const keyword = input.value.toLowerCase();
 
-    const filtered = allAssignments.filter((item) => {
-      const title = String(item.title || '').toLowerCase();
-      const description = String(item.description || '').toLowerCase();
-
-      return title.includes(keyword) || description.includes(keyword);
-    });
+    const filtered = allAssignments.filter(a =>
+      (a.title || "").toLowerCase().includes(keyword) ||
+      (a.description || "").toLowerCase().includes(keyword)
+    );
 
     renderAssignments(filtered);
   });
 }
 
-function renderAssignments(assignments) {
-  const list = document.getElementById('assignmentList');
-  if (!list) return;
+// ================= CREATE / SAVE / CANCEL =================
+function setupSaveButton() {
+  const btn = document.getElementById("saveAssignmentBtn");
+  if (!btn) return;
 
-  if (assignments.length === 0) {
-    list.innerHTML = `
-      <div class="empty-state">
-        <h3>ไม่พบข้อมูลงาน</h3>
-        <p>ยังไม่มี assignment ในสถานะนี้ หรือไม่พบคำค้นหา</p>
-      </div>
-    `;
-    return;
-  }
+  btn.onclick = async (e) => {
+    e.preventDefault();
 
-  list.innerHTML = assignments.map(createAssignmentCard).join('');
-  bindDeleteButtons();
-}
-
-function createAssignmentCard(item) {
-  const id = item.id ?? '';
-  const title = item.title || 'Untitled Assignment';
-  const description = item.description || '-';
-  const status = normalizeStatus(item.status);
-
-  const totalStudents = Number(item.totalStudents ?? item.total_students ?? 0);
-  const submittedCount = Number(item.submittedCount ?? item.submitted_count ?? 0);
-  const notSubmittedCount = Number(
-    item.notSubmittedCount ??
-    item.not_submitted_count ??
-    Math.max(totalStudents - submittedCount, 0)
-  );
-
-  const deadline = formatDate(item.deadline || item.dueDate || item.due_date);
-  const badgeClass = status === 'closed' ? 'closed-status' : 'active-status';
-  const badgeText = status === 'closed' ? 'Closed' : 'Active';
-  const editHref = `create_assignment_form.html${id ? `?id=${encodeURIComponent(id)}` : ''}`;
-  const detailHref = `create_assignment_detail.html${id ? `?id=${encodeURIComponent(id)}` : ''}`;
-
-  return `
-    <article class="assignment-card" data-id="${escapeHtml(String(id))}">
-      <div class="assignment-main">
-        <div class="assignment-info">
-          <h2>${escapeHtml(title)}</h2>
-          <p class="deadline-text">Deadline: ${escapeHtml(deadline)}</p>
-          <p>${escapeHtml(description)}</p>
-          <p>${submittedCount} ส่งแล้ว / ${notSubmittedCount} ยังไม่ส่ง</p>
-        </div>
-
-        <div class="assignment-side">
-          <span class="status-badge ${badgeClass}">${badgeText}</span>
-
-          <div class="action-row">
-            <a href="${editHref}" class="small-btn edit-btn">Edit</a>
-            <button class="small-btn delete-btn" type="button" data-id="${escapeHtml(String(id))}">
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-footer">
-        <a href="${detailHref}" class="view-btn">View Submissions</a>
-      </div>
-    </article>
-  `;
-}
-
-function bindDeleteButtons() {
-  const deleteButtons = document.querySelectorAll('.delete-btn');
-
-  deleteButtons.forEach((button) => {
-    button.addEventListener('click', async function () {
-      const assignmentId = this.dataset.id;
-      const confirmDelete = confirm('Are you sure you want to delete this assignment?');
-
-      if (!confirmDelete || !assignmentId) return;
-
-      try {
-        const response = await fetch(`${API_BASE_URL}/assignments/${assignmentId}`, {
-          method: 'DELETE'
-        });
-
-        if (!response.ok) {
-          throw new Error(`Delete failed: HTTP ${response.status}`);
-        }
-
-        allAssignments = allAssignments.filter(
-          (item) => String(item.id) !== String(assignmentId)
-        );
-
-        renderAssignments(allAssignments);
-
-        const countEl = document.getElementById('assignmentCount');
-        if (countEl) {
-          countEl.textContent = allAssignments.length;
-        }
-      } catch (error) {
-        console.error(error);
-        alert('ลบข้อมูลไม่สำเร็จ');
-      }
-    });
-  });
-}
-
-async function loadAssignmentForEdit() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-
-  if (!id) return;
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/assignments/${id}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Load failed: HTTP ${response.status}`);
+    if (!courseId) {
+      alert("No courseId");
+      return;
     }
 
-    const data = await response.json();
-    fillAssignmentForm(data);
-  } catch (error) {
-    console.error(error);
-    alert('โหลดข้อมูลสำหรับแก้ไขไม่สำเร็จ');
-  }
-}
-
-function fillAssignmentForm(data) {
-  const titleInput = document.getElementById('assignmentTitle');
-  const descriptionInput = document.getElementById('assignmentDescription');
-  const deadlineInput = document.getElementById('assignmentDeadline');
-  const statusInput = document.getElementById('assignmentStatus');
-
-  if (titleInput) titleInput.value = data.title || '';
-  if (descriptionInput) descriptionInput.value = data.description || '';
-
-  if (deadlineInput) {
-    deadlineInput.value = toDateTimeLocalValue(data.deadline || data.dueDate || data.due_date);
-  }
-
-  if (statusInput) {
-    statusInput.value = normalizeStatus(data.status);
-  }
-}
-
-function setupSaveButton() {
-  const saveBtn = document.getElementById('saveAssignmentBtn');
-  if (!saveBtn) return;
-
-  saveBtn.addEventListener('click', async (event) => {
-    event.preventDefault();
-
-    const payload = collectAssignmentFormData();
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-
-    const isEditMode = Boolean(id);
-    const requestUrl = isEditMode
-      ? `${API_BASE_URL}/assignments/${id}`
-      : `${API_BASE_URL}/assignments`;
-
-    const requestMethod = isEditMode ? 'PUT' : 'POST';
+    const payload = {
+      title: document.getElementById("assignmentTitle")?.value || "Assignment",
+      description: document.getElementById("assignmentDescription")?.value || "",
+      deadline: document.getElementById("assignmentDeadline")?.value || null,
+      status: "active",
+      course: {
+        id: courseId
+      }
+    };
 
     try {
-      const response = await fetch(requestUrl, {
-        method: requestMethod,
+      const res = await fetch(`${API_BASE_URL}/assignments`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) {
-        throw new Error(`Save failed: HTTP ${response.status}`);
-      }
+      if (!res.ok) throw new Error("Create failed");
 
-      alert(isEditMode ? 'Updated successfully' : 'Created successfully');
-      window.location.href = 'create_assignments_all.html';
-    } catch (error) {
-      console.error(error);
-      alert('บันทึกข้อมูลไม่สำเร็จ');
+      alert("Created");
+
+      window.location.href = `create_assignments_all.html?courseId=${courseId}`;
+
+    } catch (err) {
+      console.error(err);
+      alert("สร้างไม่สำเร็จ");
     }
-  });
-}
-
-function collectAssignmentFormData() {
-  return {
-    title: document.getElementById('assignmentTitle')?.value?.trim() || '',
-    description: document.getElementById('assignmentDescription')?.value?.trim() || '',
-    deadline: document.getElementById('assignmentDeadline')?.value || null,
-    status: document.getElementById('assignmentStatus')?.value || 'active'
   };
 }
 
-function setupAccordions() {
-  const accordionHeaders = document.querySelectorAll('.accordion-header');
+function setupCancelButton() {
+  const btn = document.getElementById("cancelBtn");
 
-  accordionHeaders.forEach((header) => {
-    header.addEventListener('click', function () {
-      const card = this.parentElement;
-      card.classList.toggle('open');
-    });
-  });
-}
-
-function setupProfileButton() {
-  const profileBtn = document.querySelector('.profile-btn');
-  if (!profileBtn) return;
-
-  profileBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    alert('Profile page not connected yet');
-  });
-}
-
-function showLoading(list) {
-  list.innerHTML = `
-    <div class="empty-state">
-      <h3>Loading assignments...</h3>
-      <p>กำลังดึงข้อมูลจากฐานข้อมูล</p>
-    </div>
-  `;
-}
-
-function normalizeStatus(status) {
-  const value = String(status || '').toLowerCase().trim();
-  return value === 'closed' ? 'closed' : 'active';
-}
-
-function formatDate(value) {
-  if (!value) return '-';
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return String(value);
+  if (btn && courseId) {
+    btn.onclick = () => {
+      window.location.href = `create_assignments_all.html?courseId=${courseId}`;
+    };
   }
-
-  return new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  }).format(date);
 }
 
-function toDateTimeLocalValue(value) {
-  if (!value) return '';
+// ================= EDIT =================
+async function loadAssignmentForEdit() {
+  const id = params.get("id");
+  if (!id) return;
 
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '';
+  try {
+    const res = await fetch(`${API_BASE_URL}/assignments/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
 
-  const offset = date.getTimezoneOffset();
-  const localDate = new Date(date.getTime() - offset * 60000);
+    if (!res.ok) throw new Error("Load failed");
 
-  return localDate.toISOString().slice(0, 16);
+    const data = await res.json();
+
+    document.getElementById("assignmentTitle").value = data.title || "";
+    document.getElementById("assignmentDescription").value = data.description || "";
+    document.getElementById("assignmentDeadline").value =
+      toDateTimeLocalValue(data.deadline || data.dueDate);
+
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+// ================= UI =================
+function setupAccordions() {
+  document.querySelectorAll(".accordion-header").forEach(header => {
+    header.onclick = () => header.parentElement.classList.toggle("open");
+  });
+}
+
+function showLoading(el) {
+  el.innerHTML = "<p>Loading...</p>";
+}
+
+// ================= UTIL =================
+function formatDate(val) {
+  if (!val) return "-";
+  const d = new Date(val);
+  return d.toLocaleDateString();
+}
+
+function toDateTimeLocalValue(val) {
+  if (!val) return "";
+  const d = new Date(val);
+  return d.toISOString().slice(0, 16);
 }

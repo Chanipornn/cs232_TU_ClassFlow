@@ -3,45 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Assignment Form</title>
+  <title>Create Assignment</title>
 
+  <!-- ICON -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="../css/create_assignment.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
+
 <body>
   <div class="page-shell">
+
+    <!-- HEADER -->
     <header class="detail-header">
-      <a href="create_assignments_all.html" class="circle-btn" aria-label="Back">
+      <a href="#" class="circle-btn" id="backBtn">
         <i class="fa-solid fa-arrow-left"></i>
       </a>
 
-      <h1>Assignment 1 - Cloud Architecture</h1>
+      <!-- เปลี่ยนตาม course -->
+      <h1 id="courseTitle">Loading...</h1>
 
-      <a href="#" class="profile-btn" aria-label="Profile">
+      <div class="profile-btn">
         <i class="fa-regular fa-user"></i>
-      </a>
+      </div>
     </header>
 
+    <!-- CONTENT -->
     <main class="detail-content">
+
+     
       <section class="detail-card">
+
         <div class="form-top-fields">
+
+          <label>Assignment Title</label>
+          <input id="assignmentTitle" type="text" placeholder="Enter title"/>
+
           <label>Description</label>
-          <textarea rows="3">Design a cloud architecture using AWS services.</textarea>
+          <textarea id="assignmentDescription" placeholder="Enter description"></textarea>
 
           <label>Requirements</label>
-          <textarea rows="4">• Use at least 3 AWS services
-• Submit PDF report</textarea>
+          <textarea id="requirements" placeholder="Enter requirements"></textarea>
 
-          <label>Due Date</label>
-          <input type="text" value="15 Mar 2026" />
-
-          <label>Time remaining</label>
-          <input type="text" value="15 days" />
         </div>
 
-        <div class="form-warning">YOU HAVE NOT MADE A SUBMISSION YET</div>
       </section>
 
+	  
+      <!-- AVAILABILITY -->
       <section class="accordion-card open">
         <button class="accordion-header" type="button">
           <span>Availability</span>
@@ -49,72 +59,48 @@
         </button>
 
         <div class="accordion-content">
+
+          <!-- START DATE -->
           <div class="form-row">
             <div class="form-block">
-              <label>Allow submission form</label>
-              <div class="date-row">
-                <select><option>13</option></select>
-                <select><option>02</option></select>
-                <select><option>2026</option></select>
-                <i class="fa-regular fa-calendar"></i>
-              </div>
+              <label>Allow submission from</label>
+              <input type="datetime-local" id="startDate">
             </div>
+
             <div class="check-block">
               <label><input type="checkbox" checked /> Enable</label>
-              <span>Allow to used</span>
             </div>
           </div>
 
+          <!-- DUE DATE -->
           <div class="form-row">
             <div class="form-block">
               <label>Due date</label>
-              <div class="date-row">
-                <select><option>26</option></select>
-                <select><option>02</option></select>
-                <select><option>2026</option></select>
-                <i class="fa-regular fa-calendar"></i>
-              </div>
+              <input id="assignmentDeadline" type="datetime-local"/>
             </div>
+
             <div class="check-block">
               <label><input type="checkbox" checked /> Enable</label>
-              <span>Allow to used</span>
             </div>
           </div>
 
+          <!-- CUT OFF -->
           <div class="form-row">
             <div class="form-block">
               <label>Cut off date</label>
-              <div class="date-row">
-                <select><option>26</option></select>
-                <select><option>02</option></select>
-                <select><option>2026</option></select>
-                <i class="fa-regular fa-calendar"></i>
-              </div>
+              <input type="datetime-local" id="cutoffDate">
             </div>
+
             <div class="check-block">
               <label><input type="checkbox" checked /> Enable</label>
-              <span>Allow to used</span>
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="form-block">
-              <label>Remind me to grade</label>
-              <div class="date-row">
-                <select><option>26</option></select>
-                <select><option>02</option></select>
-                <select><option>2026</option></select>
-                <i class="fa-regular fa-calendar"></i>
-              </div>
-            </div>
-            <div class="check-block">
-              <label><input type="checkbox" checked /> Enable</label>
-              <span>Allow to used</span>
-            </div>
-          </div>
         </div>
       </section>
 
+	  
+      <!-- SUBMISSION TYPE -->
       <section class="accordion-card open">
         <button class="accordion-header" type="button">
           <span>Submission Type</span>
@@ -122,57 +108,55 @@
         </button>
 
         <div class="accordion-content">
-          <div class="form-block">
-            <label>Submission Type</label>
-            <div class="checkbox-row">
-              <label><input type="checkbox" checked /> File Submission</label>
-              <label><input type="checkbox" /> Online text</label>
-            </div>
-          </div>
 
           <div class="form-block">
-            <label>Word Limit</label>
+            <label>Submission Type</label>
+
             <div class="checkbox-row">
-              <label><input type="checkbox" /> Enable</label>
-              <input type="text" class="small-input" />
-              <span>Words</span>
+              <label><input type="checkbox" id="fileSubmission" checked /> File Submission</label>
+              <label><input type="checkbox" id="textSubmission" /> Online text</label>
             </div>
           </div>
 
           <div class="form-block">
             <label>Maximum number of upload files</label>
-            <select class="mini-select">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+            <select id="maxFiles">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
             </select>
           </div>
 
           <div class="form-block">
-            <label>Maximum submission size</label>
-            <select class="mini-select">
-              <option>32</option>
-              <option>64</option>
-              <option>128</option>
+            <label>Maximum submission size (MB)</label>
+            <select id="maxSize">
+              <option value="32">32</option>
+              <option value="64">64</option>
+              <option value="128">128</option>
             </select>
           </div>
+
         </div>
       </section>
 
+	  
+      <!-- FEEDBACK -->
       <section class="accordion-card">
         <button class="accordion-header" type="button">
-          <span>Feedback types</span>
+          <span>Feedback</span>
           <i class="fa-solid fa-caret-down"></i>
         </button>
 
         <div class="accordion-content">
           <div class="form-block">
             <label>Feedback comment</label>
-            <textarea rows="3" placeholder="Write feedback type..."></textarea>
+            <textarea id="feedBack" rows="3" placeholder="Write feedback..."></textarea>
           </div>
         </div>
       </section>
 
+	  
+      <!-- SETTINGS -->
       <section class="accordion-card">
         <button class="accordion-header" type="button">
           <span>Submission settings</span>
@@ -180,22 +164,42 @@
         </button>
 
         <div class="accordion-content">
+
           <div class="form-block">
-            <label><input type="checkbox" /> Require students click submit button</label>
+            <label>
+              <input type="checkbox" id="requireSubmitBtn" />
+              Require students click submit button
+            </label>
           </div>
+
           <div class="form-block">
-            <label><input type="checkbox" /> Allow resubmission</label>
+            <label>
+              <input type="checkbox" id="allowResubmit" />
+              Allow resubmission
+            </label>
           </div>
+
         </div>
       </section>
 
+	  
+      <!-- ACTION BUTTON -->
       <div class="bottom-actions">
-        <a href="create_assignments_all.html" class="cancel-btn">Cancel</a>
-        <a href="add_assignment_instructor.html" class="save-btn" id="saveAssignmentBtn">Save change</a>
+
+        <button class="cancel-btn" id="cancelBtn" type="button">
+          Cancel
+        </button>
+
+        <button class="save-btn" id="saveAssignmentBtn">
+          Save Assignment
+        </button>
+
       </div>
+
     </main>
   </div>
 
   <script src="../js/create_assignment.js"></script>
+
 </body>
 </html>

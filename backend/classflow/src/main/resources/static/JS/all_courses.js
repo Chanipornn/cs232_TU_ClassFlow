@@ -10,6 +10,21 @@ document.addEventListener("DOMContentLoaded", function () {
   list.innerHTML = "";
 
   // ===== RENDER COURSES =====
+  courses.forEach(course => {
+    const div = document.createElement("div");
+    div.className = "course-card";
+
+    div.innerHTML = `
+      <h3>${course.code} - ${course.name} (Sec ${course.section || "-"})</h3>
+      <p>Description: ${course.description || "-"}</p>
+    `;
+
+    // ✅ ใช้ course ตรงนี้ (อยู่ใน scope)
+    div.onclick = () => goToCourse(course.id);
+
+    list.appendChild(div);
+  });
+  /*
   courses.forEach((c, index) => {
     const row = document.createElement("div");
     row.className = "course-row";
@@ -24,7 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     list.appendChild(row);
   });
-
+*/
+function goToCourse(courseId) {
+  console.log("CLICK COURSE ID:", courseId);
+  window.location.href = `create_assignments_all.html?courseId=${courseId}`;
+}
   // ===== SELECT ALL =====
   if (selectAll) {
     selectAll.addEventListener("change", () => {
