@@ -9,7 +9,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+//import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/courses")
@@ -21,50 +22,85 @@ public class CourseController {
 
     @Autowired
     private EnrollmentRepository enrollmentRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
 
+    private User syncUserWithCognito(Jwt jwt) {
+
+        String email = jwt.getClaim("email");
+        List<String> groups = jwt.getClaim("cognito:groups");
+
+        final String role = (groups != null && 
+        	    groups.stream().anyMatch(g -> g.equalsIgnoreCase("INSTRUCTOR")))
+        	    ? "INSTRUCTOR"
+        	    : "STUDENT";
+
+        return userRepository.findByEmail(email)
+                .map(existingUser -> {
+                    existingUser.setRole(role);
+                    return userRepository.save(existingUser);
+                })
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setEmail(email);
+                    newUser.setRole(role);
+                    return userRepository.save(newUser);
+                });
+    }
+    
+    // =============================
     // ดูวิชาทั้งหมด
+    // =============================
     @GetMapping
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
+    // =============================
     // อาจารย์สร้างวิชา
+    // =============================
     @PostMapping
-    public Course createCourse(@RequestBody Course course, @AuthenticationPrincipal Jwt jwt) {
-    	 String email = jwt.getClaim("email");
-
-         User instructor = userRepository.findByEmail(email)
-                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-         course.setInstructor(instructor);
-
-         return courseRepository.save(course);
-    	/*
-        String userId = jwt.getSubject(); // ดึง user_id จาก Cognito token
-        course.setInstructorId(userId);
-        return courseRepository.save(course);
-        */
-    }
-
-    // นักศึกษา enroll วิชา
-    @PostMapping("/{courseId}/enroll")
-    public String enrollCourse(@PathVariable Long courseId,
+    public Course createCourse(@RequestBody Course course,
                                @AuthenticationPrincipal Jwt jwt) {
 
-        String email = jwt.getClaim("email");
+        User instructor = syncUserWithCognito(jwt);
 
-        User student = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!"INSTRUCTOR".equals(instructor.getRole())) {
+            throw new RuntimeException("Only instructor can create course");
+        }
+
+        course.setInstructor(instructor);
+
+        return courseRepository.save(course);
+    }
+    
+    // =============================
+    // นักศึกษา enroll วิชา
+    // =============================
+    @PostMapping("/{courseId}/enroll")
+    public Map<String, String> enrollCourse(@PathVariable Long courseId,
+                                           @AuthenticationPrincipal Jwt jwt) {
+
+        String email = jwt.getClaim("email");
+        List<String> groups = jwt.getClaim("cognito:groups");
+
+        // 🔥 student เท่านั้น enroll ได้
+        if (groups != null && groups.contains("INSTRUCTOR")) {
+            throw new RuntimeException("Instructor cannot enroll");
+        }
+
+        User student = syncUserWithCognito(jwt);
+
+        if ("INSTRUCTOR".equals(student.getRole())) {
+            throw new RuntimeException("Instructor cannot enroll");
+        }
 
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        // เช็คว่า enroll แล้วหรือยัง
         if (enrollmentRepository.existsByStudent_IdAndCourse_Id(student.getId(), courseId)) {
-            return "Already enrolled";
+            return Map.of("message", "Already enrolled");
         }
 
         Enrollment enrollment = new Enrollment();
@@ -73,44 +109,28 @@ public class CourseController {
 
         enrollmentRepository.save(enrollment);
 
-        return "Enrolled successfully";
+        return Map.of("message", "Enrolled successfully");
     }
 
-    /*public String enrollCourse(@PathVariable Long courseId, @AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        if (enrollmentRepository.existsByStudentIdAndCourseId(userId, courseId)) {
-            return "Already enrolled";
-        }
-        Enrollment enrollment = new Enrollment();
-        enrollment.setStudentId(userId);
-        enrollment.setCourseId(courseId);
-        enrollmentRepository.save(enrollment);
-        return "Enrolled successfully";
-    }
-*/
-    // ดูวิชาที่ตัวเองลงทะเบียนไว้
+    // =============================
+    // ดูวิชาที่ตัวเองลงทะเบียน
+    // =============================
     @GetMapping("/my")
     public List<Course> getMyCourses(@AuthenticationPrincipal Jwt jwt) {
 
-        String email = jwt.getClaim("email");
+        User user = syncUserWithCognito(jwt);
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        if ("INSTRUCTOR".equals(user.getRole())) {
+            // 👉 instructor: ดูวิชาที่ตัวเองสอน
+            return courseRepository.findByInstructor_Id(user.getId());
+        }
 
+        // 👉 student: ดูวิชาที่ enroll
         List<Enrollment> enrollments =
                 enrollmentRepository.findByStudent_Id(user.getId());
 
         return enrollments.stream()
                 .map(Enrollment::getCourse)
-                .collect(Collectors.toList());
+                .toList();
     }
-    /*
-    @GetMapping("/my")
-    public List<Course> getMyCourses(@AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(userId);
-        List<Long> courseIds = enrollments.stream().map(Enrollment::getCourseId).toList();
-        return courseRepository.findAllById(courseIds);
-    }
-    */
 }

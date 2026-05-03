@@ -48,6 +48,130 @@ function closeModal() {
   document.getElementById('annModal').classList.remove('active');
 }
 
+// ===== โหลด courses =====
+    const API_URL = "http://localhost:8080";
+
+    function getToken() {
+      return localStorage.getItem("idToken");
+    }
+
+	// ======= USERNAME =======
+	function formatNameFromEmail(email) {
+	  if (!email) return "User";
+
+	  const namePart = email.split("@")[0]; // chayananmariwan
+
+	  // แยกคำแบบง่าย (ถ้ามี . หรือ _)
+	  let parts = namePart.split(/[._]/);
+
+	  // ถ้าไม่มีตัวแบ่ง → split แบบ heuristic
+	  if (parts.length === 1) {
+	    parts = namePart.match(/[A-Z]?[a-z]+/g) || [namePart];
+	  }
+
+	  return parts
+	    .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+	    .join(" ");
+	}
+
+	function setUserNameFromToken() {
+	  const token = localStorage.getItem("idToken");
+	  if (!token) return;
+
+	  const payload = JSON.parse(atob(token.split(".")[1]));
+	  const email = payload.email;
+
+	  const name = formatNameFromEmail(email);
+
+	  document.getElementById("username").innerText = name;
+	}
+	window.onload = function () {
+	  setUserNameFromToken();
+	  loadCourses(); // ของเดิม
+	};
+	
+	
+// ===== CREATE COURSE (BACKEND) =====
+async function createCourse() {
+  const name = document.getElementById('courseName').value.trim();
+  const code = document.getElementById('courseCode').value.trim();
+  const section = document.getElementById('courseSection').value.trim();
+  const description = document.getElementById('courseDesc').value.trim();
+
+  if (!name || !code) {
+    alert("Please fill Course Name and Code");
+    return;
+  }
+
+  const token = getToken();
+
+  try {
+    const res = await fetch(`${API_URL}/courses`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        code: code,           // ✅ เพิ่ม
+        name: name,           // ✅ ไม่ต้อง concat แล้ว
+        section: section,     // ✅ เพิ่ม
+        description: description
+      })
+    });
+
+    const course = await res.json();
+
+    renderCourse(course);
+    closeCourseModal();
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+	  
+	  
+  // ===== RENDER =====
+  function renderCourse(course) {
+    const list = document.getElementById('courseList');
+
+    const div = document.createElement('div');
+    div.className = 'course-card';
+
+	div.innerHTML = `
+		  <div class="course-title">
+		    ${course.code} - ${course.name}
+		    <span class="section">Sec ${course.section || "-"}</span>
+		  </div>
+
+		  <div class="course-desc">
+		    Description: ${course.description || "-"}
+		  </div>
+		`;
+
+    list.prepend(div);
+  }
+
+// ===== LOAD COURSE =====
+async function loadCourses() {
+  const token = getToken();
+
+  const res = await fetch(`${API_URL}/courses/my`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  const courses = await res.json();
+
+  const list = document.getElementById("courseList");
+  list.innerHTML = "";
+
+  courses.forEach(renderCourse);
+}
+
+document.addEventListener("DOMContentLoaded", loadCourses);
+
 
 // ======= SAVE ANNOUNCEMENT + ADD ASSIGNMENT =======
 function saveAnnouncement() {
@@ -64,27 +188,8 @@ function saveAnnouncement() {
   const dateStr = date
     ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
     : '—';
-
-  // ===== โหลด courses =====
-  let courses = JSON.parse(localStorage.getItem("courses")) || [];
-
-  let course = courses.find(c => c.code === courseCode);
-
-  if (course) {
-    if (!course.assignments) {
-      course.assignments = [];
-    }
-
-    if (date && !course.assignments.some(a => a.title === title && a.dueDate === date)) {
-      course.assignments.push({
-        title: title,
-        dueDate: date
-      });
-    }
-
-    localStorage.setItem("courses", JSON.stringify(courses));
   }
-
+  
   // ===== UI =====
   if (editingAnnEl) {
     editingAnnEl.querySelector('.announcement-info').innerHTML =
@@ -99,25 +204,21 @@ function saveAnnouncement() {
     const div = document.createElement('div');
     div.className = 'announcement';
 
-    div.innerHTML = `
-      <div class="announcement-info">
-        <b>📢 ${title}</b><br>
-        Course: ${courseCode}<br>
-        Instructor: Prapaporn Rattamrong<br>
-        Date: ${dateStr}<br>
-        ${msg}
-      </div>
-      <div class="ann-actions">
-        <button onclick="openEditModal(this)">Edit</button>
-        <button onclick="deleteAnnouncement(this)">Delete</button>
-      </div>
-    `;
+	div.innerHTML = `
+	  <div class="course-title">
+	    ${course.code} - ${course.name}
+	    <span class="section">Sec ${course.section || "-"}</span>
+	  </div>
+
+	  <div class="course-desc">
+	    Description: ${course.description || "-"}
+	  </div>
+	`;
 
     list.prepend(div);
   }
 
   closeModal();
-}
 
 
 // ======= DELETE =======
@@ -147,7 +248,7 @@ function openCourseModal() {
 
   document.getElementById('courseName').value = '';
   document.getElementById('courseCode').value = '';
-  document.getElementById('courseInstructor').value = '';
+  document.getElementById('courseSection').value = '';
 }
 
 function closeCourseModal() {
@@ -156,6 +257,7 @@ function closeCourseModal() {
 
 
 // ======= CREATE COURSE =======
+/*
 function createCourse() {
   const name = document.getElementById('courseName').value.trim();
   const code = document.getElementById('courseCode').value.trim();
@@ -203,7 +305,7 @@ function createCourse() {
 
   closeCourseModal();
 }
-
+*/
 
 // ======= CLOSE MODAL =======
 document.addEventListener('DOMContentLoaded', function () {
@@ -221,3 +323,4 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 });
+

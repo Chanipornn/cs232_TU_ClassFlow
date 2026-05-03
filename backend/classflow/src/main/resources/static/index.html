@@ -59,7 +59,9 @@ function login() {
   const password = document.getElementById("password").value;
 
   // ===== validation =====
-  if (!email.endsWith("@dome.tu.ac.th")) {
+  if (
+	!email.endsWith("@dome.tu.ac.th")   &&
+    email !== "chayananmariwan@gmail.com") {
     alert("Use only @dome.tu.ac.th email");
     return;
   }
@@ -101,7 +103,24 @@ function login() {
 
       alert("Login success!");
 
-      window.location.href = "/HTML/dashboard_student.html";
+	  // 🔥 normalize email
+	  const lowerEmail = email.toLowerCase();
+
+	  // 🔥 route ตาม role (แบบง่าย)
+	  if (
+	    lowerEmail === "chayananmariwan@gmail.com" ||
+	    lowerEmail.endsWith("@tu.ac.th")
+	  ) {
+	    // 👉 instructor
+	    window.location.href = "/HTML/dashboard_instructor.html";
+
+	  } else if (lowerEmail.endsWith("@dome.tu.ac.th")) {
+	    // 👉 student
+	    window.location.href = "/HTML/dashboard_student.html";
+
+	  } else {
+	    alert("Unauthorized email");
+	  }
     },
 
     //Failure

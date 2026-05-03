@@ -17,7 +17,7 @@
     <div class="right-header">
       <img src="../src/notification.png" alt="notification" class="icon-bell">
   
-      <span>Prapaporn Rattamrong</span>
+	  <span id="username">Loading...</span>
   
       <img src="../src/avatar.png" alt="profile" class="avatar" id="avatar">
   
@@ -87,6 +87,7 @@
   </div>
 
   <div id="courseList">
+	<!--
     <div class="course-card">
       <b>CS332/CS232 INTRODUCTION TO CLOUD COMPUTING TECHNOLOGY</b><br>
       Instructor: Songsakdi Rongviriyapanish<br>
@@ -111,6 +112,7 @@
       Assignments: 2<br>
       Next Deadline: 15 Apr
     </div>
+	-->
   </div>
 
   <div class="footer-bar">
@@ -174,12 +176,13 @@
 
     <label>Course Code</label>
     <input type="text" id="courseCode" class="form-input">
+	
+	<label>Section</label>
+	<input type="text" id="courseSection" class="form-input">
 
     <label>Description</label>
     <input type="text" id="courseDesc" class="form-input">
 
-    <label>Instructor</label>
-    <input type="text" id="courseInstructor" class="form-input">
 
     <div class="modal-actions">
       <button class="btn-modal-cancel" onclick="closeCourseModal()">Cancel</button>

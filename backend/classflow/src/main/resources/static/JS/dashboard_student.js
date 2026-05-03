@@ -89,3 +89,77 @@ function enrollSelected() {
 function goToAllCourses() {
   window.location.href = "all_courses.html";
 }
+
+// ===== API WITH TOKEN =====
+const API_URL = "http://localhost:8080";
+
+function getToken() {
+  return localStorage.getItem("idToken");
+}
+
+// ===== LOAD COURSE =====
+async function loadMyCourses() {
+	try {
+	   const token = getToken();
+
+	   const res = await fetch(`${API_URL}/courses/my`, {
+	     headers: {
+	       "Authorization": `Bearer ${token}`
+	     }
+	   });
+
+	   const data = await res.json();
+
+	   console.log("API response:", data);
+
+	   if (!Array.isArray(data)) {
+	     console.error("Not array:", data);
+	     return;
+	   }
+
+	   renderCourses(data);
+
+	 } catch (err) {
+	   console.error(err);
+	 }
+}
+
+// ===== RENDER =====
+function renderCourses(courses) {
+  const container = document.getElementById("myCoursesContainer");
+  container.innerHTML = "";
+
+  courses.forEach(course => {
+    const div = document.createElement("div");
+    div.className = "course-card";
+
+    div.innerHTML = `
+      <h3>${course.name}</h3>
+      <p>${course.description || ""}</p>
+      <button onclick="viewAssignments(${course.id})">
+        View Assignments
+      </button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadMyCourses();
+});
+
+
+async function viewAssignments(courseId) {
+  const token = getToken();
+
+  const res = await fetch(`${API_URL}/assignments/course/${courseId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  const assignments = await res.json();
+
+  alert(JSON.stringify(assignments, null, 2));
+}

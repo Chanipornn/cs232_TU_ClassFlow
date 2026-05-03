@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Student Sign Up</title>
-  <link rel="stylesheet" href="../CSS/style.css">
+  <link rel="stylesheet" href="/CSS/style.css">
 
   <!-- AWS Cognito -->
   <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.3.0/dist/amazon-cognito-identity.min.js"></script>
@@ -63,7 +63,8 @@ function signUp() {
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
-  if (!email.endsWith("@dome.tu.ac.th")) {
+  if (!email.endsWith("@dome.tu.ac.th")   &&
+      email !== "chayananmariwan@gmail.com") {
     alert("Use only @dome.tu.ac.th email");
     return;
   }
