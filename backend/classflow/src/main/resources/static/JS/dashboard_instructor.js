@@ -256,57 +256,6 @@ function closeCourseModal() {
 }
 
 
-// ======= CREATE COURSE =======
-/*
-function createCourse() {
-  const name = document.getElementById('courseName').value.trim();
-  const code = document.getElementById('courseCode').value.trim();
-  const instructor = document.getElementById('courseInstructor').value.trim();
-
-  if (!name || !code) {
-    alert("Please fill Course Name and Code");
-    return;
-  }
-
-  let courses = JSON.parse(localStorage.getItem("courses")) || [];
-
-  if (courses.some(c => c.code === code)) {
-    alert("Course already exists!");
-    return;
-  }
-
-  const newCourse = {
-    name,
-    code,
-    instructor,
-    assignments: []
-  };
-
-  courses.push(newCourse);
-
-  localStorage.setItem("courses", JSON.stringify(courses));
-
-  // 🔥 trigger ให้ student รู้ (optional)
-  localStorage.setItem("courses_updated", Date.now());
-
-  // ===== UI =====
-  const list = document.getElementById('courseList');
-
-  const div = document.createElement('div');
-  div.className = 'course-card';
-  div.innerHTML = `
-    <b>${code} ${name}</b><br>
-    Instructor: ${instructor}<br>
-    Assignments: 0<br>
-    Next Deadline: -
-  `;
-
-  list.prepend(div);
-
-  closeCourseModal();
-}
-*/
-
 // ======= CLOSE MODAL =======
 document.addEventListener('DOMContentLoaded', function () {
 
