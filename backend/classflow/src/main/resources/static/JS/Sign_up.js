@@ -62,11 +62,31 @@ document.addEventListener("DOMContentLoaded", function () {
   
           return;
         }
-  
-        alert("Signup success! Check your email for OTP verification");
-  
-        window.location.href = "confirm.html";
-      });
-    };
-  
+		
+		const userData = {
+			email: email,
+		    role: "STUDENT", 
+		    cognitoSub: result.userSub 
+		};
+
+		// ส่งข้อมูลไปที่ Spring Boot Controller
+		fetch('/api/auth/sync-user', {
+		    method: 'POST',
+		    headers: { 'Content-Type': 'application/json' },
+		    body: JSON.stringify(userData)
+		})
+		.then(response => {
+		    if (response.ok) {
+		    	alert("Signup success! Check your email for OTP verification");
+		        window.location.href = "confirm.html"; // เปลี่ยนหน้าเมื่อบันทึกสำเร็จเท่านั้น
+		    } else {
+		        alert("Cognito success, but failed to save in local DB");
+		    }
+		})
+		.catch(err => {
+		    console.error("Sync Error:", err);
+		    alert("Network error while syncing to database");
+		});	  
+	  });
+	};
   });
