@@ -26,112 +26,111 @@ window.addEventListener("DOMContentLoaded", async () => {
     await loadAssignments();
   }
 
-  if (window.location.pathname.includes("create_assignment_form.html")) {
+  if (window.location.pathname.includes("edit_assignment.html")) {
      await loadAssignmentData();
   }
 });
 
 // ================= COURSE =================
 async function loadCourseInfo() {
-
+	
   if (!courseId) return;
 
   try {
+	const res = await fetch(
+	       `${API_BASE_URL}/courses/${courseId}`,
+	       {
+	         headers: {
+	           "Authorization": `Bearer ${token}`
+	         }
+	       }
+	   );
 
-    const res = await fetch(
-        `${API_BASE_URL}/courses/${courseId}`,
-        {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        }
-    );
-
-    if (!res.ok) {
-      throw new Error("Course not found");
-    }
+	   if (!res.ok) {
+	     throw new Error("Course not found");
+	   }
 
     const course = await res.json();
+	
+	// ================= TITLE =================
 
-    // ================= TITLE =================
+	    const titleEl =
+	        document.getElementById("courseTitle");
 
-    const titleEl =
-        document.getElementById("courseTitle");
+	    if (titleEl) {
 
-    if (titleEl) {
+	      titleEl.innerHTML = `
+	        ${course.code || "-"} - ${course.name || "-"}
 
-      titleEl.innerHTML = `
-        ${course.code || "-"} - ${course.name || "-"}
+	        <div style="
+	          font-size: 18px;
+	          font-weight: 500;
+	          margin-top: 8px;
+	          opacity: 0.9;
+	        ">
 
-        <div style="
-          font-size: 18px;
-          font-weight: 500;
-          margin-top: 8px;
-          opacity: 0.9;
-        ">
+	          Instructor :
+	          ${course.instructorName ||
+	      course.instructor ||
+	      "Unknown Instructor"}
 
-          Instructor :
-          ${course.instructorName ||
-      course.instructor ||
-      "Unknown Instructor"}
+	          &nbsp;&nbsp;|&nbsp;&nbsp;
 
-          &nbsp;&nbsp;|&nbsp;&nbsp;
+	          Section :
+	          ${course.section || "-"}
 
-          Section :
-          ${course.section || "-"}
+	          <br>
 
-          <br>
+	          <span style="
+	            font-size: 16px;
+	            font-weight: 400;
+	          ">
+	            ${course.description || ""}
+	          </span>
 
-          <span style="
-            font-size: 16px;
-            font-weight: 400;
-          ">
-            ${course.description || ""}
-          </span>
+	        </div>
+	      `;
+	    }
+		
+		// ================= STUDENT COUNT =================
 
-        </div>
-      `;
-    }
+		    const countRes = await fetch(
+		        `${API_BASE_URL}/courses/${courseId}/student-count`,
+		        {
+		          headers: {
+		            "Authorization": `Bearer ${token}`
+		          }
+		        }
+		    );
 
-    // ================= STUDENT COUNT =================
+		    const studentCount =
+		        await countRes.text();
 
-    const countRes = await fetch(
-        `${API_BASE_URL}/courses/${courseId}/student-count`,
-        {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        }
-    );
+		    const studentEl =
+		        document.getElementById("studentCount");
 
-    const studentCount =
-        await countRes.text();
+		    if (studentEl) {
 
-    const studentEl =
-        document.getElementById("studentCount");
+		      studentEl.textContent =
+		          studentCount;
+		    }
 
-    if (studentEl) {
+		    // ================= CREATE BTN =================
 
-      studentEl.textContent =
-          studentCount;
-    }
-
-    // ================= CREATE BTN =================
-
-    const createBtn =
-        document.querySelector(".create-btn");
-
+		    const createBtn =
+		        document.querySelector(".create-btn");
+	
+    
     if (createBtn) {
-
-      createBtn.href =
-          `create_assignment_form.html?courseId=${courseId}`;
+      createBtn.href = 
+	  		`create_assignment_form.html?courseId=${courseId}`;
     }
 
   } catch (err) {
-
     console.error(err);
   }
 }
+
 // ================= BACK BUTTON =================
 function setupBackButton() {
   const backBtn = document.getElementById("backBtn");
@@ -626,23 +625,65 @@ async function updateAssignment() {
         "assignmentDeadline"
       ).value;
 
+    const fileInput =
+      document.getElementById(
+        "assignmentFile"
+      );
+
+    // =====================
+    // FORM DATA
+    // =====================
+
+    const formData =
+      new FormData();
+
+    formData.append("title", title);
+
+    formData.append(
+      "description",
+      description
+    );
+
+    formData.append(
+      "requirements",
+      requirements
+    );
+
+    formData.append(
+      "deadline",
+      deadline
+    );
+
+    // =====================
+    // NEW FILES
+    // =====================
+
+    if (fileInput.files.length > 0) {
+
+      Array.from(fileInput.files)
+        .forEach(file => {
+
+          formData.append(
+            "files",
+            file
+          );
+        });
+    }
+
     const res = await fetch(
       `http://localhost:8080/assignments/${id}`,
       {
         method: "PUT",
 
         headers: {
-          "Content-Type":
-            "application/json"
+          Authorization:
+            "Bearer " +
+            localStorage.getItem(
+              "idToken"
+            )
         },
 
-        body: JSON.stringify({
-
-          title,
-          description,
-          requirements,
-          deadline
-        })
+        body: formData
       }
     );
 
@@ -655,7 +696,8 @@ async function updateAssignment() {
 
     alert("แก้ไขสำเร็จ");
 
-    history.back();
+    window.location.href =
+      `create_assignments_all.html?courseId=${courseId}`;
 
   } catch (err) {
 
@@ -664,8 +706,6 @@ async function updateAssignment() {
     alert("แก้ไขไม่สำเร็จ");
   }
 }
-
-
 
 // ================= UI =================
 function setupAccordions() {
@@ -702,5 +742,5 @@ function goToEdit(id) {
 }
 
 
-loadAssignmentData();
+//loadAssignmentData();
 

@@ -51,33 +51,172 @@ public class AssignmentController {
     
 
  // ================= UPDATE ASSIGNMENT =================
-    @PutMapping("/{id}")
+    @PutMapping(
+    	    value = "/{id}",
+    	    consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    	)
+    	public Assignment updateAssignment(
+
+    	    @PathVariable Long id,
+
+    	    @RequestParam String title,
+
+    	    @RequestParam String description,
+
+    	    @RequestParam(required = false)
+    	    String requirements,
+
+    	    @RequestParam String deadline,
+
+    	    @RequestParam(required = false)
+    	    MultipartFile[] files
+
+    	) throws Exception {
+
+    	    Assignment assignment =
+    	        assignmentRepository
+    	            .findById(id)
+    	            .orElseThrow();
+
+    	    assignment.setTitle(title);
+
+    	    assignment.setDescription(description);
+
+    	    assignment.setRequirements(requirements);
+
+    	    assignment.setDeadline(
+    	        LocalDateTime.parse(deadline)
+    	    );
+
+    	    // ================= FILE =================
+
+    	    if (files != null &&
+    	        files.length > 0) {
+
+    	        assignment.getFiles().clear();
+
+    	        for (MultipartFile file : files) {
+
+    	            if (!file.isEmpty()) {
+
+    	                String fileName =
+    	                    file.getOriginalFilename();
+
+    	                Path uploadPath =
+    	                    Paths.get("uploads");
+
+    	                if (!Files.exists(uploadPath)) {
+
+    	                    Files.createDirectories(
+    	                        uploadPath
+    	                    );
+    	                }
+
+    	                Files.copy(
+    	                    file.getInputStream(),
+    	                    uploadPath.resolve(fileName),
+    	                    StandardCopyOption.REPLACE_EXISTING
+    	                );
+
+    	                AssignmentFile af =
+    	                    new AssignmentFile();
+
+    	                af.setFileName(fileName);
+
+    	                af.setAssignment(assignment);
+
+    	                assignment.getFiles().add(af);
+    	            }
+    	        }
+    	    }
+
+    	    return assignmentRepository.save(
+    	        assignment
+    	    );
+    	}
+   /* @PutMapping("/{id}")
     public Assignment updateAssignment(
-            @PathVariable Long id,
-            @RequestBody Assignment updated) {
+
+        @PathVariable Long id,
+
+        @RequestParam String title,
+
+        @RequestParam String description,
+
+        @RequestParam(required = false)
+        String requirements,
+
+        @RequestParam String deadline,
+
+        @RequestParam(required = false)
+        MultipartFile[] files
+
+    ) throws Exception {
 
         Assignment assignment =
-                assignmentRepository
-                        .findById(id)
-                        .orElseThrow();
+            assignmentRepository
+                .findById(id)
+                .orElseThrow();
 
-        assignment.setTitle(
-                updated.getTitle());
+        assignment.setTitle(title);
 
-        assignment.setDescription(
-                updated.getDescription());
+        assignment.setDescription(description);
 
-        assignment.setRequirements(
-                updated.getRequirements());
+        assignment.setRequirements(requirements);
 
         assignment.setDeadline(
-                updated.getDeadline());
+            LocalDateTime.parse(deadline)
+        );
 
-        return assignmentRepository
-                .save(assignment);
+        // =====================
+        // SAVE FILES
+        // =====================
+
+        if (files != null &&
+            files.length > 0) {
+
+            assignment.getFiles().clear();
+
+            for (MultipartFile file : files) {
+
+                if (!file.isEmpty()) {
+
+                    String fileName =
+                        file.getOriginalFilename();
+
+                    Path uploadPath =
+                        Paths.get("uploads");
+
+                    if (!Files.exists(uploadPath)) {
+
+                        Files.createDirectories(
+                            uploadPath
+                        );
+                    }
+
+                    Files.copy(
+                        file.getInputStream(),
+                        uploadPath.resolve(fileName),
+                        StandardCopyOption.REPLACE_EXISTING
+                    );
+
+                    AssignmentFile af =
+                        new AssignmentFile();
+
+                    af.setFileName(fileName);
+
+                    af.setAssignment(assignment);
+
+                    assignment.getFiles().add(af);
+                }
+            }
+        }
+
+        return assignmentRepository.save(
+            assignment
+        );
     }
- 
-    
+    */
     // ดู assignment ของวิชาที่ตัวเองลงไว้
     @GetMapping("/my")
     public List<Assignment> getMyAssignments(@AuthenticationPrincipal Jwt jwt) {
