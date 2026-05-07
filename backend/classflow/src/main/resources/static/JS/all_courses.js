@@ -1,89 +1,92 @@
 document.addEventListener("DOMContentLoaded", function () {
+  
+  // 1. แสดงชื่อผู้ใช้งาน
+  const username = localStorage.getItem("username") || "Guest";
+  const userDisplay = document.getElementById("username");
+  if (userDisplay) userDisplay.innerText = username;
 
   const list = document.querySelector(".course-list");
-  const selectAll = document.querySelector(".course-header input");
 
-  let courses = JSON.parse(localStorage.getItem("courses")) || [];
+  // 2. ดึงข้อมูลวิชาทั้งหมดจาก Java Backend
+  // URL ต้องตรงกับ @RequestMapping("/courses") ใน CourseController
+  fetch('http://localhost:8080/courses') 
+    .then(response => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
+    .then(courses => {
+      renderCourses(courses);
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      list.innerHTML = "<p style='padding:20px;'>ไม่สามารถโหลดข้อมูลวิชาได้ กรุณารัน Backend หรือเช็กฐานข้อมูล</p>";
+    });
 
-  console.log("Courses:", courses);
+  // 3. ฟังก์ชันสร้างรายการวิชาบนหน้าเว็บ
+  function renderCourses(courses) {
+    list.innerHTML = ""; // ล้างข้อมูล Hardcode เก่าออก
 
-  list.innerHTML = "";
+    if (courses.length === 0) {
+      list.innerHTML = "<p style='padding:20px;'>ยังไม่มีรายชื่อวิชาในระบบ</p>";
+      return;
+    }
 
-  // ===== RENDER COURSES =====
-  courses.forEach(course => {
-    const div = document.createElement("div");
-    div.className = "course-card";
+    courses.forEach(course => {
+      const row = document.createElement("div");
+      row.className = "course-row";
 
-    div.innerHTML = `
-      <h3>${course.code} - ${course.name} (Sec ${course.section || "-"})</h3>
-      <p>Description: ${course.description || "-"}</p>
-    `;
+      // ดึงชื่ออาจารย์ (ถ้ามี Object instructor)
+      const instructorName = course.instructor ? course.instructor.email : "Not assigned";
 
-    // ✅ ใช้ course ตรงนี้ (อยู่ใน scope)
-    div.onclick = () => goToCourse(course.id);
-
-    list.appendChild(div);
-  });
-  /*
-  courses.forEach((c, index) => {
-    const row = document.createElement("div");
-    row.className = "course-row";
-
-    row.innerHTML = `
-      <input type="checkbox" class="course-checkbox" data-index="${index}">
-      <div class="course-card">
-        <b>${c.code} ${c.name}</b><br>
-        Instructor: ${c.instructor}
-      </div>
-    `;
-
-    list.appendChild(row);
-  });
-*/
-function goToCourse(courseId) {
-  console.log("CLICK COURSE ID:", courseId);
-  window.location.href = `create_assignments_all.html?courseId=${courseId}`;
-}
-  // ===== SELECT ALL =====
-  if (selectAll) {
-    selectAll.addEventListener("change", () => {
-      document.querySelectorAll(".course-checkbox")
-        .forEach(cb => cb.checked = selectAll.checked);
+      row.innerHTML = `
+        <input type="checkbox" class="course-checkbox" data-id="${course.id}">
+        <div class="course-card" onclick="goToCourse(${course.id})">
+          <b>${course.code || 'No Code'} : ${course.name || 'Untitled Course'}</b><br>
+          <small>Instructor: ${instructorName}</small>
+        </div>
+      `;
+      list.appendChild(row);
     });
   }
-
 });
 
+// 4. ฟังก์ชันเมื่อคลิกที่วิชา (ไปหน้าดูรายละเอียดงาน)
+function goToCourse(courseId) {
+  window.location.href = `assignment_all.html?courseId=${courseId}`;
+}
 
-// ===== ENROLL =====
+// 5. ฟังก์ชัน Enroll (ต้องใช้ Token)
 function enrollSelected() {
-
+ 
   const checked = document.querySelectorAll(".course-checkbox:checked");
+  const token = localStorage.getItem("accessToken");
 
   if (checked.length === 0) {
-    alert("Please select at least one course");
+    alert("โปรดเลือกวิชาที่ต้องการลงทะเบียน");
     return;
   }
 
-  let courses = JSON.parse(localStorage.getItem("courses")) || [];
-  let enrolled = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+  if (!token) {
+    alert("กรุณาเข้าสู่ระบบก่อนลงทะเบียน");
+    return;
+  }
 
-  checked.forEach(cb => {
-    const course = courses[cb.dataset.index];
-
-    if (!course) return;
-
-    if (!enrolled.some(c => c.code === course.code)) {
-      enrolled.push(course);
-    }
+  // ส่งข้อมูล Enroll ไปที่ Backend ทีละวิชา
+  const promises = Array.from(checked).map(cb => {
+    const courseId = cb.dataset.id;
+    return fetch(`http://localhost:8080/courses/${courseId}/enroll`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
   });
 
-  localStorage.setItem("enrolledCourses", JSON.stringify(enrolled));
-
-  alert("Enrolled successfully!");
-
-
-  localStorage.setItem("enroll_updated", Date.now());
-
-  window.location.href = "dashboard_student.html";
+  Promise.all(promises)
+    .then(() => {
+      alert("ลงทะเบียนสำเร็จ!");
+      window.location.href = "dashboard_student.html";
+    })
+    .catch(err => alert("เกิดข้อผิดพลาดในการลงทะเบียน"));
 }
