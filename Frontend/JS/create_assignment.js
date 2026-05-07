@@ -9,8 +9,21 @@ const PAGE_MODE = (() => {
 })();
 
 let allAssignments = [];
+function loadSelectedCourse() {
+  const code = sessionStorage.getItem('selectedCourseCode') || '';
+  const name = sessionStorage.getItem('selectedCourseName') || '';
+
+  const titleEl = document.getElementById('courseTitle');
+
+  if (titleEl) {
+    titleEl.textContent = `${code} ${name}`.trim();
+  }
+}
+
 
 window.addEventListener('DOMContentLoaded', async () => {
+  loadSelectedCourse();
+
   setupAccordions();
   setupProfileButton();
   setupSearch();
