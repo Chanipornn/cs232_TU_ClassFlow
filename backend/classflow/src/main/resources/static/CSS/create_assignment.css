@@ -704,3 +704,42 @@ textarea {
    color: #4a4fa7;
 
  }
+ 
+ .file-item {
+
+   display: flex;
+
+   align-items: center;
+
+   gap: 12px;
+
+   margin-top: 10px;
+ }
+
+ .preview-btn,
+ .download-btn {
+
+   padding: 4px 12px;
+
+   border-radius: 8px;
+
+   text-decoration: none;
+
+   font-size: 14px;
+
+   font-weight: 600;
+ }
+
+ .preview-btn {
+
+   background: #ecebff;
+
+   color: #4b4bb7;
+ }
+
+ .download-btn {
+
+   background: #4b4bb7;
+
+   color: white;
+ }

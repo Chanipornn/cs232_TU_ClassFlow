@@ -18,19 +18,22 @@ public class Assignment {
 	    @Column(columnDefinition = "TEXT")
 	    private String description;
 	    
+	    @Column(columnDefinition = "TEXT")
+	    private String requirements;
+	    
 	    private LocalDateTime deadline;
+	    
+	    private String attachmentFileName;
 
 	    @ManyToOne
 	    @JoinColumn(name = "course_id")
 	    @JsonIgnoreProperties({"assignments", "enrollments", "instructor"})
 	    private Course course;
-	    
-	    private String attachmentFileName;
-	    
+	
 	    @OneToMany(
-	            mappedBy = "assignment",
+	    		mappedBy = "assignment",
 	            cascade = CascadeType.ALL,
-	            orphanRemoval = true
+	            fetch = FetchType.EAGER
 	    )
 	    @JsonManagedReference
 	    private java.util.List<AssignmentFile> files;
@@ -47,6 +50,14 @@ public class Assignment {
 	    public void setDescription(String description) { this.description = description; }
 	    public void setDeadline(LocalDateTime deadline) { this.deadline = deadline; }
 	    public void setCourse(Course course) { this.course = course; }
+	    
+	    public String getRequirements() {
+	        return requirements;
+	    }
+
+	    public void setRequirements(String requirements) {
+	        this.requirements = requirements;
+	    }
 	    
 	    public String getAttachmentFileName() {
 	        return attachmentFileName;

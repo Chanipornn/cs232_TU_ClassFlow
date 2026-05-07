@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (window.location.pathname.includes("create_assignment_form.html")) {
-    await loadAssignmentForEdit();
+     await loadAssignmentData();
   }
 });
 
@@ -125,6 +125,8 @@ async function loadAssignments() {
   }
 }
 
+
+// ================= RENDER =================
 function renderAssignments(assignments) {
 
   const assignmentList =
@@ -134,8 +136,7 @@ function renderAssignments(assignments) {
 
   const now = new Date();
 
-  // ================= FILTER =================
-
+  // FILTER 
   if (currentPage.includes("active")) {
 
     assignments = assignments.filter(a => {
@@ -162,8 +163,7 @@ function renderAssignments(assignments) {
     });
   }
 
-  // ================= COUNT =================
-
+  // COUNT 
   const countEl =
     document.getElementById("assignmentCount");
 
@@ -171,8 +171,7 @@ function renderAssignments(assignments) {
     countEl.textContent = assignments.length;
   }
 
-  // ================= EMPTY =================
-
+  // EMPTY 
   if (assignments.length === 0) {
 
     assignmentList.innerHTML = `
@@ -183,8 +182,6 @@ function renderAssignments(assignments) {
 
     return;
   }
-
-  // ================= RENDER =================
 
   assignments.forEach(a => {
 
@@ -201,7 +198,7 @@ function renderAssignments(assignments) {
 
     assignmentList.innerHTML += `
 
-      <div class="assignment-card">
+      <div class="assignment-card" onclick="goToEdit(${a.id})">
 
         <h2>${a.title}</h2>
 
@@ -254,7 +251,6 @@ if (fileInput) {
 
 
 // ================= CREATE ASSIGNMENT =================
-
 async function createAssignment(courseId) {
 
   try {
@@ -264,6 +260,9 @@ async function createAssignment(courseId) {
 
     const description =
       document.getElementById("assignmentDescription").value;
+	  
+	  const requirements =
+	    document.getElementById("assignmentRequirements").value;
 
     const deadline =
       document.getElementById("assignmentDeadline").value;
@@ -276,15 +275,14 @@ async function createAssignment(courseId) {
     formData.append("title", title);
 
     formData.append("description", description);
+	formData.append("requirements", requirements);
 
     formData.append("deadline", deadline);
 
     formData.append("courseId", courseId);
 
-    // =========================
+    
     // MULTIPLE FILES
-    // =========================
-
     if (fileInput.files.length > 0) {
 
       Array.from(fileInput.files)
@@ -328,7 +326,7 @@ async function createAssignment(courseId) {
       throw new Error("Create failed");
     }
 
-    alert("✅ สร้าง assignment สำเร็จ");
+    alert("สร้าง assignment สำเร็จ");
 
     window.location.href =
       `create_assignments_all.html?courseId=${courseId}`;
@@ -337,31 +335,12 @@ async function createAssignment(courseId) {
 
     console.error(err);
 
-    alert("❌ สร้าง assignment ไม่สำเร็จ");
+    alert("สร้าง assignment ไม่สำเร็จ");
   }
   
   
 }
 
-/*
-function renderAssignments(data) {
-  const list = document.getElementById("assignmentList");
-  if (!list) return;
-
-  if (data.length === 0) {
-    list.innerHTML = `<p>ไม่มี assignment</p>`;
-    return;
-  }
-
-  list.innerHTML = data.map(a => `
-    <div class="assignment-card">
-      <h3>${a.title}</h3>
-      <p>${a.description}</p>
-      <p>Deadline: ${formatDate(a.deadline || a.dueDate)}</p>
-    </div>
-  `).join("");
-}
-*/
 
 // ================= SEARCH =================
 function setupSearch() {
@@ -459,31 +438,183 @@ function setupCancelButton() {
   }
 }
 
-// ================= EDIT =================
-async function loadAssignmentForEdit() {
+
+// ================= LOAD OLD DATA =================
+
+async function loadAssignmentData() {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
   const id = params.get("id");
+
   if (!id) return;
 
-  try {
-    const res = await fetch(`${API_BASE_URL}/assignments/${id}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
+  const res = await fetch(
+    `http://localhost:8080/assignments/${id}`
+  );
 
-    if (!res.ok) throw new Error("Load failed");
+  const assignment =
+    await res.json();
+	
+	// ================= FILES =================
 
-    const data = await res.json();
+	const fileList =
+	  document.getElementById("fileList");
 
-    document.getElementById("assignmentTitle").value = data.title || "";
-    document.getElementById("assignmentDescription").value = data.description || "";
-    document.getElementById("assignmentDeadline").value =
-      toDateTimeLocalValue(data.deadline || data.dueDate);
+	if (
+	  assignment.files &&
+	  assignment.files.length > 0
+	) {
 
-  } catch (err) {
-    console.error(err);
+	  fileList.innerHTML = "";
+	  
+	  assignment.files.forEach(file => {
+
+	    const fileUrl =
+	      `http://localhost:8080/assignments/files/${file.fileName}`;
+
+	    fileList.innerHTML += `
+
+	      <div class="file-item">
+
+	        📄 ${file.fileName}
+
+	        <a
+	          href="${fileUrl}"
+	          target="_blank"
+	          class="preview-btn"
+	        >
+	          Preview
+	        </a>
+
+	        <a
+	          href="${fileUrl}"
+	          download
+	          class="download-btn"
+	        >
+	          Download
+	        </a>
+
+	      </div>
+	    `;
+	  });
+/*
+	  assignment.files.forEach(file => {
+
+	    fileList.innerHTML += `
+	      <div class="file-item">
+	        📄 ${file.fileName}
+	      </div>
+	    `;
+	  });
+*/
+	} else {
+
+	  fileList.innerHTML =
+	    "No files selected";
+	}
+
+  
+  // FILL FORM
+  document.getElementById(
+    "assignmentTitle"
+  ).value =
+    assignment.title || "";
+
+  document.getElementById(
+    "assignmentDescription"
+  ).value =
+    assignment.description || "";
+
+  document.getElementById(
+    "assignmentRequirements"
+  ).value =
+    assignment.requirements || "";
+
+  if (assignment.deadline) {
+
+    document.getElementById(
+      "assignmentDeadline"
+    ).value =
+      assignment.deadline
+        .replace(" ", "T");
   }
 }
+
+// ================= UPDATE =================
+async function updateAssignment() {
+
+  try {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const id =
+      params.get("id");
+
+    const title =
+      document.getElementById(
+        "assignmentTitle"
+      ).value;
+
+    const description =
+      document.getElementById(
+        "assignmentDescription"
+      ).value;
+
+    const requirements =
+      document.getElementById(
+        "assignmentRequirements"
+      ).value;
+
+    const deadline =
+      document.getElementById(
+        "assignmentDeadline"
+      ).value;
+
+    const res = await fetch(
+      `http://localhost:8080/assignments/${id}`,
+      {
+        method: "PUT",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+
+          title,
+          description,
+          requirements,
+          deadline
+        })
+      }
+    );
+
+    if (!res.ok) {
+
+      throw new Error(
+        "Update failed"
+      );
+    }
+
+    alert("แก้ไขสำเร็จ");
+
+    history.back();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("แก้ไขไม่สำเร็จ");
+  }
+}
+
+
 
 // ================= UI =================
 function setupAccordions() {
@@ -495,6 +626,7 @@ function setupAccordions() {
 function showLoading(el) {
   el.innerHTML = "<p>Loading...</p>";
 }
+
 
 // ================= UTIL =================
 function formatDate(val) {
@@ -508,3 +640,16 @@ function toDateTimeLocalValue(val) {
   const d = new Date(val);
   return d.toISOString().slice(0, 16);
 }
+
+
+// ================= GO TO EDIT =================
+
+function goToEdit(id) {
+
+	window.location.href =
+	   `edit_assignment.html?id=${id}&courseId=${courseId}`;
+}
+
+
+loadAssignmentData();
+
