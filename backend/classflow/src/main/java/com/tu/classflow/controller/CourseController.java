@@ -143,4 +143,15 @@ public class CourseController {
                 .map(Enrollment::getCourse)
                 .toList();
     }
+    
+    // =============================
+    // นับจำนวนนักเรียน
+    // =============================
+    @GetMapping("/{courseId}/student-count")
+    public long getStudentCount(
+            @PathVariable Long courseId) {
+
+        return enrollmentRepository
+                .countByCourse_Id(courseId);
+    }
 }

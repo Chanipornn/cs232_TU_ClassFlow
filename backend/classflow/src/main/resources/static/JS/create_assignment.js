@@ -2,6 +2,7 @@ const API_BASE_URL = "http://localhost:8080";
 const token = localStorage.getItem("idToken");
 
 const params = new URLSearchParams(window.location.search);
+const currentPage = window.location.pathname;
 const courseId = params.get("courseId");
 
 // ================= INIT =================
@@ -11,6 +12,13 @@ window.addEventListener("DOMContentLoaded", async () => {
   setupSearch();
   setupAccordions();
   setupCancelButton();
+  
+  document.querySelectorAll(".tab-btn").forEach(tab => {
+
+    const href = tab.getAttribute("href");
+
+    tab.href = `${href}?courseId=${courseId}`;
+  });
   
   await loadCourseInfo();
 
@@ -37,6 +45,24 @@ async function loadCourseInfo() {
     if (!res.ok) throw new Error("Course not found");
 
     const course = await res.json();
+	
+	const countRes = await fetch(
+	  `${API_BASE_URL}/courses/${courseId}/student-count`,
+	  {
+	    headers: {
+	      "Authorization": `Bearer ${token}`
+	    }
+	  }
+	);
+
+	const studentCount = await countRes.text();
+
+	const studentEl =
+	  document.getElementById("studentCount");
+
+	if (studentEl) {
+	  studentEl.textContent = studentCount;
+	}
 
     const el = document.getElementById("courseTitle");
     if (el) {
@@ -99,6 +125,98 @@ async function loadAssignments() {
   }
 }
 
+function renderAssignments(assignments) {
+
+  const assignmentList =
+    document.getElementById("assignmentList");
+
+  assignmentList.innerHTML = "";
+
+  const now = new Date();
+
+  // ================= FILTER =================
+
+  if (currentPage.includes("active")) {
+
+    assignments = assignments.filter(a => {
+
+      if (!a.deadline) return false;
+
+      const deadline =
+        new Date(a.deadline.replace(" ", "T"));
+
+      return deadline > now;
+    });
+  }
+
+  if (currentPage.includes("closed")) {
+
+    assignments = assignments.filter(a => {
+
+      if (!a.deadline) return false;
+
+      const deadline =
+        new Date(a.deadline.replace(" ", "T"));
+
+      return deadline <= now;
+    });
+  }
+
+  // ================= COUNT =================
+
+  const countEl =
+    document.getElementById("assignmentCount");
+
+  if (countEl) {
+    countEl.textContent = assignments.length;
+  }
+
+  // ================= EMPTY =================
+
+  if (assignments.length === 0) {
+
+    assignmentList.innerHTML = `
+      <div class="empty-state">
+        <h2>No assignments found</h2>
+      </div>
+    `;
+
+    return;
+  }
+
+  // ================= RENDER =================
+
+  assignments.forEach(a => {
+
+    let deadlineText = "-";
+
+    if (a.deadline) {
+
+      const d =
+        new Date(a.deadline.replace(" ", "T"));
+
+      deadlineText =
+        d.toLocaleDateString("th-TH");
+    }
+
+    assignmentList.innerHTML += `
+
+      <div class="assignment-card">
+
+        <h2>${a.title}</h2>
+
+        <p>${a.description || "-"}</p>
+
+        <strong>
+          Deadline: ${deadlineText}
+        </strong>
+
+      </div>
+    `;
+  });
+}
+
+/*
 function renderAssignments(data) {
   const list = document.getElementById("assignmentList");
   if (!list) return;
@@ -116,6 +234,7 @@ function renderAssignments(data) {
     </div>
   `).join("");
 }
+*/
 
 // ================= SEARCH =================
 function setupSearch() {
