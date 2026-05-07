@@ -33,54 +33,105 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 // ================= COURSE =================
 async function loadCourseInfo() {
+
   if (!courseId) return;
 
   try {
-    const res = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
 
-    if (!res.ok) throw new Error("Course not found");
+    const res = await fetch(
+        `${API_BASE_URL}/courses/${courseId}`,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
+    );
 
-    const course = await res.json();
-	
-	const countRes = await fetch(
-	  `${API_BASE_URL}/courses/${courseId}/student-count`,
-	  {
-	    headers: {
-	      "Authorization": `Bearer ${token}`
-	    }
-	  }
-	);
-
-	const studentCount = await countRes.text();
-
-	const studentEl =
-	  document.getElementById("studentCount");
-
-	if (studentEl) {
-	  studentEl.textContent = studentCount;
-	}
-
-    const el = document.getElementById("courseTitle");
-    if (el) {
-      el.textContent =
-        `${course.code || "-"} - ${course.name || "-"} (Sec ${course.section || "-"})`;
+    if (!res.ok) {
+      throw new Error("Course not found");
     }
 
-    // set create btn link
-    const createBtn = document.querySelector(".create-btn");
+    const course = await res.json();
+
+    // ================= TITLE =================
+
+    const titleEl =
+        document.getElementById("courseTitle");
+
+    if (titleEl) {
+
+      titleEl.innerHTML = `
+        ${course.code || "-"} - ${course.name || "-"}
+
+        <div style="
+          font-size: 18px;
+          font-weight: 500;
+          margin-top: 8px;
+          opacity: 0.9;
+        ">
+
+          Instructor :
+          ${course.instructorName ||
+      course.instructor ||
+      "Unknown Instructor"}
+
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+
+          Section :
+          ${course.section || "-"}
+
+          <br>
+
+          <span style="
+            font-size: 16px;
+            font-weight: 400;
+          ">
+            ${course.description || ""}
+          </span>
+
+        </div>
+      `;
+    }
+
+    // ================= STUDENT COUNT =================
+
+    const countRes = await fetch(
+        `${API_BASE_URL}/courses/${courseId}/student-count`,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
+    );
+
+    const studentCount =
+        await countRes.text();
+
+    const studentEl =
+        document.getElementById("studentCount");
+
+    if (studentEl) {
+
+      studentEl.textContent =
+          studentCount;
+    }
+
+    // ================= CREATE BTN =================
+
+    const createBtn =
+        document.querySelector(".create-btn");
+
     if (createBtn) {
-      createBtn.href = `create_assignment_form.html?courseId=${courseId}`;
+
+      createBtn.href =
+          `create_assignment_form.html?courseId=${courseId}`;
     }
 
   } catch (err) {
+
     console.error(err);
   }
 }
-
 // ================= BACK BUTTON =================
 function setupBackButton() {
   const backBtn = document.getElementById("backBtn");
