@@ -681,4 +681,76 @@ textarea {
   .detail-header h1 {
     font-size: 22px;
   }
+  
+  
+  
+  .file-upload-section {
+    margin-top: 20px;
+  }
+
+  .upload-label {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: #4b4bb7;
+    margin-bottom: 12px;
+  }
+
+  .custom-file-upload {
+
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #5b5bcf;
+    color: white;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+  }
+
+  .custom-file-upload:hover {
+    background: #4848b8;
+  }
+
+  #assignmentFile {
+    display: none;
+  }
+
+  .file-list {
+
+    margin-top: 15px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 14px;
+
+    border: 1px solid #ddd;
+
+    font-size: 15px;
+
+    color: #444;
+
+    min-height: 50px;
+  }
+
+  .file-item {
+
+    padding: 6px 0;
+
+    border-bottom: 1px solid #eee;
+  }
+
+  .file-item:last-child {
+    border-bottom: none;
+  }
 }

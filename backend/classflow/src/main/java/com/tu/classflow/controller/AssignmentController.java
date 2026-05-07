@@ -9,6 +9,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.*;
+import java.time.LocalDateTime;
+
 import com.tu.classflow.model.*;
 import com.tu.classflow.repository.*;
 
@@ -34,6 +38,9 @@ public class AssignmentController {
 
     @Autowired
     private CourseRepository courseRepository;
+    
+    @Autowired
+    private AssignmentFileRepository assignmentFileRepository;
 
     
  // อาจารย์สร้าง assignment
@@ -107,4 +114,119 @@ public class AssignmentController {
     public List<Assignment> getByCourse(@PathVariable Long courseId) {
         return assignmentRepository.findByCourse_Id(courseId);
     }
+    
+    
+    // Upload files
+    @PostMapping("/upload")
+    public Assignment createAssignmentWithFiles(
+
+            @RequestParam("title") String title,
+
+            @RequestParam("description") String description,
+
+            @RequestParam("deadline") String deadline,
+
+            @RequestParam("courseId") Long courseId,
+
+            @RequestParam(value = "files", required = false)
+            MultipartFile[] files
+
+    ) throws Exception {
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() ->
+                        new RuntimeException("Course not found"));
+
+        Assignment assignment = new Assignment();
+
+        assignment.setTitle(title);
+
+        assignment.setDescription(description);
+
+        if (deadline != null && !deadline.isEmpty()) {
+
+            assignment.setDeadline(
+                    LocalDateTime.parse(deadline)
+            );
+        }
+
+        assignment.setCourse(course);
+
+        Assignment savedAssignment =
+                assignmentRepository.save(assignment);
+        
+     // =========================
+     // DEBUG FILES
+     // =========================
+
+     System.out.println("FILES = " + files);
+
+     if (files != null) {
+
+         System.out.println(
+                 "FILES LENGTH = "
+                 + files.length
+         );
+
+         for (MultipartFile file : files) {
+
+             System.out.println(
+                     "FILE = "
+                     + file.getOriginalFilename()
+             );
+
+             if (!file.isEmpty()) {
+
+                 AssignmentFile af =
+                         new AssignmentFile();
+
+                 af.setAssignment(savedAssignment);
+
+                 af.setFileName(
+                         file.getOriginalFilename()
+                 );
+
+                 assignmentFileRepository.save(af);
+
+                 System.out.println(
+                         "SAVE FILE: "
+                         + file.getOriginalFilename()
+                 );
+             }
+         }
+     }
+/*
+        // =========================
+        // SAVE FILES
+        // =========================
+        if (files != null) {
+
+            for (MultipartFile file : files) {
+
+                if (!file.isEmpty()) {
+
+                    AssignmentFile af =
+                            new AssignmentFile();
+
+                    af.setAssignment(savedAssignment);
+
+                    af.setFileName(
+                            file.getOriginalFilename()
+                    );
+
+                    assignmentFileRepository.save(af);
+
+                    System.out.println(
+                            "SAVE FILE: "
+                            + file.getOriginalFilename()
+                    );
+                }
+            }
+        }*/
+     
+
+        return savedAssignment;
+    }
+    
+    
 }

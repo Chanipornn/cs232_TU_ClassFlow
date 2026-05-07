@@ -216,6 +216,133 @@ function renderAssignments(assignments) {
   });
 }
 
+
+// ================= FILE PREVIEW =================
+
+const fileInput =
+  document.getElementById("assignmentFile");
+
+if (fileInput) {
+
+  fileInput.addEventListener("change", () => {
+
+    const fileList =
+      document.getElementById("fileList");
+
+    if (fileInput.files.length === 0) {
+
+      fileList.innerHTML =
+        "No files selected";
+
+      return;
+    }
+
+    fileList.innerHTML = "";
+
+    Array.from(fileInput.files)
+      .forEach(file => {
+
+        fileList.innerHTML += `
+          <div class="file-item">
+            📄 ${file.name}
+          </div>
+        `;
+      });
+  });
+}
+
+
+
+// ================= CREATE ASSIGNMENT =================
+
+async function createAssignment(courseId) {
+
+  try {
+
+    const title =
+      document.getElementById("assignmentTitle").value;
+
+    const description =
+      document.getElementById("assignmentDescription").value;
+
+    const deadline =
+      document.getElementById("assignmentDeadline").value;
+
+    const fileInput =
+      document.getElementById("assignmentFile");
+
+    const formData = new FormData();
+
+    formData.append("title", title);
+
+    formData.append("description", description);
+
+    formData.append("deadline", deadline);
+
+    formData.append("courseId", courseId);
+
+    // =========================
+    // MULTIPLE FILES
+    // =========================
+
+    if (fileInput.files.length > 0) {
+
+      Array.from(fileInput.files)
+        .forEach(file => {
+
+          console.log("UPLOAD:", file.name);
+
+          formData.append("files", file);
+
+        });
+    }
+
+	console.log(fileInput.files);
+	console.log(fileInput.files.length);
+
+	for (let i = 0; i < fileInput.files.length; i++) {
+
+	  console.log(
+	    "SEND FILE:",
+	    fileInput.files[i].name
+	  );
+	}
+	
+    const res = await fetch(
+      "http://localhost:8080/assignments/upload",
+      {
+        method: "POST",
+
+        headers: {
+			Authorization:
+			  "Bearer " + localStorage.getItem("idToken")
+        },
+
+        body: formData
+      }
+    );
+	
+	
+
+    if (!res.ok) {
+      throw new Error("Create failed");
+    }
+
+    alert("✅ สร้าง assignment สำเร็จ");
+
+    window.location.href =
+      `create_assignments_all.html?courseId=${courseId}`;
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("❌ สร้าง assignment ไม่สำเร็จ");
+  }
+  
+  
+}
+
 /*
 function renderAssignments(data) {
   const list = document.getElementById("assignmentList");
@@ -254,6 +381,28 @@ function setupSearch() {
 }
 
 // ================= CREATE / SAVE / CANCEL =================
+function setupSaveButton() {
+
+  const btn =
+    document.getElementById("saveAssignmentBtn");
+
+  if (!btn) return;
+
+  btn.onclick = async (e) => {
+
+    e.preventDefault();
+
+    if (!courseId) {
+
+      alert("No courseId");
+
+      return;
+    }
+
+    await createAssignment(courseId);
+  };
+}
+/*
 function setupSaveButton() {
   const btn = document.getElementById("saveAssignmentBtn");
   if (!btn) return;
@@ -298,6 +447,7 @@ function setupSaveButton() {
     }
   };
 }
+*/
 
 function setupCancelButton() {
   const btn = document.getElementById("cancelBtn");

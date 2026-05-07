@@ -3,6 +3,7 @@ package com.tu.classflow.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 
 @Entity
 @Table(name = "assignments")
@@ -23,6 +24,16 @@ public class Assignment {
 	    @JoinColumn(name = "course_id")
 	    @JsonIgnoreProperties({"assignments", "enrollments", "instructor"})
 	    private Course course;
+	    
+	    private String attachmentFileName;
+	    
+	    @OneToMany(
+	            mappedBy = "assignment",
+	            cascade = CascadeType.ALL,
+	            orphanRemoval = true
+	    )
+	    @JsonManagedReference
+	    private java.util.List<AssignmentFile> files;
 
 	    public Assignment() {}
 
@@ -36,5 +47,21 @@ public class Assignment {
 	    public void setDescription(String description) { this.description = description; }
 	    public void setDeadline(LocalDateTime deadline) { this.deadline = deadline; }
 	    public void setCourse(Course course) { this.course = course; }
+	    
+	    public String getAttachmentFileName() {
+	        return attachmentFileName;
+	    }
+
+	    public void setAttachmentFileName(String attachmentFileName) {
+	        this.attachmentFileName = attachmentFileName;
+	    }
+	    
+	    public java.util.List<AssignmentFile> getFiles() {
+	        return files;
+	    }
+
+	    public void setFiles(java.util.List<AssignmentFile> files) {
+	        this.files = files;
+	    }
     
 }
