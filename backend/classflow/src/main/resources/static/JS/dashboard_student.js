@@ -119,6 +119,29 @@ function initCalendar() {
     calendar.render();
 }
 
+// ===== Search Courses =====
+function searchCourse() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const container = document.getElementById('myCoursesContainer');
+    
+    const cards = container.getElementsByClassName('course-card-item');
+
+    for (let i = 0; i < cards.length; i++) {
+        const titleElement = cards[i].querySelector('.course-title'); 
+        
+        if (titleElement) {
+            const titleText = titleElement.innerText.toLowerCase();
+            
+            if (titleText.indexOf(filter) > -1) {
+                cards[i].style.display = ""; // แสดงการ์ดใบนี้
+            } else {
+                cards[i].style.display = "none"; // ซ่อนการ์ดใบนี้
+            }
+        }
+    }
+}
+
 // ===== Navigation =====
 function goToAllCourses() {
     window.location.href = "all_courses.html";
