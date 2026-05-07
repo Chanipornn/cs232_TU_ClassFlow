@@ -384,6 +384,42 @@ body {
   transform: translateX(5px);
 }
 
+#myCoursesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px;
+}
+
+.course-card-item {
+  background-color: #c9cbe6;
+  border-radius: 20px;
+  padding: 22px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.course-card-item:hover {
+  background-color: #b4b6dd;
+  transform: translateX(5px);
+}
+
+.course-title {
+  color: #4A4E91; 
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.course-info-list p {
+  margin: 4px 0;
+  color: #5C6199;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
 
 @media (max-width: 768px) {
 

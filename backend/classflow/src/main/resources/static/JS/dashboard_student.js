@@ -1,165 +1,130 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-  const list = document.querySelector(".course-list");
-
-  // 🔥 กัน error ถ้าไม่ได้อยู่หน้า all_courses
-  if (!list) return;
-
-  let courses = JSON.parse(localStorage.getItem("courses")) || [];
-
-  list.innerHTML = "";
-
-  // 🔥 ถ้าไม่มี course
-  if (courses.length === 0) {
-    list.innerHTML = "<p>No courses available</p>";
-    return;
-  }
-
-  courses.forEach((c, index) => {
-    const row = document.createElement("div");
-    row.className = "course-row";
-
-    row.innerHTML = `
-      <input type="checkbox" class="course-checkbox" data-index="${index}">
-      <div class="course-card">
-        <b>${c.code} ${c.name}</b><br>
-        Instructor: ${c.instructor}
-      </div>
-    `;
-
-    list.appendChild(row);
-  });
-
-});
-
-
-// ======= CALENDAR =======
-document.addEventListener('DOMContentLoaded', function () {
-  const calendarEl = document.getElementById('calendar');
-
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    headerToolbar: {
-      left: 'prev',
-      center: 'title',
-      right: 'next'
-    },
-    height: 240,
-    fixedWeekCount: false
-  });
-
-  calendar.render();
-});
-
-// ===== ENROLL =====
-function enrollSelected() {
-  const checkboxes = document.querySelectorAll(".course-checkbox:checked");
-
-  let courses = JSON.parse(localStorage.getItem("courses")) || [];
-  let enrolled = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
-
-
-  if (checkboxes.length === 0) {
-    alert("Please select at least 1 course");
-    return;
-  }
-
-  checkboxes.forEach(cb => {
-    const course = courses[cb.dataset.index];
-
-    // กัน undefined
-    if (!course) return;
-
-    // กันซ้ำ
-    if (!enrolled.some(c => c.code === course.code)) {
-      enrolled.push(course);
-    }
-  });
-
-  localStorage.setItem("enrolledCourses", JSON.stringify(enrolled));
-
-  alert("Enrolled successfully!");
-
-  // ไป dashboard (calendar จะไม่พังเพราะแยก JS แล้ว)
-  window.location.href = "dashboard_student.html";
-}
-
-
-// ===== NAVIGATION =====
-function goToAllCourses() {
-  window.location.href = "all_courses.html";
-}
-
-// ===== API WITH TOKEN =====
+// API URL 
 const API_URL = "http://localhost:8080";
 
-function getToken() {
-  return localStorage.getItem("idToken");
+document.addEventListener("DOMContentLoaded", function () {
+    // โหลดข้อมูลชื่อผู้ใช้จาก localStorage
+    displayUsername();
+
+    // โหลดข้อมูลวิชาที่ลงทะเบียนไว้จาก Database
+    loadMyCourses();
+
+    // เริ่มการทำงานของปฏิทิน
+    initCalendar();
+});
+
+// ===== แสดงชื่อผู้ใช้งาน (ดึงจาก Email ใน Token) =====
+function displayUsername() {
+    const token = localStorage.getItem("idToken") || localStorage.getItem("accessToken");
+    if (!token) return;
+
+    try {
+        // Decode JWT เพื่อเอา Email
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const email = payload.email || payload["cognito:username"] || "Guest";
+        const name = email.split("@")[0]; // เอาแค่ชื่อหน้า @
+        
+        const usernameElement = document.getElementById("username");
+        if (usernameElement) usernameElement.textContent = name;
+        
+        // เก็บชื่อไว้ใน localStorage เผื่อหน้าอื่นใช้
+        localStorage.setItem("username", name);
+    } catch (e) {
+        console.error("Error decoding token:", e);
+    }
 }
 
-// ===== LOAD COURSE =====
+// ===== ดึงข้อมูลวิชาที่ลงทะเบียน (My Courses) จาก Backend =====
 async function loadMyCourses() {
-	try {
-	   const token = getToken();
+    const container = document.getElementById("myCoursesContainer");
+    const token = localStorage.getItem("accessToken") || localStorage.getItem("idToken");
 
-	   const res = await fetch(`${API_URL}/courses/my`, {
-	     headers: {
-	       "Authorization": `Bearer ${token}`
-	     }
-	   });
+    if (!container) return;
 
-	   const data = await res.json();
+    try {
+        if (!token) {
+            container.innerHTML = "<p style='padding:20px;'>กรุณาเข้าสู่ระบบ</p>";
+            return;
+        }
 
-	   console.log("API response:", data);
+        const res = await fetch(`${API_URL}/courses/my`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
 
-	   if (!Array.isArray(data)) {
-	     console.error("Not array:", data);
-	     return;
-	   }
+        if (!res.ok) throw new Error("Fetch failed");
 
-	   renderCourses(data);
+        const courses = await res.json();
+        renderCourses(courses);
 
-	 } catch (err) {
-	   console.error(err);
-	 }
+    } catch (err) {
+        console.error("Load courses error:", err);
+        container.innerHTML = "<p style='padding:20px;'>ไม่สามารถเชื่อมต่อฐานข้อมูลได้</p>";
+    }
 }
 
-// ===== RENDER =====
+// ===== Card  =====
 function renderCourses(courses) {
   const container = document.getElementById("myCoursesContainer");
   container.innerHTML = "";
 
-  courses.forEach(course => {
-    const div = document.createElement("div");
-    div.className = "course-card";
+  if (!courses || courses.length === 0) {
+    container.innerHTML = "<p style='padding:20px;'>No courses enrolled.</p>";
+    return;
+  }
 
-    div.innerHTML = `
-      <h3>${course.name}</h3>
-      <p>${course.description || ""}</p>
-      <button onclick="viewAssignments(${course.id})">
-        View Assignments
-      </button>
+  courses.forEach(course => {
+    const card = document.createElement("div");
+    card.className = "course-card-item"; // ใช้ Class ตาม CSS ใหม่ด้านล่าง
+    card.onclick = () => window.location.href = `assignment_all.html?courseId=${course.id}`;
+
+    // จัดรูปแบบวันที่ Deadline ให้ดูง่าย (เช่น 15 Mar)
+    let deadlineText = "-";
+    if (course.nextDeadline) {
+      const d = new Date(course.nextDeadline);
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      deadlineText = `${d.getDate()} ${months[d.getMonth()]}`;
+    }
+
+    card.innerHTML = `
+      <div class="course-content">
+        <b class="course-title">${course.code} ${course.name}</b>
+        <div class="course-info-list">
+          <p>Instructor: ${course.instructor ? course.instructor.email.split('@')[0] : "TBA"}</p>
+          <p>Assignments: ${course.assignmentCount || 0}</p>
+          <p>Next Deadline: ${deadlineText}</p>
+        </div>
+      </div>
     `;
 
-    container.appendChild(div);
+    container.appendChild(card);
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadMyCourses();
-});
+// ===== FullCalendar =====
+function initCalendar() {
+    const calendarEl = document.getElementById('calendar');
+    if (!calendarEl) return;
 
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev',
+            center: 'title',
+            right: 'next'
+        },
+        height: 300,
+        fixedWeekCount: false
+    });
+    calendar.render();
+}
 
-async function viewAssignments(courseId) {
-  const token = getToken();
+// ===== Navigation =====
+function goToAllCourses() {
+    window.location.href = "all_courses.html";
+}
 
-  const res = await fetch(`${API_URL}/assignments/course/${courseId}`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-
-  const assignments = await res.json();
-
-  alert(JSON.stringify(assignments, null, 2));
+function goToCourseDetail(courseId) {
+    // ส่ง ID วิชาไปที่หน้า Assignment (ปรับชื่อไฟล์ตามจริงของคุณ)
+    window.location.href = `assignment_all.html?courseId=${courseId}`;
 }
