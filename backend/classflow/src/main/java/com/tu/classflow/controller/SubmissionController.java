@@ -1,13 +1,18 @@
 package com.tu.classflow.controller;
 
-import com.tu.classflow.config.S3Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.tu.classflow.config.S3Service;
 
 @RestController
 @RequestMapping("/submissions")
@@ -22,9 +27,12 @@ public class SubmissionController {
     public Map<String, String> uploadSubmission(
         @RequestParam("file") MultipartFile file,
         @RequestParam("assignmentId") Long assignmentId,
-        @AuthenticationPrincipal Jwt jwt
+        @RequestHeader("Authorization") String authHeader
     ) throws IOException {
-        String userId = jwt.getSubject();
+        // ดึง userId จาก token
+        String token = authHeader.replace("Bearer ", "");
+        String userId = com.auth0.jwt.JWT.decode(token).getSubject();
+
         String fileUrl = s3Service.uploadFile(file);
         return Map.of(
             "userId", userId,

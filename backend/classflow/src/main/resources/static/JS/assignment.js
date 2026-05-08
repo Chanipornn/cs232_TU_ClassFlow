@@ -93,8 +93,9 @@ function renderAssignments(filter) {
       statusText = "Not Submitted";
     }
 
+    // ← เพิ่ม onclick และ style: cursor
     const card = `
-      <div class="card">
+      <div class="card" onclick="goToAssignmentDetail(${a.id})" style="cursor: pointer;">
         <div>
           <h3>${a.title}</h3>
           <p>Deadline: ${a.deadline}</p>
@@ -105,6 +106,12 @@ function renderAssignments(filter) {
 
     container.innerHTML += card;
   });
+}
+
+
+//function goToAssignmentDetail(assignmentId) {
+function goToAssignmentDetail(assignmentId) {
+    window.location.href = `assignment_detail.html?id=${assignmentId}`;
 }
 
 function searchAssignment(keyword, filter) {
