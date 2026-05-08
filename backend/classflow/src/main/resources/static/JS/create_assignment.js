@@ -250,43 +250,63 @@ function renderAssignments(assignments) {
 
 	  <div class="assignment-card">
 
-	    
-			<h2>${a.title}</h2>
-			<p>${a.description || "-"}</p>
+  <div class="assignment-main">
 
-		        <strong>
-		          Deadline: ${deadlineText}
-		        </strong>
+    <!-- LEFT -->
+    <div class="assignment-info">
 
-	    
+      <h2>${a.title}</h2>
 
-	    <div class="assignment-actions">
+      <p>
+        ${a.description || "-"}
+      </p>
 
-	      <button
-	        class="edit-btn"
-	        onclick="goToEdit(${a.id})"
-	      >
-	        Edit
-	      </button>
+      <p class="deadline-text">
+        <strong>
+          Deadline: ${deadlineText}
+        </strong>
+      </p>
 
-	      <button
-	        class="delete-btn"
-	        onclick="deleteAssignment(${a.id})"
-	      >
-	        Delete
-	      </button>
+      <div class="card-footer">
 
-	      <button
-	        class="view-btn"
-	        onclick="viewSubmission(${a.id})"
-	      >
-	        View Submission
-	      </button>
+        <button
+          class="view-btn"
+          onclick="viewSubmission(${a.id})"
+        >
+          View Submission
+        </button>
 
-	    </div>
+      </div>
 
-	  </div>
-	`;
+    </div>
+
+    <!-- RIGHT -->
+    <div class="assignment-side">
+
+      <div class="action-row">
+
+        <button
+          class="small-btn edit-btn"
+          onclick="goToEdit(${a.id})"
+        >
+          Edit
+        </button>
+
+        <button
+          class="small-btn delete-btn"
+          onclick="deleteAssignment(${a.id})"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+`;
    /* assignmentList.innerHTML += `
 
       <div class="assignment-card" onclick="goToEdit(${a.id})">
