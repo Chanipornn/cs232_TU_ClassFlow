@@ -275,7 +275,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 450;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 }
 
@@ -743,3 +743,311 @@ textarea {
 
    color: white;
  }
+
+/* =========================
+  FIX TEXTAREA RIGHT EDGE
+========================= */
+
+.form-top-fields textarea,
+.form-block textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 16px 18px;
+  line-height: 1.5;
+  border-radius: 18px;
+}
+
+/* =========================
+   INPUT DESIGN
+========================= */
+
+.form-top-fields input,
+.form-top-fields textarea,
+.form-block input,
+.form-block textarea,
+select {
+  border: 2px solid #d7d7e8;
+  border-radius: 18px;
+  transition: all 0.2s ease;
+}
+
+.form-top-fields input:focus,
+.form-top-fields textarea:focus,
+.form-block input:focus,
+.form-block textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #5e60b8;
+  box-shadow: 0 0 0 4px rgba(94, 96, 184, 0.12);
+}
+
+/* =========================
+   FILE UPLOAD DESIGN
+========================= */
+
+.file-upload-section {
+  margin-top: 24px;
+}
+
+.upload-label {
+  display: block;
+  margin-bottom: 14px;
+  color: #4a4fa7;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+#assignmentFile {
+  display: none;
+}
+
+.custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 14px 22px;
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, #5e60b8, #7d7fe3);
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  box-shadow: 0 4px 12px rgba(94, 96, 184, 0.25);
+}
+
+.custom-file-upload:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(94, 96, 184, 0.35);
+}
+
+.file-list {
+  margin-top: 14px;
+  padding: 14px 18px;
+
+  background: #f5f5ff;
+  border: 2px dashed #c9caef;
+  border-radius: 16px;
+
+  color: #555;
+  font-size: 15px;
+}
+
+/* =========================
+   DATETIME PICKER DESIGN
+========================= */
+
+input[type="datetime-local"] {
+  width: 320px;
+  max-width: 100%;
+
+  padding: 14px 18px;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  border: 2px solid #d7d7e8;
+  border-radius: 16px;
+
+  background: #ffffff;
+  color: #333;
+
+  transition: all 0.2s ease;
+}
+
+input[type="datetime-local"]:hover {
+  border-color: #8f91e8;
+}
+
+input[type="datetime-local"]:focus {
+  border-color: #5e60b8;
+  box-shadow: 0 0 0 4px rgba(94, 96, 184, 0.12);
+}
+
+/* =========================
+   CHECKBOX DESIGN
+========================= */
+
+.checkbox-row input[type="checkbox"],
+.check-block input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #5e60b8;
+}
+
+/* =========================
+   SELECT BOX DESIGN
+========================= */
+
+#maxFiles,
+#maxSize {
+  margin-top: 10px;
+
+  min-width: 120px;
+  height: 44px;
+
+  padding: 0 14px;
+
+  border-radius: 14px;
+  border: 2px solid #d7d7e8;
+
+  background: white;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* =========================
+   SUCCESS POPUP
+========================= */
+
+.popup-overlay {
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.45);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.3s ease;
+}
+
+.popup-overlay.active {
+
+  opacity: 1;
+  visibility: visible;
+}
+
+.popup-box {
+
+  width: 420px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 40px 32px;
+
+  text-align: center;
+
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+
+  animation: popupShow 0.3s ease;
+}
+
+/* =========================
+   SVG SUCCESS ICON
+========================= */
+
+.popup-icon {
+
+  width: 95px;
+  height: 95px;
+
+  margin: 0 auto 24px;
+
+  border-radius: 50%;
+
+  background: #4a4fa7;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow:
+          inset 0 -6px 0 rgba(0,0,0,0.08),
+          0 10px 25px rgba(74,79,167,0.35);
+
+  animation: popIcon 0.45s ease;
+}
+
+.popup-icon svg {
+
+  width: 52px;
+  height: 52px;
+
+  stroke: white;
+
+  stroke-width: 3.5;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  fill: none;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.popup-box h2 {
+
+  font-size: 32px;
+
+  color: #2f2f8f;
+
+  margin-bottom: 10px;
+}
+
+.popup-box p {
+
+  font-size: 18px;
+
+  color: #666;
+
+  margin-bottom: 10px;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes popupShow {
+
+  from {
+
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes popIcon {
+
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

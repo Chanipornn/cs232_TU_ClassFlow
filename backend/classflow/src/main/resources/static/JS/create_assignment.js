@@ -417,16 +417,16 @@ async function createAssignment(courseId) {
       throw new Error("Create failed");
     }
 
-    alert("สร้าง assignment สำเร็จ");
-
-    window.location.href =
-      `create_assignments_all.html?courseId=${courseId}`;
+      showPopup(
+          "สร้าง assignment สำเร็จ",
+          `create_assignments_all.html?courseId=${courseId}`
+      );
 
   } catch (err) {
 
     console.error(err);
 
-    alert("สร้าง assignment ไม่สำเร็จ");
+      showPopup("สร้าง assignment ไม่สำเร็จ");
   }
   
   
@@ -741,7 +741,10 @@ async function updateAssignment() {
       );
     }
 
-    alert("แก้ไขสำเร็จ");
+      showPopup(
+          "แก้ไข assignment สำเร็จ",
+          `create_assignments_all.html?courseId=${courseId}`
+      );
 
     window.location.href =
       `create_assignments_all.html?courseId=${courseId}`;
@@ -750,7 +753,7 @@ async function updateAssignment() {
 
     console.error(err);
 
-    alert("แก้ไขไม่สำเร็จ");
+      showPopup("แก้ไข assignment ไม่สำเร็จ");
   }
 }
 
@@ -763,6 +766,30 @@ function setupAccordions() {
 
 function showLoading(el) {
   el.innerHTML = "<p>Loading...</p>";
+}
+
+function showPopup(message, redirectUrl = null) {
+
+    const popup =
+        document.getElementById("successPopup");
+
+    const popupMessage =
+        document.getElementById("popupMessage");
+
+    popupMessage.textContent = message;
+
+    popup.classList.add("active");
+
+    setTimeout(() => {
+
+        popup.classList.remove("active");
+
+        if (redirectUrl) {
+
+            window.location.href = redirectUrl;
+        }
+
+    }, 1800);
 }
 
 
