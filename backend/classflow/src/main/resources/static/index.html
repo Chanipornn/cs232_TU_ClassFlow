@@ -39,106 +39,137 @@
     </div>
   
   </div>
+  
 
-
-
-<!-- Cognito Config -->
-<script>
-const poolData = {
-  UserPoolId: "us-east-1_gFzKBoxUE",
-  ClientId: "deuj2keprro5a2icvna5ohbg"
-};
-
-const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-</script>
-
-<!-- Login -->
-<script>
-function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  // ===== validation =====
-  if (
-	!email.endsWith("@dome.tu.ac.th")   &&
-    email !== "chayananmariwan@gmail.com") {
-    alert("Use only @dome.tu.ac.th email");
-    return;
-  }
-
-  if (!email || !password) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  const authenticationData = {
-    Username: email,
-    Password: password,
+  <!-- Cognito Config -->
+  <script>
+  const poolData = {
+    UserPoolId: "us-east-1_gFzKBoxUE",
+    ClientId: "deuj2keprro5a2icvna5ohbg"
   };
 
-  const authenticationDetails =
-    new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+  </script>
 
-  const userData = {
-    Username: email,
-    Pool: userPool,
-  };
+  <!-- Login -->
+  <script>
+  function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-  const cognitoUser =
-    new AmazonCognitoIdentity.CognitoUser(userData);
+    // ===== validation =====
+    if (
+  	!email.endsWith("@dome.tu.ac.th")   &&
+      email !== "chayananmariwan@gmail.com") {
+      alert("Use only @dome.tu.ac.th email");
+      return;
+    }
 
-  cognitoUser.authenticateUser(authenticationDetails, {
-    onSuccess: function (result) {
+    if (!email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
 
-      //ตั้งค่า Token
-      const idToken = result.getIdToken().getJwtToken();
-      const accessToken = result.getAccessToken().getJwtToken();
-      const refreshToken = result.getRefreshToken().getToken();
+    const authenticationData = {
+      Username: email,
+      Password: password,
+    };
 
-      localStorage.setItem("idToken", idToken);
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      localStorage.setItem("username", email);
+    const authenticationDetails =
+      new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
 
-      console.log("Login success");
+    const userData = {
+      Username: email,
+      Pool: userPool,
+    };
 
-      alert("Login success!");
+    const cognitoUser =
+      new AmazonCognitoIdentity.CognitoUser(userData);
 
-	  // 🔥 normalize email
-	  const lowerEmail = email.toLowerCase();
+    cognitoUser.authenticateUser(authenticationDetails, {
+  	onSuccess: function (result) {
 
-	  // 🔥 route ตาม role (แบบง่าย)
-	  if (
-	    lowerEmail === "chayananmariwan@gmail.com" ||
-	    lowerEmail.endsWith("@tu.ac.th")
-	  ) {
-	    // 👉 instructor
-	    window.location.href = "/HTML/dashboard_instructor.html";
+  	  // ===== Tokens =====
 
-	  } else if (lowerEmail.endsWith("@dome.tu.ac.th")) {
-	    // 👉 student
-	    window.location.href = "/HTML/dashboard_student.html";
+  	  const idToken =
+  	    result.getIdToken().getJwtToken();
 
-	  } else {
-	    alert("Unauthorized email");
-	  }
-    },
+  	  const accessToken =
+  	    result.getAccessToken().getJwtToken();
 
-    //Failure
-    onFailure: function (err) {
-      console.error(err);
+  	  const refreshToken =
+  	    result.getRefreshToken().getToken();
 
-      if (err.code === "UserNotConfirmedException") {
-        alert("Please verify your email first");
-      } else if (err.code === "NotAuthorizedException") {
-        alert("Incorrect email or password");
-      } else {
-        alert(err.message || "Login failed");
-      }
-    },
-  });
-}
+  	  // ===== Save =====
 
+  	  localStorage.setItem("idToken", idToken);
+
+  	  localStorage.setItem("accessToken", accessToken);
+
+  	  localStorage.setItem("refreshToken", refreshToken);
+
+  	  localStorage.setItem("username", email);
+
+  	  console.log("Login success");
+
+  	  alert("Login success!");
+
+  	  const lowerEmail =
+  	    email.toLowerCase();
+
+  	  // ===== decode JWT =====
+
+  	  const payload =
+  	    JSON.parse(
+  	      atob(idToken.split(".")[1])
+  	    );
+
+  	  // ===== sync =====
+
+  	  const userData = {
+
+  	    email: payload.email,
+
+  	    cognitoSub: payload.sub,
+
+  	    role:
+  	      lowerEmail === "chayananmariwan@gmail.com" ||
+  	      lowerEmail.endsWith("@tu.ac.th")
+  	        ? "INSTRUCTOR"
+  	        : "STUDENT"
+  	  };
+
+  	  fetch("/api/auth/sync-user", {
+
+  	    method: "POST",
+
+  	    headers: {
+  	      "Content-Type": "application/json"
+  	    },
+
+  	    body: JSON.stringify(userData)
+
+  	  });
+
+  	  if (
+  	    lowerEmail === "chayananmariwan@gmail.com" ||
+  	    lowerEmail.endsWith("@tu.ac.th")
+  	  ) {
+
+  	    window.location.href =
+  	      "/HTML/dashboard_instructor.html";
+
+  	  } else {
+
+  	    window.location.href =
+  	      "/HTML/dashboard_student.html";
+  	  }
+  	}
+       
+ });
+  	  
+  	}
+	 
 </script>
 
 </body>

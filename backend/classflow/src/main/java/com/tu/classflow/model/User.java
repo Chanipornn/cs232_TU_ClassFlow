@@ -14,6 +14,7 @@ public class User {
     private String email;
     private String role; // STUDENT / INSTRUCTOR
     
+    @Column(unique = true)
     private String cognitoSub;// Link กับ AWS Cognito
     
     // constructor 

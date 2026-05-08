@@ -60,11 +60,8 @@ function closeModal() {
 	  if (!email) return "User";
 
 	  const namePart = email.split("@")[0]; // chayananmariwan
-
-	  // แยกคำแบบง่าย (ถ้ามี . หรือ _)
 	  let parts = namePart.split(/[._]/);
 
-	  // ถ้าไม่มีตัวแบ่ง → split แบบ heuristic
 	  if (parts.length === 1) {
 	    parts = namePart.match(/[A-Z]?[a-z]+/g) || [namePart];
 	  }
@@ -87,7 +84,7 @@ function closeModal() {
 	}
 	window.onload = function () {
 	  setUserNameFromToken();
-	  loadCourses(); // ของเดิม
+	  loadCourses(); 
 	};
 	
 	
@@ -112,12 +109,19 @@ async function createCourse() {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({
+     /* body: JSON.stringify({
         code: code,           // ✅ เพิ่ม
         name: name,           // ✅ ไม่ต้อง concat แล้ว
         section: section,     // ✅ เพิ่ม
         description: description
-      })
+      })*/
+	  
+	  body: JSON.stringify({
+	    courseCode: code,
+	    title: name,
+	    section: section,
+	    description: description
+	  })
     });
 
     const course = await res.json();
@@ -133,31 +137,45 @@ async function createCourse() {
 	  
   // ===== RENDER =====
   function renderCourse(course) {
+
     const list = document.getElementById('courseList');
 
     const div = document.createElement('div');
+
     div.className = 'course-card';
 
-	div.innerHTML = `
-		  <div class="course-title">
-		    ${course.code} - ${course.name}
-		    <span class="section">Sec ${course.section || "-"}</span>
-		  </div>
+    div.innerHTML = `
+      <div class="course-title">
+        ${course.courseCode || course.code}
+        -
+        ${course.title || course.name}
 
-		  <div class="course-desc">
-		    Description: ${course.description || "-"}
-		  </div>
-		`;
-		div.style.cursor = "pointer";
+        <span class="section">
+          Sec ${course.section || "-"}
+        </span>
+      </div>
 
-		 div.onclick = () => {
-		   window.location.href =
-		     `/HTML/create_assignments_all.html?courseId=${course.id}`;
-		 };
+      <div class="course-desc">
+        ${course.description || "-"}
+      </div>
+
+      <div class="course-instructor">
+        Instructor:
+        ${course.instructor?.email || "Unknown"}
+      </div>
+    `;
+
+    div.style.cursor = "pointer";
+
+    div.onclick = () => {
+      window.location.href =
+        `/HTML/create_assignments_all.html?courseId=${course.id}`;
+    };
 
     list.prepend(div);
   }
-
+  
+  
 // ===== LOAD COURSE =====
 async function loadCourses() {
 	const token = getToken();

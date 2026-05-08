@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .requestMatchers("/assignments/**").permitAll()
                 .requestMatchers("/submissions/**").permitAll()
                 .requestMatchers("/api/notifications/**").permitAll()
+                .requestMatchers("/courses/**").permitAll()
 
                 .anyRequest().permitAll() // อนุญาตทุก request
             )

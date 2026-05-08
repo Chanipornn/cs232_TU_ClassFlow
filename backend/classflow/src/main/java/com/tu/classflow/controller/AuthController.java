@@ -2,10 +2,8 @@ package com.tu.classflow.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 import com.tu.classflow.model.User;
 import com.tu.classflow.repository.UserRepository;
@@ -16,7 +14,66 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @PostMapping("/sync-user")
+    public ResponseEntity<?> syncUser(
+            @RequestBody User user) {
 
+        try {
+
+            if (user.getCognitoSub() == null ||
+                user.getCognitoSub().isBlank()) {
+
+                return ResponseEntity.badRequest()
+                        .body("CognitoSub required");
+            }
+
+            // หา user จาก CognitoSub
+            User existingUser =
+                    userRepository
+                    .findByCognitoSub(
+                            user.getCognitoSub()
+                    )
+                    .orElse(null);
+
+            // มีแล้ว
+            if (existingUser != null) {
+
+                // update email/role
+                existingUser.setEmail(
+                        user.getEmail()
+                );
+
+                existingUser.setRole(
+                        user.getRole()
+                );
+
+                userRepository.save(
+                        existingUser
+                );
+
+                return ResponseEntity.ok(
+                        existingUser
+                );
+            }
+
+            // ยังไม่มี
+            User savedUser =
+                    userRepository.save(user);
+
+            return ResponseEntity.ok(
+                    savedUser
+            );
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .internalServerError()
+                    .body(e.getMessage());
+        }
+    }
+
+    /*
     @PostMapping("/sync-user")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
@@ -41,4 +98,5 @@ public class AuthController {
             return ResponseEntity.internalServerError().body("Error: Could not sync user. " + e.getMessage());
         }
     }
+    */
 }
