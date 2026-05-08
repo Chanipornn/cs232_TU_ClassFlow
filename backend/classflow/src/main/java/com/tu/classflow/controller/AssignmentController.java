@@ -1,44 +1,20 @@
 package com.tu.classflow.controller;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.tu.classflow.model.Assignment;
-import com.tu.classflow.model.AssignmentFile;
-import com.tu.classflow.model.Course;
-import com.tu.classflow.model.Enrollment;
-import com.tu.classflow.model.Notification;
-import com.tu.classflow.model.User;
-import com.tu.classflow.repository.AssignmentFileRepository;
-import com.tu.classflow.repository.AssignmentRepository;
-import com.tu.classflow.repository.CourseRepository;
-import com.tu.classflow.repository.EnrollmentRepository;
-import com.tu.classflow.repository.NotificationRepository;
-import com.tu.classflow.repository.UserRepository;
+import com.tu.classflow.model.*;
+import com.tu.classflow.repository.*;
 
 
 @RestController
@@ -57,6 +33,9 @@ public class AssignmentController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private SubmissionRepository submissionRepository;
 
     //@Autowired
     //private com.tu.classflow.service.EventBridgeService eventBridgeService;
@@ -326,7 +305,6 @@ public class AssignmentController {
     }
     
     
-    
     // อาจารย์สร้าง assignment
     @PostMapping
     public Map<String, Object> createAssignment(@RequestBody Assignment assignment) {
@@ -479,5 +457,12 @@ public class AssignmentController {
         return savedAssignment;
     }
     
+    @DeleteMapping("/{id}")
+    public void deleteAssignment(
+            @PathVariable Long id
+    ) {
+
+        assignmentRepository.deleteById(id);
+    }
     
 }

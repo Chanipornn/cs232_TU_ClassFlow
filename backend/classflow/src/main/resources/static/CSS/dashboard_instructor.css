@@ -604,3 +604,34 @@ body {
     }
   
   }
+  
+  .assignment-actions{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+  }
+
+  .btn-edit,
+  .btn-delete,
+  .btn-view{
+      border:none;
+      border-radius:10px;
+      padding:8px 14px;
+      cursor:pointer;
+      font-weight:600;
+  }
+
+  .btn-edit{
+      background:#6C63FF;
+      color:white;
+  }
+
+  .btn-delete{
+      background:#ff5a5a;
+      color:white;
+  }
+
+  .btn-view{
+      background:#4CAF50;
+      color:white;
+  }

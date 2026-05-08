@@ -10,6 +10,9 @@ public class Submission {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	
+	private String fileName;
+	private Boolean isLate;
 
     private String fileUrl; // S3 link
 
@@ -39,5 +42,21 @@ public class Submission {
     public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
     public void setStudent(User student) { this.student = student; }
     public void setAssignment(Assignment assignment) { this.assignment = assignment; }
+    
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public Boolean getIsLate() {
+        return isLate;
+    }
+
+    public void setIsLate(Boolean isLate) {
+        this.isLate = isLate;
+    }
 
 }

@@ -246,7 +246,48 @@ function renderAssignments(assignments) {
         d.toLocaleDateString("th-TH");
     }
 
-    assignmentList.innerHTML += `
+	assignmentList.innerHTML += `
+
+	  <div class="assignment-card">
+
+	    
+			<h2>${a.title}</h2>
+			<p>${a.description || "-"}</p>
+
+		        <strong>
+		          Deadline: ${deadlineText}
+		        </strong>
+
+	    
+
+	    <div class="assignment-actions">
+
+	      <button
+	        class="edit-btn"
+	        onclick="goToEdit(${a.id})"
+	      >
+	        Edit
+	      </button>
+
+	      <button
+	        class="delete-btn"
+	        onclick="deleteAssignment(${a.id})"
+	      >
+	        Delete
+	      </button>
+
+	      <button
+	        class="view-btn"
+	        onclick="viewSubmission(${a.id})"
+	      >
+	        View Submission
+	      </button>
+
+	    </div>
+
+	  </div>
+	`;
+   /* assignmentList.innerHTML += `
 
       <div class="assignment-card" onclick="goToEdit(${a.id})">
 
@@ -259,7 +300,7 @@ function renderAssignments(assignments) {
         </strong>
 
       </div>
-    `;
+    `;*/
   });
 }
 
@@ -501,7 +542,13 @@ async function loadAssignmentData() {
   if (!id) return;
 
   const res = await fetch(
-    `http://localhost:8080/assignments/${id}`
+    `http://localhost:8080/assignments/${id}`,
+    {
+      headers: {
+        Authorization:
+          "Bearer " + localStorage.getItem("idToken")
+      }
+    }
   );
 
   const assignment =
@@ -742,5 +789,45 @@ function goToEdit(id) {
 }
 
 
-//loadAssignmentData();
+function viewSubmission(id) {
+
+  window.location.href =
+    `view_all_assignment_instructor.html?assignmentId=${id}&courseId=${courseId}`;
+
+}
+
+async function deleteAssignment(id) {
+
+  if (!confirm("Delete this assignment?")) {
+    return;
+  }
+
+  try {
+
+    const res = await fetch(
+      `${API_BASE_URL}/assignments/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Authorization":
+            `Bearer ${token}`
+        }
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Delete failed");
+    }
+
+    alert("Deleted");
+
+    await loadAssignments();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Delete failed");
+  }
+}
 

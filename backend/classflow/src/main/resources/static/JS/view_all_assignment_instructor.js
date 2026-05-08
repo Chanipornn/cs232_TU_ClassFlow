@@ -1,12 +1,20 @@
 let allSubmissions = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
+	setupBackButton();
     fetchSubmissions();
     setupEventListeners();
 });
 
 async function fetchSubmissions() {
-    const API_URL = 'http://localhost:8080/api/submissions'; 
+    //const API_URL = 'http://localhost:8080/api/submissions'; 
+	const params = new URLSearchParams(window.location.search);
+
+	const assignmentId = params.get("assignmentId");
+	const courseId = params.get("courseId");
+
+	const API_URL =
+	  `http://localhost:8080/submissions/assignment/${assignmentId}`;
 
     try {
         const response = await fetch(API_URL);
@@ -150,4 +158,28 @@ function sortData(sortBy) {
 
     // เมื่อเรียงเสร็จแล้ว สั่งให้ตารางแสดงผลใหม่
     renderTable(sortedData);
+}
+
+
+function setupBackButton() {
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const courseId =
+        params.get("courseId");
+
+    const backBtn =
+        document.querySelector(".back-btn");
+
+    if (backBtn && courseId) {
+
+        backBtn.onclick = (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                `create_assignments_all.html?courseId=${courseId}`;
+        };
+    }
 }

@@ -2,15 +2,16 @@ package com.tu.classflow.controller;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+
+
+import com.tu.classflow.model.Submission;
+import com.tu.classflow.repository.SubmissionRepository;
 
 import com.tu.classflow.config.S3Service;
 
@@ -21,6 +22,18 @@ public class SubmissionController {
 
     @Autowired
     private S3Service s3Service;
+    
+    @Autowired
+    private SubmissionRepository submissionRepository;
+    
+    @GetMapping("/assignment/{assignmentId}")
+    public List<Submission> getByAssignment(
+            @PathVariable Long assignmentId
+    ) {
+
+        return submissionRepository
+                .findByAssignmentId(assignmentId);
+    }
 
     // นักศึกษาส่งงาน
     @PostMapping("/upload")

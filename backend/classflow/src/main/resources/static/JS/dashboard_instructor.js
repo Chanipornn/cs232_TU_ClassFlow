@@ -143,7 +143,7 @@ async function createCourse() {
     const div = document.createElement('div');
 
     div.className = 'course-card';
-
+	
     div.innerHTML = `
       <div class="course-title">
         ${course.courseCode || course.code}
