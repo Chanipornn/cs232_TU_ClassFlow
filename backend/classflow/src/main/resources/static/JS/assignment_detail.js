@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Submission failed: " + error.message);
         }
 		
-		window.location.href =
-		    "/HTML/dashboard_student.html";
+		const courseId = new URLSearchParams(window.location.search).get('courseId');
+        window.location.href = `assignment_all.html?courseId=${courseId}`;
     });
 }
 

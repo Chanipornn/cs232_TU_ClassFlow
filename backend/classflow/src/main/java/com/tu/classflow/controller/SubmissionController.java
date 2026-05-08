@@ -33,6 +33,9 @@ public class SubmissionController {
     @Autowired
     private AssignmentRepository assignmentRepository;
     
+    @Autowired
+    private UserRepository userRepository;
+    
     @GetMapping("/assignment/{assignmentId}")
     public List<Submission> getByAssignment(
             @PathVariable Long assignmentId
@@ -212,50 +215,40 @@ public class SubmissionController {
             @RequestHeader("Authorization") String authHeader
     ) throws IOException {
 
-        String token =
-                authHeader.replace("Bearer ", "");
+        String token = authHeader.replace("Bearer ", "");
+        DecodedJWT jwt = com.auth0.jwt.JWT.decode(token);
+        String email = jwt.getClaim("email").asString();
 
-        DecodedJWT jwt =
-                com.auth0.jwt.JWT.decode(token);
+        // 1. อัปโหลดไฟล์ไป S3
+        String fileUrl = s3Service.uploadFile(file);
 
-        String email =
-                jwt.getClaim("email")
-                        .asString();
+        // 2. ดึงข้อมูล Assignment
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
 
-        String fileUrl =
-                s3Service.uploadFile(file);
+        // 3. ดึงข้อมูล User (เพื่อให้ความสัมพันธ์ student_id ใน DB ถูกต้อง)
+        User student = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Assignment assignment =
-                assignmentRepository
-                        .findById(assignmentId)
-                        .orElseThrow();
-
-        Submission submission =
-                new Submission();
-
+        Submission submission = new Submission();
         submission.setAssignment(assignment);
 
-        submission.setStudentName(email);
         submission.setStudentId(studentId);
         submission.setStudentName(studentName);
 
+
+        submission.setStudent(student); // เปลี่ยนจาก setStudentName เป็น setStudent
+
         submission.setFileUrl(fileUrl);
-
-        submission.setFileName(
-                file.getOriginalFilename()
-        );
-
+        submission.setFileName(file.getOriginalFilename());
         submission.setStatus("SUBMITTED");
-        submission.setSubmittedAt(
-                LocalDateTime.now()
-        );
+        submission.setSubmittedAt(LocalDateTime.now());
 
-        boolean isLate =
-                LocalDateTime.now()
-                    .isAfter(
-                        assignment.getDeadline()
-                    );
-
+        // 4. เช็คการส่งเลท (เพิ่ม Null Check สำหรับ Deadline)
+        boolean isLate = false;
+        if (assignment.getDeadline() != null) {
+            isLate = LocalDateTime.now().isAfter(assignment.getDeadline());
+        }
         submission.setLate(isLate);
 
         submissionRepository.save(submission);
