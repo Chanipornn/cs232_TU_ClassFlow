@@ -92,6 +92,16 @@ public class SubmissionController {
                 .body(baos.toByteArray());
     }
     
+    @GetMapping("/{submissionId}")
+    public Submission getSubmissionById(
+            @PathVariable Long submissionId
+    ) {
+
+        return submissionRepository
+                .findById(submissionId)
+                .orElseThrow();
+    }
+    
     
     // นักศึกษาส่งงาน
     @PostMapping("/upload")

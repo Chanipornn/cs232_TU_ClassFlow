@@ -230,3 +230,63 @@ async function loadAssignmentInfo() {
             .innerText = "Assignment";
     }
 }
+
+
+
+const params = new URLSearchParams(window.location.search);
+
+const assignmentId = params.get("assignmentId");
+
+async function loadSubmissions() {
+
+    const res = await fetch(
+        `http://localhost:8080/submissions/assignment/${assignmentId}`
+    );
+
+    const submissions = await res.json();
+
+    const tbody =
+        document.getElementById("submission-list");
+
+    tbody.innerHTML = "";
+
+    submissions.forEach((submission, index) => {
+
+        tbody.innerHTML += `
+            <tr class="submission-row"
+                onclick="openSubmission(${submission.id})">
+
+                <td>${index + 1}</td>
+
+                <td>
+                    ${submission.studentName}
+                </td>
+
+                <td>
+                    ${
+                        submission.submittedAt
+                        ? new Date(
+                            submission.submittedAt
+                          ).toLocaleString()
+                        : "-"
+                    }
+                </td>
+
+                <td>
+                    <a href="${submission.fileUrl}"
+                       target="_blank">
+                       Download
+                    </a>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function openSubmission(submissionId) {
+
+    window.location.href =
+        `assignment_detail_instructor.html?submissionId=${submissionId}`;
+}
+
+loadSubmissions();
