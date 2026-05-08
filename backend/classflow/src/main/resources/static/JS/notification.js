@@ -45,7 +45,7 @@ fetchStudentNotifications();
 */
 
 async function fetchStudentNotifications() {
-    const API_URL = 'http://localhost:8080/api/notifications/student'; 
+    const API_URL = 'http://localhost:8080/api/notifications/student';
 
     try {
         const token = localStorage.getItem("accessToken");  // เพิ่ม token
@@ -59,7 +59,7 @@ async function fetchStudentNotifications() {
 
         const container = document.getElementById('notification-container');
         const emptyState = document.getElementById('empty-state');
-        
+
         container.innerHTML = '';
 
         if (!Array.isArray(notifications) || notifications.length === 0) {
@@ -70,13 +70,41 @@ async function fetchStudentNotifications() {
             emptyState.style.display = 'none';
 
             notifications.forEach(notif => {
-                const cardHtml = `
-                    <div class="card">
-                        <div class="title">🔔 New Assignment</div>
-                        <div class="desc">${notif.message}</div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', cardHtml);
+
+                const card = document.createElement("div");
+
+                card.className = "card";
+
+                card.innerHTML = `
+        <div class="title">🔔 New Assignment</div>
+        <div class="desc">${notif.message}</div>
+    `;
+
+                // =========================
+                // MARK AS READ
+                // =========================
+
+                card.addEventListener("click", async () => {
+
+                    await fetch(
+                        `http://localhost:8080/api/notifications/${notif.id}/read`,
+                        {
+                            method: "PATCH",
+                            headers: {
+                                "Authorization": "Bearer " + token
+                            }
+                        }
+                    );
+
+                    // DEBUG
+                    console.log(notif);
+                    console.log(notif.assignmentId);
+
+                    window.location.href =
+                        `assignment_detail.html?id=${notif.assignmentId}`;
+                });
+
+                container.appendChild(card);
             });
         }
 
