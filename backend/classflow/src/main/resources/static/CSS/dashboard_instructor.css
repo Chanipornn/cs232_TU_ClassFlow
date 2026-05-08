@@ -334,8 +334,9 @@ body {
   }
   
   .btn-edit:hover {
-    background: #5658a7;
-    color: white;
+    background: #dcdcdc;
+    color: #333;
+    transform: scale(1.05)
   }
   
   .btn-delete {
@@ -622,8 +623,8 @@ body {
   }
 
   .btn-edit{
-      background:#6C63FF;
-      color:white;
+      background:#ececec;
+      color:#222;
   }
 
   .btn-delete{
