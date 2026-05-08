@@ -1,7 +1,14 @@
 package com.tu.classflow.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "notifications")
@@ -31,6 +38,15 @@ public class Notification {
     public void setIsRead(Boolean isRead) { this.isRead = isRead; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public void setUser(User user) { this.user = user; }
+    public Long getAssignmentId() {
+    return assignmentId;
+}
+
+public void setAssignmentId(Long assignmentId) {
+    this.assignmentId = assignmentId;
+}
+
+    private Long assignmentId;
 
     /*
     private String userId; // cognito user_id

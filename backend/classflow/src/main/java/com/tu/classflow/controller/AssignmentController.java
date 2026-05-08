@@ -357,7 +357,8 @@ public class AssignmentController {
         for (Enrollment e : enrollments) {
             Notification notif = new Notification();
             notif.setUser(e.getStudent());
-            notif.setMessage("มี assignment ใหม่: " + saved.getTitle());
+            notif.setMessage("มี assignment ใหม่: " + saved.getTitle());            
+            notif.setAssignmentId(saved.getId());          
             notif.setIsRead(false);
             notificationRepository.save(notif);
         }
