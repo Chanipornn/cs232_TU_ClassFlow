@@ -17,8 +17,18 @@
     <div class="logo">TU ClassFlow</div>
 
     <div class="right-header">
-      <a href="Notification.html">
-        <img src="../src/notification.png" class="icon-bell">
+      <a href="Notification.html" style="position:relative;">
+    <img src="../src/notification.png" class="icon-bell">
+    <span id="notif-badge" style="
+        display:none;
+        position:absolute;
+        top:-5px; right:-5px;
+        background:red; color:white;
+        border-radius:50%;
+        width:18px; height:18px;
+        font-size:11px;
+        text-align:center; line-height:18px;
+    ">0</span>
       </a>
       <span id="username">Guest</span>
       <img src="../src/avatar.png" class="avatar" id="avatar">

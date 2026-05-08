@@ -151,3 +151,28 @@ function goToCourseDetail(courseId) {
     // ส่ง ID วิชาไปที่หน้า Assignment (ปรับชื่อไฟล์ตามจริงของคุณ)
     window.location.href = `assignment_all.html?courseId=${courseId}`;
 }
+
+
+
+//การแจ้งเตือน (Notification) - ดึงจำนวนการแจ้งเตือนที่ยังไม่อ่านมาแสดงบน Badge
+async function fetchNotifCount() {
+    try {
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch("http://localhost:8080/api/notifications/student", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        const notifications = await response.json();
+
+        const unread = notifications.filter(n => !n.isRead).length;
+        const badge = document.getElementById("notif-badge");
+
+        if (badge && unread > 0) {
+            badge.textContent = unread;
+            badge.style.display = "block";
+        }
+    } catch (error) {
+        console.error("Error fetching notifications:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", fetchNotifCount);

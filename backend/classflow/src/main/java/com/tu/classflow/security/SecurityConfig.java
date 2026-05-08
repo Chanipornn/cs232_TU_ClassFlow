@@ -53,13 +53,21 @@ public class SecurityConfig {
                 //.requestMatchers("/courses/**", "/assignments/**").authenticated()
                 .requestMatchers("/assignments/**").permitAll()
                 .requestMatchers("/submissions/**").permitAll()
+                .requestMatchers("/api/notifications/**").permitAll()
 
                 .anyRequest().permitAll() // อนุญาตทุก request
             )
 
             .oauth2ResourceServer(oauth -> oauth
-            		.jwt(Customizer.withDefaults())
-            		);
+    .jwt(Customizer.withDefaults())
+    .bearerTokenResolver(request -> {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        return null;
+    })
+);
 
         return http.build();
     }
