@@ -15,19 +15,9 @@
       <div class="back-btn">←</div>
 
       <div class="tabs">
-
-        <a href="assignment_all.html">
-          <button class="tab">All</button>
-        </a>
-      
-        <a href="assignment_todo.html">
-          <button class="tab active">To do</button>
-        </a>
-      
-        <a href="assignment_submitted.html">
-          <button class="tab">Submitted</button>
-        </a>
-      
+        <button class="tab" onclick="switchTab('assignment_all.html')">All</button>
+        <button class="tab active" onclick="switchTab('assignment_todo.html')">To do</button>
+        <button class="tab" onclick="switchTab('assignment_submitted.html')">Submitted</button>
       </div>
 
       <div class="search-box">
@@ -36,8 +26,8 @@
       </div>
     </div>
 
-    <h2>CS332/CS232 INTRODUCTION TO CLOUD COMPUTING TECHNOLOGY</h2>
-    <p>Instructor: Ms. Prapaporn / Ms. Wanida</p>
+    <h2 id="courseTitle">Loading...</h2>
+    <p id="instructorName">Instructor: -</p>
     <p id="totalAssignments">Assignments: 0</p>
 
     <div class="progress-bar">
