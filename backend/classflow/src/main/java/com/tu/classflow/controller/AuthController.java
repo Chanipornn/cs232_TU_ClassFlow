@@ -1,10 +1,14 @@
 package com.tu.classflow.controller;
 
-import com.tu.classflow.model.User;
-import com.tu.classflow.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.tu.classflow.model.User;
+import com.tu.classflow.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -17,8 +21,8 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             // 1. เช็กว่าอีเมลซ้ำไหม
-            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-                return ResponseEntity.badRequest().body("Error: Email is already in use!");
+            if (userRepository.findByCognitoSub(user.getCognitoSub()).isPresent()) {
+                return ResponseEntity.badRequest().body("Error: User is already registered!");
             }
 
             // 2. เช็กว่าข้อมูลสำคัญอย่าง email หรือ cognitoSub เป็นค่าว่างไหม

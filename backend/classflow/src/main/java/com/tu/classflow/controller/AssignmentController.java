@@ -1,27 +1,45 @@
 package com.tu.classflow.controller;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
-import java.time.LocalDateTime;
+import com.tu.classflow.model.Assignment;
+import com.tu.classflow.model.AssignmentFile;
+import com.tu.classflow.model.Course;
+import com.tu.classflow.model.Enrollment;
+import com.tu.classflow.model.Notification;
+import com.tu.classflow.model.User;
+import com.tu.classflow.repository.AssignmentFileRepository;
+import com.tu.classflow.repository.AssignmentRepository;
+import com.tu.classflow.repository.CourseRepository;
+import com.tu.classflow.repository.EnrollmentRepository;
+import com.tu.classflow.repository.NotificationRepository;
+import com.tu.classflow.repository.UserRepository;
 
-import java.nio.file.*;
-import java.io.File;
-import java.nio.file.StandardCopyOption;
-
-import com.tu.classflow.model.*;
-import com.tu.classflow.repository.*;
 
 @RestController
 @RequestMapping("/assignments")
@@ -48,6 +66,12 @@ public class AssignmentController {
     
     @Autowired
     private AssignmentFileRepository assignmentFileRepository;
+
+    // เพิ่ม Method สำหรับดึงงานทั้งหมดเข้าไปใน AssignmentController.java
+    @GetMapping
+    public List<Assignment> getAllAssignments() {
+    return assignmentRepository.findAll();
+    }
     
 
  // ================= UPDATE ASSIGNMENT =================
@@ -219,23 +243,41 @@ public class AssignmentController {
     */
     // ดู assignment ของวิชาที่ตัวเองลงไว้
     @GetMapping("/my")
-    public List<Assignment> getMyAssignments(@AuthenticationPrincipal Jwt jwt) {
-    	  String email = jwt.getClaim("email");
+    public List<Assignment> getMyAssignments(jakarta.servlet.http.HttpServletRequest request) {
+        try {
+            String authHeader = request.getHeader("Authorization");
+            
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                System.out.println("❌ No Authorization header");
+                return new java.util.ArrayList<>();
+            }
+            
+            String token = authHeader.substring(7);
+            com.auth0.jwt.interfaces.DecodedJWT decodedJWT = 
+                com.auth0.jwt.JWT.decode(token);
+            
+            String cognitoSub = decodedJWT.getSubject();
+            System.out.println("✓ cognitoSub: " + cognitoSub);
+            
+            User user = userRepository.findByCognitoSub(cognitoSub)
+                    .orElseThrow(() -> new RuntimeException("User not found: " + cognitoSub));
 
-          User user = userRepository.findByEmail(email)
-                  .orElseThrow(() -> new RuntimeException("User not found"));
+            List<Enrollment> enrollments =
+                    enrollmentRepository.findByStudent_Id(user.getId());
 
-          List<Enrollment> enrollments =
-                  enrollmentRepository.findByStudent_Id(user.getId());
+            List<Long> courseIds = enrollments.stream()
+                    .map(e -> e.getCourse().getId())
+                    .collect(Collectors.toList());
 
-              List<Long> courseIds = enrollments.stream()
-                      .map(e -> e.getCourse().getId())
-                      .collect(Collectors.toList());
-
-              return assignmentRepository.findByCourse_IdIn(courseIds);
- 
+            System.out.println("✓ Found assignments for courses: " + courseIds);
+            return assignmentRepository.findByCourse_IdIn(courseIds);
+            
+        } catch (Exception e) {
+            System.out.println("❌ Error: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error in getMyAssignments: " + e.getMessage());
+        }
     }
-
     
     // ดู assignment ของวิชานั้นๆ
     @GetMapping("/course/{courseId}")

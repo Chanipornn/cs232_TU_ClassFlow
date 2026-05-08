@@ -1,7 +1,47 @@
-const API_URL = "http://localhost:3000/assignments";
+const API_URL = "http://localhost:8080/assignments";
 
 let allAssignments = [];
 
+
+// แก้ให้ส่ง Token ไปด้วยตอนเรียก API เพื่อดึงข้อมูล Assignment ของผู้ใช้ที่ล็อกอินอยู่
+async function fetchAssignments() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = urlParams.get('courseId');
+
+    try {
+        const token = localStorage.getItem("accessToken") || localStorage.getItem("idToken");
+        
+        let url;
+        let options = {};
+        
+        if (courseId) {
+            url = `http://localhost:8080/assignments/course/${courseId}`;
+        } else {
+            url = `http://localhost:8080/assignments/my`;
+            if (token) {
+                options.headers = {
+                    'Authorization': `Bearer ${token}`
+                };
+            }
+        }
+        
+        const response = await fetch(url, options);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        
+        if (Array.isArray(data)) {
+            allAssignments = data;
+            updateSummary(); 
+            renderAssignments('all');
+        } else {
+            console.error("Data is not an array:", data);
+        }
+    } catch (error) {
+        console.error("Fetch error:", error);
+    }
+}
+/*
 async function fetchAssignments(filter = "all") {
   try {
     const res = await fetch(API_URL);
@@ -16,7 +56,7 @@ async function fetchAssignments(filter = "all") {
     console.error("Error:", err);
   }
 }
-
+*/
 function updateSummary() {
   const total = allAssignments.length;
   const submitted = allAssignments.filter(a => a.status === "submitted").length;

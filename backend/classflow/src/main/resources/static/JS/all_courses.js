@@ -55,7 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const row = document.createElement("div");
             row.className = "course-row";
 
-            const instructorName = course.instructor ? course.instructor.email : "TBA";
+            // เปลี่ยนเป็นดึงจากฟิลด์ที่ส่งมาจาก Java Controller (ปกติ Java จะ map snake_case เป็น camelCase)
+            const instructorName = course.instructorId || course.instructor_id || "TBA";
 
             row.innerHTML = `
                 <input type="checkbox" class="course-checkbox" data-id="${course.id}">
@@ -85,6 +86,7 @@ function goToCourseDetail(courseId) {
 
 // --- 7. ฟังก์ชัน Enroll (บันทึกลง Database จริง) ---
 function enrollSelected() {
+
     const checked = document.querySelectorAll(".course-checkbox:checked");
     const token = localStorage.getItem("accessToken") || localStorage.getItem("idToken");
     const enrollBtn = document.querySelector(".enroll-btn");
