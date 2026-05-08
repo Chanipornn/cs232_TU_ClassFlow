@@ -9,6 +9,6 @@ import com.tu.classflow.model.Submission;
 
 @Repository
 public interface SubmissionRepository extends JpaRepository<Submission, Long> {
-	List<Submission> findByAssignmentId(Long assignmentId);
+	List<Submission> findByAssignment_Id(Long assignmentId);
 
 }

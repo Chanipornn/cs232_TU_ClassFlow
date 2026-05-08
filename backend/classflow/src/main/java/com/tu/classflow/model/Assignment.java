@@ -23,6 +23,8 @@ public class Assignment {
 	    
 	    private LocalDateTime deadline;
 	    
+	    private LocalDateTime dueDate;
+	    
 	    private String attachmentFileName;
 
 	    @ManyToOne
@@ -74,5 +76,15 @@ public class Assignment {
 	    public void setFiles(java.util.List<AssignmentFile> files) {
 	        this.files = files;
 	    }
+	    
+	    public LocalDateTime getDueDate() {
+	        return dueDate;
+	    }
+
+	    public void setDueDate(LocalDateTime dueDate) {
+	        this.dueDate = dueDate;
+	    }
+	    
+	    
     
 }

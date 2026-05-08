@@ -147,6 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Submit error:", error);
             alert("Submission failed: " + error.message);
         }
+		
+		window.location.href =
+		    "/HTML/dashboard_student.html";
     });
 }
 

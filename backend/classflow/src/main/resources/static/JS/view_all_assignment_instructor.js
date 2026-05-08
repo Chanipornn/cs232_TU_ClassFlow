@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	setupBackButton();
     fetchSubmissions();
     setupEventListeners();
+	loadAssignmentInfo();
 });
 
 async function fetchSubmissions() {
@@ -128,7 +129,18 @@ function setupEventListeners() {
                 alert('ไม่มีไฟล์ให้ดาวน์โหลด');
                 return;
             }
-            allSubmissions.forEach(item => {
+			
+			const params =
+			    new URLSearchParams(window.location.search);
+
+			const assignmentId =
+			    params.get("assignmentId");
+
+			window.location.href =
+			    `http://localhost:8080/submissions/assignment/${assignmentId}/download-all`;
+				
+				
+            /*allSubmissions.forEach(item => {
                 const link = document.createElement('a');
                 link.href = item.fileUrl;
                 link.download = item.fileName;
@@ -136,6 +148,7 @@ function setupEventListeners() {
                 link.click();
                 document.body.removeChild(link);
             });
+			*/
         });
     }
 }
@@ -181,5 +194,39 @@ function setupBackButton() {
             window.location.href =
                 `create_assignments_all.html?courseId=${courseId}`;
         };
+    }
+}
+
+
+async function loadAssignmentInfo() {
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const assignmentId =
+        params.get("assignmentId");
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:8080/assignments/${assignmentId}`
+            );
+
+        if (!response.ok)
+            throw new Error("Assignment not found");
+
+        const assignment =
+            await response.json();
+
+        document.getElementById("assignmentTitle")
+            .innerText = assignment.title;
+
+    } catch (err) {
+
+        console.error(err);
+
+        document.getElementById("assignmentTitle")
+            .innerText = "Assignment";
     }
 }

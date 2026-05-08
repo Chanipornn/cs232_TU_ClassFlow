@@ -12,11 +12,13 @@ public class Submission {
     private Long id;
 	
 	private String fileName;
-	private Boolean isLate;
+	private boolean isLate;
 
     private String fileUrl; // S3 link
 
     private String status; // SUBMITTED / PENDING
+    
+    private String studentName;
 
     private LocalDateTime submittedAt;
 
@@ -51,12 +53,20 @@ public class Submission {
         this.fileName = fileName;
     }
 
-    public Boolean getIsLate() {
+  public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public boolean isLate() {
         return isLate;
     }
 
-    public void setIsLate(Boolean isLate) {
-        this.isLate = isLate;
+    public void setLate(boolean late) {
+        isLate = late;
     }
 
 }
