@@ -1,22 +1,11 @@
 package com.tu.classflow.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "courses")
@@ -37,7 +26,6 @@ public class Course {
 
     // เชื่อมความสัมพันธ์ไปยัง Assignment
     // mappedBy ต้องตรงกับชื่อตัวแปรใน Assignment.java
-    @JsonIgnore // ป้องกัน JSON วนลูป
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("course") // ป้องกัน JSON วนลูป
     private List<Assignment> assignments;

@@ -55,8 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const row = document.createElement("div");
             row.className = "course-row";
 
-            // เปลี่ยนเป็นดึงจากฟิลด์ที่ส่งมาจาก Java Controller (ปกติ Java จะ map snake_case เป็น camelCase)
-            const instructorName = course.instructorId || course.instructor_id || "TBA";
+            const instructorName = course.instructor ? course.instructor.email.split('@')[0] : "TBA";
 
             row.innerHTML = `
                 <input type="checkbox" class="course-checkbox" data-id="${course.id}">

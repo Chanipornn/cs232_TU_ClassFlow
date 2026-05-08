@@ -36,26 +36,38 @@ public class CourseController {
     private UserRepository userRepository;
 
     private User syncUserWithCognito(Jwt jwt) {
+        try {
+            String email = jwt.getClaim("email");
+            String sub = jwt.getSubject(); 
+            List<String> groups = jwt.getClaim("cognito:groups");
 
-        String email = jwt.getClaim("email");
-        List<String> groups = jwt.getClaim("cognito:groups");
+            final String role = (groups != null && 
+                    groups.stream().anyMatch(g -> g.equalsIgnoreCase("INSTRUCTOR")))
+                    ? "INSTRUCTOR"
+                    : "STUDENT";
 
-        final String role = (groups != null && 
-        	    groups.stream().anyMatch(g -> g.equalsIgnoreCase("INSTRUCTOR")))
-        	    ? "INSTRUCTOR"
-        	    : "STUDENT";
+            User user = userRepository.findByCognitoSub(sub).orElse(null);
 
-        return userRepository.findByCognitoSub(jwt.getSubject())
-                .map(existingUser -> {
-                    existingUser.setRole(role);
-                    return userRepository.save(existingUser);
-                })
-                .orElseGet(() -> {
-                    User newUser = new User();
-                    newUser.setEmail(email);
-                    newUser.setRole(role);
-                    return userRepository.save(newUser);
-                });
+            if (user == null) {
+                user = userRepository.findByEmail(email).orElse(null);
+                if (user != null) {
+                	user.setCognitoSub(sub);
+                }
+            }
+
+            if (user == null) {
+                user = new User();
+                user.setEmail(email);
+                user.setCognitoSub(sub);
+            }
+
+            user.setRole(role);
+            return userRepository.save(user);
+
+        } catch (Exception e) {
+            System.err.println("Error in syncUserWithCognito: " + e.getMessage());
+            throw e;
+        }
     }
     
     

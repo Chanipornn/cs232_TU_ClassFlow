@@ -65,39 +65,39 @@ async function loadMyCourses() {
 
 // ===== Card  =====
 function renderCourses(courses) {
-  const container = document.getElementById("myCoursesContainer");
-  container.innerHTML = "";
+    const container = document.getElementById("myCoursesContainer");
+        if (!container) return;
+        container.innerHTML = "";
 
-  if (!courses || courses.length === 0) {
-    container.innerHTML = "<p style='padding:20px;'>No courses enrolled.</p>";
-    return;
-  }
-
-  courses.forEach(course => {
-    const card = document.createElement("div");
-    card.className = "course-card-item"; // ใช้ Class ตาม CSS ใหม่ด้านล่าง
-    card.onclick = () => window.location.href = `assignment_all.html?courseId=${course.id}`;
-
-    // จัดรูปแบบวันที่ Deadline ให้ดูง่าย (เช่น 15 Mar)
-    let deadlineText = "-";
-    if (course.nextDeadline) {
-      const d = new Date(course.nextDeadline);
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      deadlineText = `${d.getDate()} ${months[d.getMonth()]}`;
+        if (!courses || courses.length === 0) {
+        container.innerHTML = "<p style='padding:20px;'>No courses enrolled.</p>";
+        return;
     }
 
-    card.innerHTML = `
-      <div class="course-content">
-        <b class="course-title">${course.code} ${course.name}</b>
-        <div class="course-info-list">
-          <p>Instructor: ${course.instructor ? course.instructor.email.split('@')[0] : "TBA"}</p>
-          <p>Assignments: ${course.assignmentCount || 0}</p>
-          <p>Next Deadline: ${deadlineText}</p>
-        </div>
-      </div>
-    `;
+    courses.forEach(course => {
+        const card = document.createElement("div");
+        card.className = "course-card-item";
+        card.onclick = () => window.location.href = `assignment_all.html?courseId=${course.id}`;
+    
+        let deadlineText = "-";
+    
+        if (course.nextDeadline) {
+            const d = new Date(course.nextDeadline);
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            deadlineText = `${d.getDate()} ${months[d.getMonth()]}`;
+        }
 
-    container.appendChild(card);
+        card.innerHTML = `
+            <div class="course-content">
+                <b class="course-title">${course.code} ${course.name}</b>
+                <div class="course-info-list">
+                    <p>Instructor: ${course.instructor ? course.instructor.email.split('@')[0] : "TBA"}</p>
+                     <p>Assignments: ${course.assignmentCount || 0}</p>
+                    <p>Next Deadline: ${deadlineText}</p>
+                 </div>
+            </div>
+    `;
+        container.appendChild(card);
   });
 }
 
