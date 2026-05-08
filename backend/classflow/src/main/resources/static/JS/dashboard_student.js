@@ -176,3 +176,16 @@ async function fetchNotifCount() {
 }
 
 document.addEventListener("DOMContentLoaded", fetchNotifCount);
+
+const avatar =
+    document.getElementById("avatar");
+
+if (avatar) {
+    avatar.addEventListener(
+        "click",
+        () => {
+            window.location.href =
+                "/HTML/profile.html";
+        }
+    );
+}

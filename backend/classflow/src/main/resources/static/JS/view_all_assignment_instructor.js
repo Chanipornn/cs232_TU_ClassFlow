@@ -45,6 +45,7 @@ function filterData(status) {
     renderTable(filtered);
 }
 
+/*
 function renderTable(data) {
     const tableBody = document.getElementById('submission-list');
     tableBody.innerHTML = '';
@@ -58,10 +59,14 @@ function renderTable(data) {
                 <td>${item.id}</td>
                 <td>
                     <a href="assignment_detail_instructor.html?studentId=${item.id}" style="text-decoration: none; color: inherit;">
-                        ${item.name}
+                        ${item.studentName || "-"}
                     </a>
                 </td>
-                <td class="${dateClass}">${item.dueDate}</td>
+                <td class="${dateClass}">				${
+				    item.submittedAt
+				    ? new Date(item.submittedAt).toLocaleString()
+				    : "-"
+				}</td>
                 <td>
                     <a href="${item.fileUrl}" class="file-link" download="${item.fileName}">
                         ${item.fileName} <i class="fas fa-download icon-red"></i>
@@ -71,6 +76,84 @@ function renderTable(data) {
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
     });
+}
+*/
+
+function renderTable(data) {
+
+    const tableBody =
+        document.getElementById('submission-list');
+
+    tableBody.innerHTML = '';
+
+    data.forEach(item => {
+
+        const submittedDate =
+            item.submittedAt
+            ? new Date(item.submittedAt)
+            : null;
+
+        const date =
+            submittedDate
+            ? submittedDate.toLocaleDateString("th-TH")
+            : "-";
+
+        const time =
+            submittedDate
+            ? submittedDate.toLocaleTimeString("th-TH")
+            : "-";
+
+        const row = `
+            <tr
+                onclick="openSubmission(${item.id})"
+                style="cursor:pointer;"
+            >
+
+                <td>${item.id}</td>
+
+                <td>
+                  ${item.studentCode || "-"}
+                </td>
+
+                <td>
+                    ${item.studentName || "-"}
+                </td>
+
+                <td>
+                    ${date}
+                </td>
+
+                <td>
+                    ${time}
+                </td>
+
+                <td>
+                    <a href="${item.fileUrl}"
+                       target="_blank"
+                       onclick="event.stopPropagation()">
+
+                        ${item.fileName}
+
+                        <i class="fas fa-download icon-red"></i>
+                    </a>
+                </td>
+
+            </tr>
+        `;
+
+        tableBody.insertAdjacentHTML(
+            'beforeend',
+            row
+        );
+
+    });
+}
+
+function openSubmission(submissionId) {
+
+    window.location.href =
+        `/HTML/assignment_detail_instructor.html?submissionId=${submissionId}`;
+
 }
 
 function updateStatCards(data) {
@@ -158,15 +241,22 @@ function sortData(sortBy) {
 
     if (sortBy === 'name') {
         // เรียงตามชื่อตัวอักษร A-Z
-        sortedData.sort((a, b) => a.name.localeCompare(b.name));
+		sortedData.sort((a, b) =>
+		    (a.studentName || "")
+		        .localeCompare(b.studentName || "")
+		);
     } 
     else if (sortBy === 'id') {
         // เรียงตามรหัสนักศึกษาจากน้อยไปมาก
-        sortedData.sort((a, b) => a.id.localeCompare(b.id));
+        sortedData.sort((a, b) => a.id - b.id);
     } 
     else if (sortBy === 'date') {
         // เรียงตามวันที่ (ต้องมั่นใจว่ารูปแบบวันที่ใน Java ส่งมาเป็นมาตรฐาน เช่น YYYY-MM-DD)
-        sortedData.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+		sortedData.sort(
+		    (a, b) =>
+		        new Date(b.submittedAt)
+		        - new Date(a.submittedAt)
+		);
     }
 
     // เมื่อเรียงเสร็จแล้ว สั่งให้ตารางแสดงผลใหม่
@@ -233,60 +323,3 @@ async function loadAssignmentInfo() {
 
 
 
-const params = new URLSearchParams(window.location.search);
-
-const assignmentId = params.get("assignmentId");
-
-async function loadSubmissions() {
-
-    const res = await fetch(
-        `http://localhost:8080/submissions/assignment/${assignmentId}`
-    );
-
-    const submissions = await res.json();
-
-    const tbody =
-        document.getElementById("submission-list");
-
-    tbody.innerHTML = "";
-
-    submissions.forEach((submission, index) => {
-
-        tbody.innerHTML += `
-            <tr class="submission-row"
-                onclick="openSubmission(${submission.id})">
-
-                <td>${index + 1}</td>
-
-                <td>
-                    ${submission.studentName}
-                </td>
-
-                <td>
-                    ${
-                        submission.submittedAt
-                        ? new Date(
-                            submission.submittedAt
-                          ).toLocaleString()
-                        : "-"
-                    }
-                </td>
-
-                <td>
-                    <a href="${submission.fileUrl}"
-                       target="_blank">
-                       Download
-                    </a>
-                </td>
-            </tr>
-        `;
-    });
-}
-
-function openSubmission(submissionId) {
-
-    window.location.href =
-        `assignment_detail_instructor.html?submissionId=${submissionId}`;
-}
-
-loadSubmissions();

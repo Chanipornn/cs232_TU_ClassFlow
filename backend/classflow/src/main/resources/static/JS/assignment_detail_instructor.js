@@ -30,7 +30,7 @@ document.getElementById('saveFeedback').addEventListener('click', async function
     const feedbackData = {
         grade: parseFloat(newGrade), // ส่งเป็นตัวเลข
         comment: newComment,
-        gradedBy: "Nittikhol suksumrong",
+        gradedBy: "Instructor",
         updatedAt: new Date().toISOString() // เพิ่ม Timestamp ให้เพื่อนฝั่ง Java ด้วย
     };
 
@@ -42,13 +42,24 @@ document.getElementById('saveFeedback').addEventListener('click', async function
         console.log("ส่งข้อมูลไป Java:", feedbackData);
 
         // --- ส่วนเชื่อมต่อกับ Java (Uncomment เมื่อเพื่อนพร้อม) ---
-        
+        /*
         const response = await fetch('http://localhost:8080/api/feedback/update', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(feedbackData)
         });
+*/
 
+const response = await fetch(
+    `http://localhost:8080/submissions/feedback/${submissionId}`,
+    {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(feedbackData)
+    }
+);
         if (!response.ok) throw new Error('บันทึกไม่สำเร็จ');
         
 
@@ -103,7 +114,7 @@ async function loadSubmissionDetail() {
 
         document.getElementById("studentId")
             .innerText =
-                "Submission ID: " + submission.id;
+                submission.studentCode || "-";
 
         // ===== HEADER =====
         document.querySelector(".header-info h1")

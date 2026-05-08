@@ -13,12 +13,16 @@ public class Submission {
 	
 	private String fileName;
 	private boolean isLate;
+	private Double grade;
+	private String gradedBy;
 
     private String fileUrl; // S3 link
 
     private String status; // SUBMITTED / PENDING
     
     private String studentName;
+    
+    private String studentCode;
 
     private LocalDateTime submittedAt;
 
@@ -29,6 +33,9 @@ public class Submission {
     @ManyToOne
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
+    
+    @Column(length = 1000)
+	private String comment;
 
     public Submission() {}
 
@@ -67,6 +74,38 @@ public class Submission {
 
     public void setLate(boolean late) {
         isLate = late;
+    }
+    
+    public String getStudentCode() {
+        return studentCode;
+    }
+
+    public void setStudentCode(String studentCode) {
+        this.studentCode = studentCode;
+    }
+    
+    public Double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Double grade) {
+        this.grade = grade;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getGradedBy() {
+        return gradedBy;
+    }
+
+    public void setGradedBy(String gradedBy) {
+        this.gradedBy = gradedBy;
     }
 
 }

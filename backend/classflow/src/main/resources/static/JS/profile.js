@@ -1,0 +1,90 @@
+document.addEventListener(
+    "DOMContentLoaded",
+    loadProfile
+);
+
+function loadProfile() {
+
+    // โหลดจาก localStorage ก่อน
+
+    const profile =
+        JSON.parse(
+            localStorage.getItem("profile")
+        ) || {};
+
+    document.getElementById("email").value =
+        profile.email || "";
+
+    document.getElementById("studentId").value =
+        profile.studentId || "";
+
+    document.getElementById("fullName").value =
+        profile.fullName || "";
+
+    document.getElementById("faculty").value =
+        profile.faculty || "";
+
+    document.getElementById("department").value =
+        profile.department || "";
+
+    document.getElementById("profileName")
+        .innerText =
+            profile.fullName || "Student";
+
+    document.getElementById("profileRole")
+        .innerText =
+            "Student";
+}
+
+document.getElementById("saveBtn")
+    .addEventListener(
+        "click",
+        saveProfile
+);
+
+function saveProfile() {
+
+    const profile = {
+
+        email:
+            document.getElementById("email").value,
+
+        studentId:
+            document.getElementById("studentId").value,
+
+        fullName:
+            document.getElementById("fullName").value,
+
+        faculty:
+            document.getElementById("faculty").value,
+
+        department:
+            document.getElementById("department").value
+    };
+
+	// เก็บ object profile
+	    localStorage.setItem(
+	        "profile",
+	        JSON.stringify(profile)
+	    );
+
+	    // เพิ่ม 2 อันนี้
+	    localStorage.setItem(
+	        "studentId",
+	        profile.studentId
+	    );
+
+	    localStorage.setItem(
+	        "fullName",
+	        profile.fullName
+	    );
+
+	    alert("Profile saved successfully");
+
+	    document.getElementById("profileName")
+	        .innerText =
+	            profile.fullName || "Student";
+
+	    window.location.href =
+	        "/HTML/dashboard_student.html";
+}

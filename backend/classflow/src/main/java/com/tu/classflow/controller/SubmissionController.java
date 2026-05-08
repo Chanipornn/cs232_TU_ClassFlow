@@ -106,6 +106,107 @@ public class SubmissionController {
     // นักศึกษาส่งงาน
     @PostMapping("/upload")
     public Map<String, String> uploadSubmission(
+
+            @RequestParam("file") 
+            MultipartFile file,
+
+            @RequestParam("assignmentId") 
+            Long assignmentId,
+      
+            @RequestParam("studentCode") 
+            String studentCode,
+
+            //@RequestParam("studentId")
+            //String studentId,
+
+            @RequestParam("studentName")
+            String studentName,
+
+            @RequestHeader("Authorization")
+            String authHeader
+
+    ) throws IOException {
+
+        String token =
+                authHeader.replace("Bearer ", "");
+
+        DecodedJWT jwt =
+                com.auth0.jwt.JWT.decode(token);
+
+        String fileUrl =
+                s3Service.uploadFile(file);
+
+        Assignment assignment =
+                assignmentRepository
+                        .findById(assignmentId)
+                        .orElseThrow();
+
+        Submission submission =
+                new Submission();
+
+        submission.setAssignment(assignment);
+        submission.setStudentName(studentName);
+        submission.setStudentCode(studentCode);
+
+        submission.setFileUrl(fileUrl);
+
+        submission.setFileName(
+                file.getOriginalFilename()
+        );
+
+        submission.setStatus("SUBMITTED");
+
+        submission.setSubmittedAt(
+                LocalDateTime.now()
+        );
+
+        boolean isLate =
+                LocalDateTime.now()
+                    .isAfter(
+                        assignment.getDeadline()
+                    );
+
+        submission.setLate(isLate);
+
+        submissionRepository.save(submission);
+
+        return Map.of(
+                "message", "Upload success",
+                "fileUrl", fileUrl
+        );
+    }
+    
+    
+    @PostMapping("/feedback/{submissionId}")
+    public Submission saveFeedback(
+            @PathVariable Long submissionId,
+            @RequestBody Map<String, Object> body
+    ) {
+
+        Submission submission =
+                submissionRepository
+                        .findById(submissionId)
+                        .orElseThrow();
+
+        submission.setGrade(
+                Double.parseDouble(
+                        body.get("grade").toString()
+                )
+        );
+
+        submission.setComment(
+                body.get("comment").toString()
+        );
+
+        submission.setGradedBy(
+                body.get("gradedBy").toString()
+        );
+
+        return submissionRepository.save(submission);
+    }
+    /*
+    @PostMapping("/upload")
+    public Map<String, String> uploadSubmission(
             @RequestParam("file") MultipartFile file,
             @RequestParam("assignmentId") Long assignmentId,
             @RequestHeader("Authorization") String authHeader
@@ -135,6 +236,8 @@ public class SubmissionController {
         submission.setAssignment(assignment);
 
         submission.setStudentName(email);
+        submission.setStudentId(studentId);
+        submission.setStudentName(studentName);
 
         submission.setFileUrl(fileUrl);
 
@@ -162,4 +265,5 @@ public class SubmissionController {
                 "fileUrl", fileUrl
         );
     }
+    */
 }

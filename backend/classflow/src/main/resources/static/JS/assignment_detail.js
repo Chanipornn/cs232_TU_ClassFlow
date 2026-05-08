@@ -118,9 +118,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const token = localStorage.getItem("accessToken"); // ดึง token
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("assignmentId", assignmentId);
+		const profile =
+		    JSON.parse(
+		        localStorage.getItem("profile")
+		    );
+			
+			const formData = new FormData();
+
+			formData.append("file", file);
+
+			formData.append(
+			    "assignmentId",
+			    assignmentId
+			);
+
+			const studentCode =
+			    localStorage.getItem("studentId");
+
+			const studentName =
+			    localStorage.getItem("fullName");
+
+			formData.append(
+			    "studentCode",
+			    studentCode
+			);
+
+			formData.append(
+			    "studentName",
+			    studentName
+			);
+			
+		if (
+		    !profile ||
+		    !profile.studentId ||
+		    !profile.fullName
+		) {
+		    alert(
+		        "Please complete your profile first"
+		    );
+
+		    window.location.href =
+		        "/HTML/profile.html";
+
+		    return;
+		}
+        /*formData.append("file", file);
+        formData.append("assignmentId", assignmentId);*/
 
         try {
             const response = await fetch("http://localhost:8080/submissions/upload", {
@@ -142,6 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             alert("Submitted successfully!");
+			
+			window.location.href =
+					    "/HTML/dashboard_student.html";
 
         } catch (error) {
             console.error("Submit error:", error);

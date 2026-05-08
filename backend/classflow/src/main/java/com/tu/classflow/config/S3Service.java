@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+//import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.core.sync.RequestBody;
+//import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -32,6 +34,7 @@ public class S3Service {
     @Value("${aws.region}")
     private String region;
 
+    /*
     private S3Client getClient() {
         AwsSessionCredentials awsCreds = AwsSessionCredentials.create(
                 accessKey,
@@ -41,10 +44,33 @@ public class S3Service {
 
         return S3Client.builder()
                 .region(Region.of(region))
-                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                .credentialsProvider(
+                        DefaultCredentialsProvider.create()
+                    )
                 .build();
     }
+*/
+    
+    private S3Client getClient() {
 
+        AwsSessionCredentials awsCreds =
+                AwsSessionCredentials.create(
+                        accessKey,
+                        secretKey,
+                        sessionToken
+                );
+
+        return S3Client.builder()
+                .region(Region.of(region))
+                .credentialsProvider(
+                    StaticCredentialsProvider.create(
+                        awsCreds
+                    )
+                )
+                .build();
+    }
+    
+    
     public String uploadFile(MultipartFile file) throws IOException {
         String key = "submissions/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
 
