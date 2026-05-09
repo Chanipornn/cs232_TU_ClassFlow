@@ -1,6 +1,12 @@
 // API URL 
 const API_URL = "http://localhost:8080";
 
+function getToken() {
+    return localStorage.getItem("accessToken") 
+        || localStorage.getItem("idToken") 
+        || null;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     // โหลดข้อมูลชื่อผู้ใช้จาก localStorage
     displayUsername();
@@ -10,6 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // เริ่มการทำงานของปฏิทิน
     initCalendar();
+
+    // โหลดประกาศล่าสุดสำหรับนักเรียน
+    loadAnnouncements();
+
+    fetchNotifCount();
 });
 
 // ===== แสดงชื่อผู้ใช้งาน (ดึงจาก Email ใน Token) =====
@@ -157,7 +168,8 @@ function goToCourseDetail(courseId) {
 //การแจ้งเตือน (Notification) - ดึงจำนวนการแจ้งเตือนที่ยังไม่อ่านมาแสดงบน Badge
 async function fetchNotifCount() {
     try {
-        const token = localStorage.getItem("accessToken");
+        const token = getToken();
+        if (!token) return;
         const response = await fetch("http://localhost:8080/api/notifications/student", {
             headers: { "Authorization": "Bearer " + token }
         });
@@ -175,7 +187,77 @@ async function fetchNotifCount() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", fetchNotifCount);
+
+
+
+// ===== Load Student Announcements =====
+async function loadAnnouncements() {
+
+    const token = getToken();  
+    if (!token) return;        
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:8080/announcements/student",
+            {
+                headers: {
+                    "Authorization":
+                        "Bearer " + token
+                }
+            }
+        );
+
+        if (!response.ok)
+            throw new Error("Fetch failed");
+
+        const announcements =
+            await response.json();
+
+        const container =
+            document.getElementById(
+                "announcementContainer"
+            );
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        if (announcements.length === 0) {
+            container.innerHTML =
+                "<p>No announcements</p>";
+            return;
+        }
+
+        announcements.forEach(ann => {
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "student-announcement";
+
+            div.innerHTML = `
+                <div>
+                    <b>📢 ${ann.title}</b><br>
+                    Course: ${ann.courseCode}<br>
+                    Date: ${ann.date}<br>
+                    ${ann.message}
+                </div>
+            `;
+
+            container.appendChild(div);
+        });
+
+    } catch (err) {
+        console.error(
+            "Load announcements error:",
+            err
+        );
+    }
+}
+
+
 
 const avatar =
     document.getElementById("avatar");

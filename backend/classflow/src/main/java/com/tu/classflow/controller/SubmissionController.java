@@ -1,24 +1,38 @@
 package com.tu.classflow.controller;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
-
-import java.util.Map;
 import java.util.List;
-import java.util.zip.*;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.*;
+
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-import com.tu.classflow.model.*;
-import com.tu.classflow.repository.*;
-import com.tu.classflow.dto.FeedbackRequest;
-
 import com.tu.classflow.config.S3Service;
+import com.tu.classflow.dto.FeedbackRequest;
+import com.tu.classflow.model.Assignment;
+import com.tu.classflow.model.Submission;
+import com.tu.classflow.repository.AssignmentRepository;
+import com.tu.classflow.repository.SubmissionRepository;
+import com.tu.classflow.repository.UserRepository;
 
 @RestController
 @RequestMapping("/submissions")
@@ -36,6 +50,7 @@ public class SubmissionController {
     
     @Autowired
     private UserRepository userRepository;
+
     
     @GetMapping("/assignment/{assignmentId}")
     public List<Submission> getByAssignment(
@@ -167,6 +182,8 @@ public class SubmissionController {
         submission.setLate(isLate);
 
         submissionRepository.save(submission);
+
+
 
         return Map.of(
                 "message", "Upload success",
