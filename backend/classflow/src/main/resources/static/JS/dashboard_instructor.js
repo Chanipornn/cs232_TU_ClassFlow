@@ -83,8 +83,10 @@ function closeModal() {
 	  document.getElementById("username").innerText = name;
 	}
 	window.onload = function () {
+    console.log("onload fired");
 	  setUserNameFromToken();
 	  loadCourses(); 
+    loadAnnouncements();  
 	};
 	
 	
@@ -210,12 +212,24 @@ async function loadCourses() {
 
 
 // ======= SAVE ANNOUNCEMENT + ADD ASSIGNMENT =======
-function saveAnnouncement() {
+async function saveAnnouncement() {
   const title  = document.getElementById('annTitle').value.trim();
   const date   = document.getElementById('annDate').value;
   const msg    = document.getElementById('annMessage').value.trim();
   const courseCode = document.getElementById('annCourse').value;
+  const token = getToken();
 
+  try {
+        const res = await fetch(`${API_URL}/announcements`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ title, date, message: msg, courseCode })
+        });
+
+        const saved = await res.json(); // ได้ id กลับมา
 
   const dateStr = date
     ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -226,21 +240,66 @@ function saveAnnouncement() {
 
     const div = document.createElement('div');
     div.className = 'announcement';
+    div.dataset.id = saved.id; // เก็บ id ไว้
 
 	div.innerHTML = `
-	  <div class="announcement-info">
-	    <b>📢 ${title}</b><br>
-	    Course: ${courseCode}<br>
-	    Date: ${dateStr}<br>
-	    ${msg}
-	  </div>
-	`;
+    <div class="announcement-info">
+        <b>📢 ${title}</b><br>
+        Date: ${dateStr}<br>
+        ${msg}
+    </div>
+    <div class="ann-actions">
+        <button class="btn-edit" onclick="openEditModal(this)">Edit</button>
+        <button class="btn-delete" onclick="deleteAnnouncement(this)">Delete</button>
+    </div>
+`;
 
-    list.prepend(div);
-  }
+        list.prepend(div);
+        closeModal();
 
-  closeModal();
+    } catch (err) {
+        console.error(err);
+    }
+}
 
+
+// ======= LOAD ANNOUNCEMENTS (เพิ่มใหม่) =======
+async function loadAnnouncements() {
+    const token = getToken();
+
+    try {
+        const res = await fetch(`${API_URL}/announcements`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const announcements = await res.json();
+        const list = document.getElementById('announcementList');
+        list.innerHTML = '';
+
+        announcements.forEach(ann => {
+            const div = document.createElement('div');
+            div.className = 'announcement';
+            div.dataset.id = ann.id;
+
+            div.innerHTML = `
+                <div class="announcement-info">
+                    <b>📢 ${ann.title}</b><br>
+                    Date: ${ann.date || '—'}<br>
+                    ${ann.message || ''}
+                </div>
+                <div class="ann-actions">
+                    <button class="btn-edit" onclick="openEditModal(this)">Edit</button>
+                    <button class="btn-delete" onclick="deleteAnnouncement(this)">Delete</button>
+                </div>
+            `;
+
+            list.appendChild(div);
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 // ======= DELETE =======
 let deletingAnnEl = null;
@@ -250,12 +309,29 @@ function deleteAnnouncement(btn) {
   document.getElementById('deleteModal').classList.add('active');
 }
 
-function confirmDelete() {
-  if (deletingAnnEl) {
-    deletingAnnEl.remove();
-    deletingAnnEl = null;
-  }
-  closeDeleteModal();
+async function confirmDelete() {
+    if (!deletingAnnEl) return;
+
+    const id = deletingAnnEl.dataset.id; //ดึง id จาก element
+    const token = getToken();
+
+    try {
+        const res = await fetch(`${API_URL}/announcements/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+            deletingAnnEl.remove(); // ลบ DOM หลัง API สำเร็จ
+            deletingAnnEl = null;
+        } else {
+            alert('ลบไม่สำเร็จ');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+
+    closeDeleteModal();
 }
 
 function closeDeleteModal() {
