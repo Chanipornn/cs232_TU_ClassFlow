@@ -18,16 +18,49 @@
 
 ## นางสาวชญาณ์นันท์ มะริวรรณ์
 
-หน้าที่:
-- พัฒนาระบบฝั่งอาจารย์
-- พัฒนาระบบ Create Assignment 
+### หน้าที่รับผิดชอบ
+
+รับผิดชอบการพัฒนา Backend หลักของระบบในส่วน Instructor
+รวมถึงการเชื่อมต่อระบบกับบริการต่าง ๆ บน AWS ได้แก่
+Amazon RDS และ Amazon Cognito
+
+### งานที่พัฒนา
+
+#### Backend Development (Instructor Side)
+
+- พัฒนา REST API สำหรับฝั่งอาจารย์
+- พัฒนาระบบสร้าง Assignment
+- พัฒนาระบบแก้ไขและลบ Assignment
+- พัฒนาระบบดู Submission ของนักศึกษา
 - พัฒนาระบบ Feedback และ Grading
-- เชื่อม Amazon Cognito
+- พัฒนาระบบแสดงสถานะการตรวจงาน
+- พัฒนาระบบ Download Assignment Files
+
+#### Amazon RDS Integration
+
 - เชื่อม Spring Boot กับ Amazon RDS
-- พัฒนาระบบ Download All File
 
-หลักฐาน:
+#### Amazon Cognito Integration
 
+- เชื่อมระบบ Login กับ Amazon Cognito
+- จัดการ Authentication Flow & JWT Token
+- พัฒนาระบบแยกสิทธิ์ Student / Instructor
+
+### หลักฐานการทำงาน
+
+### ตัวอย่าง Commit
+- fix API role and create course (Instructor)
+- create course and assignment (Instructor)
+- add attachment files and edit assignment cards (Instructor)
+- create return feedback to student
+- connect Mysql to RDS
+
+### ผลลัพธ์ที่ได้
+
+- ระบบ Backend สามารถทำงานร่วมกับ Frontend ได้แบบ End-to-End
+- ระบบสามารถจัดเก็บข้อมูลจริงบน Amazon RDS
+- ระบบรองรับ Authentication ผ่าน Amazon Cognito
+- อาจารย์สามารถสร้าง Assignment ตรวจงาน และให้ Feedback ได้จริง
 
 ---
 
