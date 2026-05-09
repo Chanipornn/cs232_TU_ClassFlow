@@ -64,8 +64,8 @@ public class AssignmentController {
     @Autowired
     private SubmissionRepository submissionRepository;
 
-    //@Autowired
-    //private com.tu.classflow.service.EventBridgeService eventBridgeService;
+    @Autowired
+    private com.tu.classflow.service.EventBridgeService eventBridgeService;
 
     @Autowired
     private CourseRepository courseRepository;
@@ -453,29 +453,26 @@ public class AssignmentController {
         enrollmentRepository.findByCourse_Id(course.getId());
 
         for (Enrollment e : enrollments) {
+    Notification notif = new Notification();
+    notif.setUser(e.getStudent());
+    notif.setTitle("📝 งานใหม่: " + savedAssignment.getTitle());
+    notif.setMessage("มีการมอบหมายงานใหม่ในวิชา " + course.getCode());
+    notif.setType("ASSIGNMENT");
+    notif.setRelatedId(savedAssignment.getId());
+    notif.setIsRead(false);
+    notif.setCreatedAt(LocalDateTime.now());
+    notificationRepository.save(notif);
+    System.out.println("Notification created for: " + e.getStudent().getId()); // ✅ ย้ายเข้ามาใน loop
+}
 
-        Notification notif = new Notification();
+eventBridgeService.sendAssignmentCreatedEvent(
+    savedAssignment.getTitle(),
+    course.getCode(),
+    course.getInstructor().getEmail()
+);
 
-        notif.setUser(e.getStudent());
-
-        notif.setMessage(
-            "มี assignment ใหม่: "
-            + savedAssignment.getTitle()
-        );
-
-         notif.setIsRead(false);
-
-        notificationRepository.save(notif);
-
-        System.out.println(
-            "Notification created for: "
-            + e.getStudent().getId()
-         );
-    }
-        
-     // debug
-     System.out.println("FILES = " + files);
-
+// debug
+System.out.println("FILES = " + files);
      if (files != null) {
 
          System.out.println(
@@ -553,3 +550,5 @@ public class AssignmentController {
     }
     
 }
+
+

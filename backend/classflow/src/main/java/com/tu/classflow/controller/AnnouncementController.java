@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tu.classflow.service.EventBridgeService;
 import com.tu.classflow.model.Announcement;
 import com.tu.classflow.model.Enrollment;
 import com.tu.classflow.model.Notification;
@@ -41,6 +42,9 @@ public class AnnouncementController {
 
     @Autowired
     private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private EventBridgeService eventBridgeService;
 
     // GET /announcements — ดึงของ instructor คนนั้น
     @GetMapping
@@ -106,6 +110,12 @@ public class AnnouncementController {
  
         // ส่ง notification ไปยังนักเรียนทั้งหมดในวิชา
         sendAnnouncementNotifications(savedAnn);
+
+        eventBridgeService.sendAnnouncementCreatedEvent(
+        savedAnn.getTitle(),
+        savedAnn.getCourseCode(),
+        user.getEmail()
+    );
 
         return savedAnn;
     }
