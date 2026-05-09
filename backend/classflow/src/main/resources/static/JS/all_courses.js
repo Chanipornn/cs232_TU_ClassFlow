@@ -1,9 +1,7 @@
 // 1. API URL (เช็ก Port ให้ตรงกับที่รัน Spring Boot)
 const API_URL = "http://localhost:8080";
 
-document.addEventListener("DOMContentLoaded", function () {
-    
-    // --- แสดงชื่อผู้ใช้งานที่หัวเว็บ ---
+document.addEventListener("DOMContentLoaded", async function () {
     const username = localStorage.getItem("username") || "Guest";
     const userDisplay = document.getElementById("username");
     if (userDisplay) userDisplay.innerText = username;
@@ -12,24 +10,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.querySelector(".search");
     const selectAll = document.querySelector(".course-header input");
 
-    let allCourses = []; // เก็บวิชาทั้งหมดจาก DB ไว้สำหรับทำ Search
+    let allCourses = []; 
+    let myCourseIds = []; // เก็บเฉพาะ ID วิชาที่ลงทะเบียนแล้ว
 
-    // --- 2. ดึงข้อมูลวิชาทั้งหมดจาก Java Backend ---
-    fetch(`${API_URL}/courses`)
-        .then(response => {
-            if (!response.ok) throw new Error("Network response was not ok");
-            return response.json();
-        })
-        .then(courses => {
-            allCourses = courses;
-            renderCourses(allCourses); // แสดงผลวิชาทั้งหมดตอนโหลดหน้า
-        })
-        .catch(error => {
-            console.error("Error fetching courses:", error);
-            if (list) list.innerHTML = "<p style='padding:20px;'>ไม่สามารถโหลดข้อมูลวิชาได้ (Check Backend/Database)</p>";
-        });
+    const token = localStorage.getItem("accessToken") || localStorage.getItem("idToken");
+    const options = { headers: { 'Authorization': `Bearer ${token}` } };
 
-    // --- 3. ระบบ Search (ค้นหาชื่อวิชาหรือรหัสวิชา) ---
+    try {
+        // --- 1. ดึงวิชาที่เราลงทะเบียนแล้ว (My Courses) ---
+        // ใช้ Endpoint /assignments/my หรือสร้าง /courses/my ตามใน Spring Boot
+        const myRes = await fetch(`${API_URL}/assignments/my`, options); 
+        const myData = await myRes.json();
+        // เก็บ ID วิชาที่ลงทะเบียนแล้วไว้ใน Array
+        myCourseIds = myData.map(item => item.course.id);
+
+        // --- 2. ดึงวิชาทั้งหมด (All Courses) ---
+        const allRes = await fetch(`${API_URL}/courses`);
+        allCourses = await allRes.json();
+
+        renderCourses(allCourses, myCourseIds);
+    } catch (error) {
+        console.error("Error loading data:", error);
+        if (list) list.innerHTML = "<p style='padding:20px;'>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
+    }
+
+    // ระบบ Search
     if (searchInput) {
         searchInput.addEventListener("input", function (e) {
             const searchTerm = e.target.value.toLowerCase();
@@ -37,41 +42,44 @@ document.addEventListener("DOMContentLoaded", function () {
                 (course.name && course.name.toLowerCase().includes(searchTerm)) || 
                 (course.code && course.code.toLowerCase().includes(searchTerm))
             );
-            renderCourses(filtered);
+            renderCourses(filtered, myCourseIds);
         });
     }
 
-    // --- 4. ฟังก์ชัน Render รายการวิชา ---
-    function renderCourses(coursesToRender) {
+    function renderCourses(coursesToRender, enrolledIds) {
         if (!list) return;
         list.innerHTML = "";
 
-        if (coursesToRender.length === 0) {
-            list.innerHTML = "<p style='padding:20px;'>ไม่พบรายชื่อวิชา</p>";
-            return;
-        }
-
         coursesToRender.forEach(course => {
+            const isEnrolled = enrolledIds.includes(course.id);
             const row = document.createElement("div");
             row.className = "course-row";
+            
+            // ถ้าลงทะเบียนแล้ว ให้จางลง หรือห้ามติ๊กซ้ำ
+            if (isEnrolled) row.style.opacity = "0.7";
 
             const instructorName = course.instructor ? course.instructor.email.split('@')[0] : "TBA";
 
             row.innerHTML = `
-                <input type="checkbox" class="course-checkbox" data-id="${course.id}">
-                <div class="course-card" onclick="goToCourseDetail(${course.id})">
-                    <b>${course.code || ''} : ${course.name}</b><br>
-                    <small>Instructor: ${instructorName}</small>
+                <input type="checkbox" class="course-checkbox" data-id="${course.id}" ${isEnrolled ? 'disabled' : ''}>
+                <div class="course-card" onclick="${isEnrolled ? "alert('You already enrolled in this course')" : `goToCourseDetail(${course.id})`}">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <span>
+                            <b>${course.code || ''} : ${course.name}</b><br>
+                            <small>Instructor: ${instructorName}</small>
+                        </span>
+                        ${isEnrolled ? '<span class="enrolled-badge">✓ Enrolled</span>' : ''}
+                    </div>
                 </div>
             `;
             list.appendChild(row);
         });
     }
 
-    // --- 5. ระบบ Select All ---
+    // ระบบ Select All (จะเลือกเฉพาะตัวที่ไม่ได้ disabled)
     if (selectAll) {
         selectAll.addEventListener("change", () => {
-            const checkboxes = document.querySelectorAll(".course-checkbox");
+            const checkboxes = document.querySelectorAll(".course-checkbox:not(:disabled)");
             checkboxes.forEach(cb => cb.checked = selectAll.checked);
         });
     }

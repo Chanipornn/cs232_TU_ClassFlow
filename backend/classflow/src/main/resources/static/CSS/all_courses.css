@@ -270,3 +270,18 @@ body {
     cursor: pointer;
     border: 2px solid white; /* optional */
   }
+
+  .enrolled-badge {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 1px solid #2e7d32;
+}
+
+.course-checkbox:disabled {
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
