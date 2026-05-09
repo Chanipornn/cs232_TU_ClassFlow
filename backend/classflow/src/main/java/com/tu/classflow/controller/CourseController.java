@@ -176,4 +176,51 @@ public class CourseController {
         return enrollmentRepository
                 .countByCourse_Id(courseId);
     }
+    
+    
+    @GetMapping("/courses/available/{studentId}")
+    public List<Course> getAvailableCourses(
+            @PathVariable Long studentId
+    ) {
+
+        // enrollment ของ student
+        List<Enrollment> enrollments =
+                enrollmentRepository.findByStudent_Id(
+                        studentId
+                );
+
+        // ดึง course id ที่ลงแล้ว
+        List<Long> enrolledCourseIds =
+                enrollments.stream()
+                        .map(e -> e.getCourse().getId())
+                        .toList();
+
+        // ดึงทุกวิชา
+        List<Course> allCourses =
+                courseRepository.findAll();
+
+        // filter วิชาที่ยังไม่ได้ลง
+        return allCourses.stream()
+                .filter(course ->
+                        !enrolledCourseIds.contains(
+                                course.getId()
+                        )
+                )
+                .toList();
+    }
+    
+    @GetMapping("/courses/enrolled/{studentId}")
+    public List<Course> getEnrolledCourses(
+            @PathVariable Long studentId
+    ) {
+
+        List<Enrollment> enrollments =
+                enrollmentRepository.findByStudent_Id(
+                        studentId
+                );
+
+        return enrollments.stream()
+                .map(Enrollment::getCourse)
+                .toList();
+    }
 }
