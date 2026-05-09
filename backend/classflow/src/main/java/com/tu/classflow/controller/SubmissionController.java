@@ -64,29 +64,50 @@ public class SubmissionController {
 
         for (Submission s : submissions) {
 
-            URL url =
-                    new URL(s.getFileUrl());
+            try {
 
-            InputStream input =
-                    url.openStream();
+                URL url =
+                        new URL(s.getFileUrl());
 
-            ZipEntry entry =
-                    new ZipEntry(s.getFileName());
+                InputStream input =
+                        url.openStream();
 
-            zipOut.putNextEntry(entry);
+                String safeFileName =
+                        s.getStudentCode()
+                        + "_"
+                        + s.getFileName();
 
-            input.transferTo(zipOut);
+                ZipEntry entry =
+                        new ZipEntry(safeFileName);
 
-            zipOut.closeEntry();
+                zipOut.putNextEntry(entry);
 
-            input.close();
+                byte[] bytes =
+                        input.readAllBytes();
+
+                zipOut.write(bytes, 0, bytes.length);
+
+                zipOut.closeEntry();
+
+                input.close();
+
+            } catch (Exception e) {
+
+                System.out.println(
+                    "Download failed: "
+                    + s.getFileUrl()
+                );
+
+                e.printStackTrace();
+            }
         }
 
+        zipOut.finish();
         zipOut.close();
 
         return ResponseEntity.ok()
                 .header(
-                    "Content-Disposition",
+                    HttpHeaders.CONTENT_DISPOSITION,
                     "attachment; filename=submissions.zip"
                 )
                 .contentType(
