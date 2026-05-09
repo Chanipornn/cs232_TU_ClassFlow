@@ -75,4 +75,31 @@ public class EventBridgeService {
             e.printStackTrace();
         }
     }
+
+
+    public void sendDeadlineReminderEvent(String title, String courseCode, String deadline) {
+    try {
+        String detail = String.format(
+            "{\"title\":\"%s\",\"courseCode\":\"%s\",\"deadline\":\"%s\"}",
+            title, courseCode, deadline
+        );
+
+        PutEventsRequestEntry entry = PutEventsRequestEntry.builder()
+                .source("classflow.deadline")
+                .detailType("DeadlineReminder")
+                .detail(detail)
+                .eventBusName("default")
+                .build();
+
+        PutEventsResponse response = client.putEvents(
+            PutEventsRequest.builder().entries(entry).build()
+        );
+
+        System.out.println("=== Deadline EventBridge result: failedCount=" + response.failedEntryCount());
+
+    } catch (Exception e) {
+        System.err.println("=== EventBridge ERROR: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
 }
