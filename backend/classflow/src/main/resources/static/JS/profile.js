@@ -47,44 +47,90 @@ function saveProfile() {
     const profile = {
 
         email:
-            document.getElementById("email").value,
+        document.getElementById("email").value,
 
         studentId:
-            document.getElementById("studentId").value,
+        document.getElementById("studentId").value,
 
         fullName:
-            document.getElementById("fullName").value,
+        document.getElementById("fullName").value,
 
         faculty:
-            document.getElementById("faculty").value,
+        document.getElementById("faculty").value,
 
         department:
-            document.getElementById("department").value
+        document.getElementById("department").value
     };
 
-	// เก็บ object profile
-	    localStorage.setItem(
-	        "profile",
-	        JSON.stringify(profile)
-	    );
+    // save localStorage
 
-	    // เพิ่ม 2 อันนี้
-	    localStorage.setItem(
-	        "studentId",
-	        profile.studentId
-	    );
+    localStorage.setItem(
+        "profile",
+        JSON.stringify(profile)
+    );
 
-	    localStorage.setItem(
-	        "fullName",
-	        profile.fullName
-	    );
+    localStorage.setItem(
+        "studentId",
+        profile.studentId
+    );
 
-	    alert("Profile saved successfully");
+    localStorage.setItem(
+        "fullName",
+        profile.fullName
+    );
 
-	    document.getElementById("profileName")
-	        .innerText =
-	            profile.fullName || "Student";
+    // update name
 
-	    window.location.href =
-	        "/HTML/dashboard_student.html";
+    document.getElementById("profileName")
+        .innerText =
+        profile.fullName || "Student";
+
+    // popup
+
+    showSavePopup();
+}
+
+function showSavePopup() {
+
+    const popup =
+        document.createElement("div");
+
+    popup.className = "success-popup";
+
+    popup.innerHTML = `
+
+        <div class="success-box">
+
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <h2>Success</h2>
+
+            <p>Profile saved successfully</p>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+        popup.classList.add("show");
+    }, 10);
+
+    setTimeout(() => {
+
+        popup.classList.remove("show");
+
+        setTimeout(() => {
+
+            popup.remove();
+
+            window.location.href =
+                "/HTML/dashboard_student.html";
+
+        }, 300);
+
+    }, 1800);
 }
