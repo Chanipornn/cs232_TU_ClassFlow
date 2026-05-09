@@ -25,9 +25,11 @@ async function fetchAssignments(filter = "all") {
         }
 
         // 2. ดึงรายการ Assignment
+        const studentCode = localStorage.getItem("studentId"); 
+
         let url = courseId 
-            ? `${API_URL_BASE}/assignments/course/${courseId}` 
-            : `${API_URL_BASE}/assignments/my`;
+            ? `${API_URL_BASE}/assignments/course/${courseId}?studentCode=${studentCode}` 
+            : `${API_URL_BASE}/assignments/my?studentCode=${studentCode}`;
             
         const response = await fetch(url, options);
         const data = await response.json();
@@ -67,9 +69,19 @@ function renderAssignments(filter) {
     }
 
     filtered.forEach(a => {
-        // ใช้ค่า submitted (boolean) ที่เราเพิ่งแก้ใน Java
-        let statusClass = a.submitted ? "green" : "red";
-        let statusText = a.submitted ? "Submitted" : "Not Submitted";
+        // จัดการเรื่องสถานะและสีให้ครอบคลุม
+        let statusClass = "red";
+        let statusText = "Not Submitted";
+
+        if (a.status === "SUBMITTED") {
+            // ถ้าอาจารย์ตรวจแล้ว (ให้เป็นสีเขียว)
+            statusClass = "green"; 
+            statusText = "Submitted"; 
+        } else if (a.status === "PENDING" || a.submitted === true) {
+            // ถ้าส่งแล้วแต่ยังไม่ตรวจ (ให้เป็นสีเหลือง)
+            statusClass = "yellow";
+            statusText = "Pending";
+        }
 
         const card = `
             <div class="card" onclick="goToAssignmentDetail(${a.id})" style="cursor: pointer;">
@@ -104,7 +116,26 @@ function switchTab(page) {
 }
 
 function goToAssignmentDetail(assignmentId) {
-    window.location.href = `assignment_detail.html?id=${assignmentId}&courseId=${courseId}`;
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = urlParams.get('courseId');
+    
+    // ค้นหาข้อมูล assignment ชิ้นนี้จากรายการทั้งหมด
+    const assignment = allAssignments.find(a => a.id == assignmentId);
+    if (!assignment) return;
+
+    let targetPage = "assignment_detail.html"; // Default: หน้าส่งงาน (ยังไม่ส่ง)
+
+    // เช็คเงื่อนไข: ถ้า status เป็น PENDING หรือ submitted เป็น true (ส่งแล้วแต่ยังไม่ตรวจ)
+    if (assignment.status === "PENDING" || (assignment.submitted === true && assignment.status !== "SUBMITTED")) {
+        targetPage = "Submitted_before_deadline.html";
+    } 
+    // เช็คเงื่อนไข: ถ้า status เป็น SUBMITTED (อาจารย์ตรวจแล้ว)
+    else if (assignment.status === "SUBMITTED") {
+        targetPage = "Done-submitted.html";
+    }
+
+    // ส่งไปหน้าที่ต้องการ พร้อมพ่วง id และ courseId
+    window.location.href = `${targetPage}?id=${assignmentId}${courseId ? '&courseId=' + courseId : ''}`;
 }
 
 function searchAssignment(keyword, filter) {

@@ -41,6 +41,7 @@ import com.tu.classflow.repository.EnrollmentRepository;
 import com.tu.classflow.repository.NotificationRepository;
 import com.tu.classflow.repository.SubmissionRepository;
 import com.tu.classflow.repository.UserRepository;
+import com.tu.classflow.model.Submission;
 
 
 @RestController
@@ -286,8 +287,37 @@ public class AssignmentController {
     
     // ดู assignment ของวิชานั้นๆ
     @GetMapping("/course/{courseId}")
-    public List<Assignment> getByCourse(@PathVariable Long courseId) {
-        return assignmentRepository.findByCourse_Id(courseId);
+    public List<Assignment> getByCourse(
+            @PathVariable Long courseId,
+            @RequestParam(required = false) String studentCode
+    ) {
+        List<Assignment> assignments = assignmentRepository.findByCourse_Id(courseId);
+
+        if (studentCode != null && !studentCode.isEmpty()) {
+            for (Assignment assignment : assignments) {
+                List<Submission> submissions = submissionRepository.findByAssignment_Id(assignment.getId());
+
+                // หา Submission เฉพาะของนักศึกษาคนนี้
+                Submission studentSub = submissions.stream()
+                        .filter(sub -> studentCode.equals(sub.getStudentCode()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (studentSub != null) {
+                    assignment.setSubmitted(true);
+                    // เช็คว่าอาจารย์ให้คะแนนหรือยัง (อิงจากตาราง DB)
+                    if (studentSub.getGrade() != null || studentSub.getGradedBy() != null) {
+                        assignment.setStatus("SUBMITTED"); // ตรวจแล้ว
+                    } else {
+                        assignment.setStatus("PENDING");   // เพิ่งอัปโหลดแต่ยังไม่มีคะแนน
+                    }
+                } else {
+                    assignment.setSubmitted(false);
+                    assignment.setStatus("NOT_SUBMITTED");
+                }
+            }
+        }
+        return assignments;
     }
     
  // ================= GET ASSIGNMENT BY ID =================

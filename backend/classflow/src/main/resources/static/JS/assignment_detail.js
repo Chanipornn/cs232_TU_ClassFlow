@@ -108,64 +108,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if (submitBtn) {
     submitBtn.addEventListener("click", async () => {
         const file = fileInput?.files[0];
+        const token = localStorage.getItem("accessToken") || localStorage.getItem("idToken");
+        
+        // 1. ตรวจสอบไฟล์
         if (!file) {
             alert("Please select a file to submit");
             return;
         }
 
+        // 2. ตรวจสอบ Profile ข้อมูลนักศึกษา
+        const studentCode = localStorage.getItem("studentId");
+        const studentName = localStorage.getItem("fullName");
+
+        if (!studentCode || !studentName) {
+            alert("Please complete your profile first");
+            window.location.href = "/HTML/profile.html";
+            return;
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const assignmentId = urlParams.get('id');
+        const courseId = urlParams.get('courseId');
 
-        const token = localStorage.getItem("accessToken"); // ดึง token
-
-		const profile =
-		    JSON.parse(
-		        localStorage.getItem("profile")
-		    );
-			
-			const formData = new FormData();
-
-			formData.append("file", file);
-
-			formData.append(
-			    "assignmentId",
-			    assignmentId
-			);
-
-			const studentCode =
-			    localStorage.getItem("studentId");
-
-			const studentName =
-			    localStorage.getItem("fullName");
-
-			formData.append(
-			    "studentCode",
-			    studentCode
-			);
-
-			formData.append(
-			    "studentName",
-			    studentName
-			);
-			
-		if (
-		    !profile ||
-		    !profile.studentId ||
-		    !profile.fullName
-		) {
-		    alert(
-		        "Please complete your profile first"
-		    );
-
-		    window.location.href =
-		        "/HTML/profile.html";
-
-		    return;
-		}
-        /*formData.append("file", file);
-        formData.append("assignmentId", assignmentId);*/
+        // 3. เตรียมข้อมูลส่งไป Backend
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("assignmentId", assignmentId);
+        formData.append("studentCode", studentCode);
+        formData.append("studentName", studentName);
 
         try {
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Uploading...";
+
             const response = await fetch("http://localhost:8080/submissions/upload", {
                 method: "POST",
                 headers: {
@@ -176,26 +151,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-            // เปลี่ยน badge เป็นสีเขียว
-            const badge = document.querySelector(".status-badge");
-            if (badge) {
-                badge.textContent = "SUBMITTED";
-                badge.style.backgroundColor = "#4CAF50";
-                badge.style.color = "white";
-            }
-
             alert("Submitted successfully!");
-			
-			window.location.href =
-					    "/HTML/dashboard_student.html";
+            
+            // กลับไปยังหน้าที่กดมา พร้อม courseId
+            if (courseId) {
+                window.location.href = `assignment_all.html?courseId=${courseId}`;
+            } else {
+                window.location.href = "/HTML/dashboard_student.html";
+            }
 
         } catch (error) {
             console.error("Submit error:", error);
             alert("Submission failed: " + error.message);
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit";
         }
-		
-		const courseId = new URLSearchParams(window.location.search).get('courseId');
-        window.location.href = `assignment_all.html?courseId=${courseId}`;
     });
 }
 

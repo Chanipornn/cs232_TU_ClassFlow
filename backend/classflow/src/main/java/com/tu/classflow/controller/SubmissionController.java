@@ -163,12 +163,10 @@ public class SubmissionController {
                 LocalDateTime.now()
         );
 
-        boolean isLate =
-                LocalDateTime.now()
-                    .isAfter(
-                        assignment.getDeadline()
-                    );
-
+        boolean isLate = false;
+        if (assignment.getDeadline() != null) {
+            isLate = LocalDateTime.now().isAfter(assignment.getDeadline());
+        }
         submission.setLate(isLate);
 
         submissionRepository.save(submission);

@@ -39,6 +39,12 @@ public class Assignment {
 	    )
 	    @JsonManagedReference
 	    private java.util.List<AssignmentFile> files;
+	    
+	    @Transient
+	    private boolean submitted;
+
+	    @Transient
+	    private String status;
 
 	    public Assignment() {}
 
@@ -52,6 +58,12 @@ public class Assignment {
 	    public void setDescription(String description) { this.description = description; }
 	    public void setDeadline(LocalDateTime deadline) { this.deadline = deadline; }
 	    public void setCourse(Course course) { this.course = course; }
+	    
+	    public boolean isSubmitted() { return submitted; }
+	    public void setSubmitted(boolean submitted) { this.submitted = submitted; }
+
+	    public String getStatus() { return status; }
+	    public void setStatus(String status) { this.status = status; }
 	    
 	    public String getRequirements() {
 	        return requirements;
