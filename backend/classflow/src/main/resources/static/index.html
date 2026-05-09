@@ -22,13 +22,14 @@
       <div class="circle big"></div>
       <div class="circle small"></div>
     </div>
-  
+
     <div class="right">
       <h2>Sign In</h2>
-  
+
       <input id="email" name="email" type="text" placeholder="Email">
       <input id="password" name="password" type="password" placeholder="Password">
-  
+      <p id="errorMsg" style="color: red; font-size: 14px; margin-top: 6px; display: none;"></p>
+
       <button onclick="login()">Sign In</button>
   
       <p class="signup-text">
@@ -53,124 +54,105 @@
 
   <!-- Login -->
   <script>
-  function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
 
-    // ===== validation =====
-    if (
-  	!email.endsWith("@dome.tu.ac.th")   &&
-      email !== "chayananmariwan@gmail.com") {
-      alert("Use only @dome.tu.ac.th email");
-      return;
+    function showError(msg) {
+      const el = document.getElementById("errorMsg");
+      el.textContent = msg;
+      el.style.display = "block";
     }
 
-    if (!email || !password) {
-      alert("Please fill all fields");
-      return;
+    function clearError() {
+      const el = document.getElementById("errorMsg");
+      el.textContent = "";
+      el.style.display = "none";
     }
 
-    const authenticationData = {
-      Username: email,
-      Password: password,
-    };
+    function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-    const authenticationDetails =
-      new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+      clearError();
 
-    const userData = {
-      Username: email,
-      Pool: userPool,
-    };
+      if (!email || !password) {
+        showError("Please fill all fields");
+        return;
+      }
 
-    const cognitoUser =
-      new AmazonCognitoIdentity.CognitoUser(userData);
+      if (
+              !email.endsWith("@dome.tu.ac.th") &&
+              email !== "chayananmariwan@gmail.com"
+      ) {
+        showError("Use only @dome.tu.ac.th email");
+        return;
+      }
 
-    cognitoUser.authenticateUser(authenticationDetails, {
-  	onSuccess: function (result) {
+      const authenticationData = {
+        Username: email,
+        Password: password,
+      };
 
-  	  // ===== Tokens =====
+      const authenticationDetails =
+              new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
 
-  	  const idToken =
-  	    result.getIdToken().getJwtToken();
+      const userData = {
+        Username: email,
+        Pool: userPool,
+      };
 
-  	  const accessToken =
-  	    result.getAccessToken().getJwtToken();
+      const cognitoUser =
+              new AmazonCognitoIdentity.CognitoUser(userData);
 
-  	  const refreshToken =
-  	    result.getRefreshToken().getToken();
+      cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: function (result) {
 
-  	  // ===== Save =====
+          const idToken = result.getIdToken().getJwtToken();
+          const accessToken = result.getAccessToken().getJwtToken();
+          const refreshToken = result.getRefreshToken().getToken();
 
-  	  localStorage.setItem("idToken", idToken);
+          localStorage.setItem("idToken", idToken);
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          localStorage.setItem("username", email);
 
-  	  localStorage.setItem("accessToken", accessToken);
+          console.log("Login success");
 
-  	  localStorage.setItem("refreshToken", refreshToken);
 
-  	  localStorage.setItem("username", email);
+          const lowerEmail = email.toLowerCase();
 
-  	  console.log("Login success");
+          const payload = JSON.parse(atob(idToken.split(".")[1]));
 
-  	  alert("Login success!");
+          const userData = {
+            email: payload.email,
+            cognitoSub: payload.sub,
+            role:
+                    lowerEmail === "chayananmariwan@gmail.com" ||
+                    lowerEmail.endsWith("@tu.ac.th")
+                            ? "INSTRUCTOR"
+                            : "STUDENT"
+          };
 
-  	  const lowerEmail =
-  	    email.toLowerCase();
+          fetch("/api/auth/sync-user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData)
+          });
 
-  	  // ===== decode JWT =====
+          if (
+                  lowerEmail === "chayananmariwan@gmail.com" ||
+                  lowerEmail.endsWith("@tu.ac.th")
+          ) {
+            window.location.href = "/HTML/dashboard_instructor.html";
+          } else {
+            window.location.href = "/HTML/dashboard_student.html";
+          }
+        },
 
-  	  const payload =
-  	    JSON.parse(
-  	      atob(idToken.split(".")[1])
-  	    );
+        onFailure: function (err) {
+          showError(err.message || "Login failed");
+        }
+      });
+    }
 
-  	  // ===== sync =====
-
-  	  const userData = {
-
-  	    email: payload.email,
-
-  	    cognitoSub: payload.sub,
-
-  	    role:
-  	      lowerEmail === "chayananmariwan@gmail.com" ||
-  	      lowerEmail.endsWith("@tu.ac.th")
-  	        ? "INSTRUCTOR"
-  	        : "STUDENT"
-  	  };
-
-  	  fetch("/api/auth/sync-user", {
-
-  	    method: "POST",
-
-  	    headers: {
-  	      "Content-Type": "application/json"
-  	    },
-
-  	    body: JSON.stringify(userData)
-
-  	  });
-
-  	  if (
-  	    lowerEmail === "chayananmariwan@gmail.com" ||
-  	    lowerEmail.endsWith("@tu.ac.th")
-  	  ) {
-
-  	    window.location.href =
-  	      "/HTML/dashboard_instructor.html";
-
-  	  } else {
-
-  	    window.location.href =
-  	      "/HTML/dashboard_student.html";
-  	  }
-  	}
-
- });
-
-  	}
-
-</script>
-
+  </script>
 </body>
 </html>
