@@ -80,14 +80,14 @@ body {
 
 /* ปุ่มทั่วไป */
 .tab {
-  padding: 10px 22px;          /* 👈 ใหญ่ขึ้น */
+  padding: 10px 23px;          /* 👈 ใหญ่ขึ้น */
   border-radius: 25px;
-  margin-left: 10px;
+  margin-left: 8px;
   border: none;
   background: #e0e0e0;
   cursor: pointer;
   font-weight: 600;           /* 👈 หนาขึ้น */
-  font-size: 14px;
+  font-size: 15px;
   transition: 0.25s;          /* 👈 ลื่น */
 }
 
