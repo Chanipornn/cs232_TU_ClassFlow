@@ -33,6 +33,7 @@ import com.tu.classflow.model.AssignmentFile;
 import com.tu.classflow.model.Course;
 import com.tu.classflow.model.Enrollment;
 import com.tu.classflow.model.Notification;
+import com.tu.classflow.model.Submission;
 import com.tu.classflow.model.User;
 import com.tu.classflow.repository.AssignmentFileRepository;
 import com.tu.classflow.repository.AssignmentRepository;
@@ -41,7 +42,6 @@ import com.tu.classflow.repository.EnrollmentRepository;
 import com.tu.classflow.repository.NotificationRepository;
 import com.tu.classflow.repository.SubmissionRepository;
 import com.tu.classflow.repository.UserRepository;
-import com.tu.classflow.model.Submission;
 
 
 @RestController
@@ -388,7 +388,8 @@ public class AssignmentController {
             Notification notif = new Notification();
             notif.setUser(e.getStudent());
             notif.setMessage("มี assignment ใหม่: " + saved.getTitle());            
-            notif.setAssignmentId(saved.getId());          
+            notif.setRelatedId(saved.getId());
+            notif.setType("ASSIGNMENT");        
             notif.setIsRead(false);
             notificationRepository.save(notif);
         }

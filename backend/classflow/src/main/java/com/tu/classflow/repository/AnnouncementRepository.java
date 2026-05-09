@@ -8,4 +8,9 @@ import com.tu.classflow.model.Announcement;
 
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
     List<Announcement> findByInstructor_IdOrderByIdDesc(Long instructorId);
+
+    List<Announcement>
+        findByCourseCodeInOrderByIdDesc(
+            List<String> courseCodes
+        );
 }
