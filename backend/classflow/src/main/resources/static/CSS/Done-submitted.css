@@ -2,16 +2,19 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f3f3f3;
+  min-height: 100vh;
 }
 
 .main-container {
-    max-width: 900px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
     background: white;
-    border-radius: 30px;
+    border-radius: 0;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(111, 78, 78, 0.05);
     padding-bottom: 20px;
+    min-height: 100vh;
 }
 
 /* Header */

@@ -1,75 +1,78 @@
-async function fetchAssignmentDetails() {
+const API_BASE = "http://localhost:8080";
 
+async function loadPendingSubmission() {
     const urlParams = new URLSearchParams(window.location.search);
     const assignmentId = urlParams.get('id');
+    const studentCode = localStorage.getItem("studentId");
+    const token = localStorage.getItem("accessToken") || localStorage.getItem("idToken");
 
     if (!assignmentId) {
-        console.error("No Assignment ID found");
+        console.error("No assignment ID");
         return;
     }
 
-    const API_URL = `http://localhost:8080/api/assignments/${assignmentId}`;
+    const options = {
+        headers: { 'Authorization': `Bearer ${token}` }
+    };
 
     try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error("Fetch failed");
-        
-        const data = await response.json();
+        // 1. ดึงข้อมูลตัวงาน (Assignment)
+        const assignRes = await fetch(`${API_BASE}/assignments/${assignmentId}`, options);
+        if (!assignRes.ok) throw new Error("Failed to fetch assignment");
+        const assignment = await assignRes.json();
 
-        renderAssignmentPage(data);
+        // 2. ดึงข้อมูลการส่งงาน (Submission)
+        const subRes = await fetch(`${API_BASE}/submissions/assignment/${assignmentId}`, options);
+        let mySubmission = null;
+        if (subRes.ok) {
+            const submissions = await subRes.json();
+            // หาข้อมูลการส่งงานของตัวเองจาก studentCode
+            mySubmission = submissions.find(s => s.studentCode === studentCode);
+        }
+
+        renderPendingPage(assignment, mySubmission);
 
     } catch (error) {
         console.error("Error:", error);
-        // แสดงข้อความ Error กรณีหาข้อมูลไม่เจอ
-        document.body.innerHTML = `<h2 style="text-align:center; margin-top:50px;">Assignment Not Found</h2>`;
+        document.getElementById('assignment-detail-container').innerHTML = `<p style="color:red">Error loading data</p>`;
     }
 }
 
-// ฟังก์ชันสำหรับใส่ข้อมูลลงใน Element
-function renderAssignmentPage(data) {
-    // เปลี่ยนหัวข้อหน้าเว็บ
-    document.querySelector('.header-info h1').innerText = data.title;
-    
-    // ใส่ข้อมูลในกล่อง Description
-    const descriptionBox = document.querySelector('.submission-box.description-box');
-    descriptionBox.innerHTML = `
-        <div class="content-group">
-            <p><strong>Description</strong></p>
-            <p>${data.description}</p>
-        </div>
-        <div class="content-group">
-            <p><strong>Requirements</strong></p>
-            <ul>
-                ${data.requirements.map(req => `<li>${req}</li>`).join('')}
-            </ul>
-        </div>
-        <div class="content-group">
-            <p><strong>Due Date</strong></p>
-            <p>${data.dueDate}</p>
-        </div>
-        <div class="content-group">
-            <p><strong>Time remaining</strong></p>
-            <p>${data.timeRemaining}</p>
-        </div>
-        <button class="status-badge">${data.submissionStatus.toUpperCase()}</button>
+function renderPendingPage(assignment, submission) {
+    // 1. จัดการหัวข้อ
+    document.getElementById('assign-title').innerText = assignment.title || "Untitled Assignment";
+
+    // 2. จัดรูปแบบวันที่
+    const deadlineStr = assignment.deadline ? new Date(assignment.deadline).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : "No deadline";
+    const submitDateStr = submission && submission.submittedAt ? new Date(submission.submittedAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : "-";
+
+    // 3. แสดง Description และ Requirements
+    const detailContainer = document.getElementById('assignment-detail-container');
+    detailContainer.innerHTML = `
+        <p><strong>Description:</strong></p>
+        <p>${assignment.description || "-"}</p>
+        <br>
+        <p><strong>Requirements:</strong></p>
+        <p>${assignment.requirements || "-"}</p>
     `;
 
-    // ใส่ข้อมูลในตาราง Submission
-    document.getElementById('sub-status').innerText = data.submissionStatus;
-    document.getElementById('sub-due-date').innerText = data.fullDueDate;
-    document.getElementById('sub-grading').innerText = data.gradingStatus;
+    // 4. แสดงข้อมูลในตาราง Submission
+    document.getElementById('sub-status').innerText = "Submitted for grading";
+    document.getElementById('sub-due-date').innerText = deadlineStr;
+    document.getElementById('sub-grading').innerText = "Not graded"; // ยังไม่ตรวจ
     
-    if (data.submittedFile) {
-        document.getElementById('sub-file').innerHTML = `<a href="${data.fileUrl}" class="file-link">${data.submittedFile}</a>`;
+    // จัดการเรื่องไฟล์
+    if (submission && submission.fileUrl) {
+        document.getElementById('sub-file').innerHTML = `<a href="${submission.fileUrl}" target="_blank" class="file-link">${submission.fileName || "View File"}</a> <br><small style="color:gray;">(Submitted at: ${submitDateStr})</small>`;
+    } else {
+        document.getElementById('sub-file').innerText = "No file attached";
     }
 
-    // ปุ่ม Edit
-    const editBtn = document.querySelector('.edit-btn');
+    // 5. จัดการปุ่ม Edit (แนบ ID ไปด้วยเผื่อกดแก้ไข)
+    const editBtn = document.getElementById('edit-link');
     if (editBtn) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const assignmentId = urlParams.get('id');
-        editBtn.href = `edit_submission.html?id=${assignmentId}`;
+        editBtn.href = `edit_submission.html?id=${assignment.id}`;
     }
 }
 
-document.addEventListener('DOMContentLoaded', fetchAssignmentDetails);
+document.addEventListener('DOMContentLoaded', loadPendingSubmission);
