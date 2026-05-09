@@ -1,3 +1,6 @@
+const API_BASE = "http://localhost:8080";
+
+// ดึง Elements จาก HTML
 const fileInput = document.getElementById("fileInput");
 const fileNameEl = document.getElementById("fileName");
 const fileDateEl = document.getElementById("fileDate");
@@ -7,132 +10,105 @@ const deleteBtn = document.getElementById("deleteBtn");
 const submitBtn = document.getElementById("submitBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const fileBtn = document.getElementById("fileBtn");
-const linkBtn = document.getElementById("linkBtn");
-const driveBtn = document.getElementById("driveBtn");
-const dropboxBtn = document.getElementById("dropboxBtn");
 
-let selectedSubmission = null;
+// เก็บไฟล์ที่เลือกใหม่
+let selectedFile = null;
 
-function formatFileSize(bytes) {
-  if (!bytes) return "-";
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+// ดึง IDs จาก URL
+const urlParams = new URLSearchParams(window.location.search);
+const assignmentId = urlParams.get('id');
+const courseId = urlParams.get('courseId');
+
+// 1. โหลดข้อมูล Assignment เพื่อมาแสดงรายละเอียดบนหน้าเว็บ
+async function loadAssignmentInfo() {
+    try {
+        const response = await fetch(`${API_BASE}/assignments/${assignmentId}`);
+        const data = await response.json();
+        // อัปเดต UI รายละเอียดงาน (ถ้ามี ID ตรงกับ HTML)
+        if(document.querySelector(".assignment-card h1")) {
+            document.querySelector(".assignment-card h1").innerText = data.title;
+        }
+    } catch (error) {
+        console.error("Error loading assignment:", error);
+    }
 }
 
-function formatDate(timestamp) {
-  if (!timestamp) return "-";
-  return new Date(timestamp).toLocaleDateString();
-}
+// 2. จัดการเมื่อมีการเลือกไฟล์ใหม่
+fileBtn.addEventListener("click", () => fileInput.click());
 
-function renderSubmission(item) {
-  if (!item) {
+fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        selectedFile = file;
+        // แสดงข้อมูลไฟล์บนตาราง
+        fileNameEl.textContent = file.name;
+        fileDateEl.textContent = new Date().toLocaleDateString();
+        fileSizeEl.textContent = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+        fileTypeEl.textContent = file.type || "Unknown";
+        
+        // เปลี่ยน UI เป็นสถานะพร้อมส่ง
+        document.getElementById("fileRow").style.display = "flex";
+        document.getElementById("emptyState").style.display = "none";
+    }
+});
+
+// 3. ลบไฟล์ที่เลือก (ล้างค่าในหน้าจอ)
+deleteBtn.addEventListener("click", () => {
+    selectedFile = null;
+    fileInput.value = "";
     fileNameEl.textContent = "No file selected";
-    fileNameEl.removeAttribute("href");
-    fileNameEl.removeAttribute("target");
     fileDateEl.textContent = "-";
     fileSizeEl.textContent = "-";
     fileTypeEl.textContent = "-";
-    return;
-  }
-
-  if (item.kind === "link") {
-    fileNameEl.textContent = item.name;
-    fileNameEl.href = item.url;
-    fileNameEl.target = "_blank";
-  } else {
-    fileNameEl.textContent = item.name;
-    fileNameEl.href = "#";
-    fileNameEl.removeAttribute("target");
-  }
-
-  fileDateEl.textContent = formatDate(item.lastModified);
-  fileSizeEl.textContent = item.kind === "link" ? "-" : formatFileSize(item.size);
-  fileTypeEl.textContent = item.kind === "link" ? (item.source || "Link") : (item.type || "Unknown");
-}
-
-function saveSubmission(item) {
-  selectedSubmission = item;
-  localStorage.setItem("submittedAssignment", JSON.stringify(item));
-  renderSubmission(item);
-}
-
-function handleFile(file) {
-  if (!file) return;
-
-  const maxSize = 32 * 1024 * 1024;
-  if (file.size > maxSize) {
-    alert("ไฟล์ต้องมีขนาดไม่เกิน 32MB");
-    return;
-  }
-
-  saveSubmission({
-    kind: "file",
-    name: file.name,
-    size: file.size,
-    type: file.type || "Unknown",
-    lastModified: file.lastModified || Date.now()
-  });
-}
-
-function askForLink(sourceName) {
-  const url = prompt(`Paste ${sourceName} link`);
-  if (!url || !url.trim()) return;
-
-  const trimmed = url.trim();
-
-  try {
-    new URL(trimmed);
-  } catch (error) {
-    alert("ลิงก์ไม่ถูกต้อง");
-    return;
-  }
-
-  saveSubmission({
-    kind: "link",
-    source: sourceName,
-    url: trimmed,
-    name: trimmed,
-    size: 0,
-    type: "Link",
-    lastModified: Date.now()
-  });
-}
-
-const saved = localStorage.getItem("submittedAssignment");
-if (saved) {
-  try {
-    selectedSubmission = JSON.parse(saved);
-    renderSubmission(selectedSubmission);
-  } catch (error) {
-    renderSubmission(null);
-  }
-} else {
-  renderSubmission(null);
-}
-
-fileBtn.addEventListener("click", () => fileInput.click());
-
-fileInput.addEventListener("change", () => {
-  if (fileInput.files.length > 0) {
-    handleFile(fileInput.files[0]);
-  }
 });
 
-linkBtn.addEventListener("click", () => askForLink("Link"));
-driveBtn.addEventListener("click", () => askForLink("Google Drive"));
-dropboxBtn.addEventListener("click", () => askForLink("Dropbox"));
+// 4. บันทึกการเปลี่ยนแปลง (Save Changes) - ส่งไปยัง Backend
+submitBtn.addEventListener("click", async () => {
+    if (!selectedFile) {
+        alert("Please select a new file to upload");
+        return;
+    }
 
-deleteBtn.addEventListener("click", () => {
-  selectedSubmission = null;
-  localStorage.removeItem("submittedAssignment");
-  renderSubmission(null);
-});
+    const token = localStorage.getItem("accessToken") || localStorage.getItem("idToken");
+    const studentCode = localStorage.getItem("studentId");
+    const studentName = localStorage.getItem("fullName");
 
-submitBtn.addEventListener("click", () => {
-  window.location.href = "Submitted_before_deadline.html";
+    // เตรียม FormData เหมือนหน้า assignment_detail
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("assignmentId", assignmentId);
+    formData.append("studentCode", studentCode);
+    formData.append("studentName", studentName);
+
+    try {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Saving...";
+
+        const response = await fetch(`${API_BASE}/submissions/upload`, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData
+        });
+
+        if (!response.ok) throw new Error("Upload failed");
+
+        alert("Changes saved successfully!");
+        // เมื่อสำเร็จ ให้ไปที่หน้า Submitted_before_deadline พร้อมส่ง ID งานไปด้วย
+        window.location.href = `Submitted_before_deadline.html?id=${assignmentId}&courseId=${courseId}`;
+
+    } catch (error) {
+        console.error("Error saving changes:", error);
+        alert("Failed to save changes: " + error.message);
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Save changes";
+    }
 });
 
 cancelBtn.addEventListener("click", () => {
-  window.location.href = "assignment_detail.html";
+    window.history.back();
 });
+
+// เรียกทำงานเมื่อโหลดหน้า
+document.addEventListener("DOMContentLoaded", loadAssignmentInfo);

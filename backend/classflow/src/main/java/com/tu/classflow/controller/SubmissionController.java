@@ -131,59 +131,34 @@ public class SubmissionController {
     // นักศึกษาส่งงาน
     @PostMapping("/upload")
     public Map<String, String> uploadSubmission(
-
-            @RequestParam("file") 
-            MultipartFile file,
-
-            @RequestParam("assignmentId") 
-            Long assignmentId,
-      
-            @RequestParam("studentCode") 
-            String studentCode,
-
-            //@RequestParam("studentId")
-            //String studentId,
-
-            @RequestParam("studentName")
-            String studentName,
-
-            @RequestHeader("Authorization")
-            String authHeader
-
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("assignmentId") Long assignmentId,
+            @RequestParam("studentCode") String studentCode,
+            @RequestParam("studentName") String studentName,
+            @RequestHeader("Authorization") String authHeader
     ) throws IOException {
 
-        String token =
-                authHeader.replace("Bearer ", "");
+        String token = authHeader.replace("Bearer ", "");
+        DecodedJWT jwt = com.auth0.jwt.JWT.decode(token);
 
-        DecodedJWT jwt =
-                com.auth0.jwt.JWT.decode(token);
+        String fileUrl = s3Service.uploadFile(file);
 
-        String fileUrl =
-                s3Service.uploadFile(file);
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
 
-        Assignment assignment =
-                assignmentRepository
-                        .findById(assignmentId)
-                        .orElseThrow();
-
-        Submission submission =
-                new Submission();
+        List<Submission> existingSubmissions = submissionRepository.findByAssignment_Id(assignmentId);
+        Submission submission = existingSubmissions.stream()
+                .filter(s -> studentCode.equals(s.getStudentCode()))
+                .findFirst()
+                .orElse(new Submission()); // ถ้าไม่มีสร้างใหม่
 
         submission.setAssignment(assignment);
         submission.setStudentName(studentName);
         submission.setStudentCode(studentCode);
-
         submission.setFileUrl(fileUrl);
-
-        submission.setFileName(
-                file.getOriginalFilename()
-        );
-
+        submission.setFileName(file.getOriginalFilename()); // ชื่อไฟล์จะถูกเปลี่ยน
         submission.setStatus("SUBMITTED");
-
-        submission.setSubmittedAt(
-                LocalDateTime.now()
-        );
+        submission.setSubmittedAt(LocalDateTime.now());
 
         boolean isLate = false;
         if (assignment.getDeadline() != null) {
