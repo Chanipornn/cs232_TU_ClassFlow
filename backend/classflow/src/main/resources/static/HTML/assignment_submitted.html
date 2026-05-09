@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>Submitted</title>
   <link rel="stylesheet" href="../css/assignment.css">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body onload="fetchAssignments('submitted')">
@@ -12,12 +15,11 @@
   <div class="header-inner">
 
     <div class="top-bar">
-      
-		<div class="back-btn"
-		             onclick="window.location.href='../HTML/dashboard_student.html'">←
-		          <i class="fa-solid fa-arrow-left"></i>
-		        </div>
-	  
+
+      <div class="back-btn"
+           onclick="window.location.href='../HTML/dashboard_student.html'">
+        <i class="fa-solid fa-arrow-left"></i>
+      </div>
 
       <div class="tabs">
         <button class="tab" onclick="switchTab('assignment_all.html')">All</button>
@@ -27,7 +29,10 @@
 
       <div class="search-box">
         <input type="text" placeholder="Search..."
-          oninput="searchAssignment(this.value,'submitted')">
+               oninput="searchAssignment(this.value,'submitted')">
+        <button type="button" class="search-icon-btn" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
       </div>
     </div>
 
@@ -46,7 +51,7 @@
 
 <script src="../js/assignment.js"></script>
 <script>
-function goPage(page){ window.location.href = page; }
+  function goPage(page){ window.location.href = page; }
 </script>
 
 </body>
