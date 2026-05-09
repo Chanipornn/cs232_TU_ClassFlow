@@ -5,8 +5,6 @@ document.addEventListener(
 
 function loadProfile() {
 
-    // โหลดจาก localStorage ก่อน
-
     const profile =
         JSON.parse(
             localStorage.getItem("profile")
@@ -29,63 +27,78 @@ function loadProfile() {
 
     document.getElementById("profileName")
         .innerText =
-            profile.fullName || "Student";
+        profile.fullName || "Student";
 
     document.getElementById("profileRole")
         .innerText =
-            "Student";
+        "Student";
 }
 
 document.getElementById("saveBtn")
     .addEventListener(
         "click",
         saveProfile
-);
+    );
+
+function showError() {
+    clearError();
+
+    const fields = [
+        { id: "email",      label: "Email" },
+        { id: "studentId",  label: "Student ID" },
+        { id: "fullName",   label: "Full Name" },
+        { id: "faculty",    label: "Faculty" },
+        { id: "department", label: "Department" }
+    ];
+
+    let hasError = false;
+
+    fields.forEach(({ id, label }) => {
+        const input = document.getElementById(id);
+        if (!input.value.trim()) {
+            const el = document.createElement("p");
+            el.className = "field-error";
+            el.style.cssText = "color: red; font-size: 13px; margin: 4px 0 0 4px;";
+            el.textContent = `Please fill in ${label}`;
+            input.after(el);
+            hasError = true;
+        }
+    });
+
+    return hasError;
+}
+
+function clearError() {
+    document.querySelectorAll(".field-error").forEach(el => el.remove());
+}
 
 function saveProfile() {
 
-    const profile = {
+    if (showError()) return;
 
-        email:
-        document.getElementById("email").value,
+    const email =
+        document.getElementById("email").value.trim();
 
-        studentId:
-        document.getElementById("studentId").value,
+    const studentId =
+        document.getElementById("studentId").value.trim();
 
-        fullName:
-        document.getElementById("fullName").value,
+    const fullName =
+        document.getElementById("fullName").value.trim();
 
-        faculty:
-        document.getElementById("faculty").value,
+    const faculty =
+        document.getElementById("faculty").value.trim();
 
-        department:
-        document.getElementById("department").value
-    };
+    const department =
+        document.getElementById("department").value.trim();
 
-    // save localStorage
+    const profile = { email, studentId, fullName, faculty, department };
 
-    localStorage.setItem(
-        "profile",
-        JSON.stringify(profile)
-    );
-
-    localStorage.setItem(
-        "studentId",
-        profile.studentId
-    );
-
-    localStorage.setItem(
-        "fullName",
-        profile.fullName
-    );
-
-    // update name
+    localStorage.setItem("profile", JSON.stringify(profile));
+    localStorage.setItem("studentId", profile.studentId);
+    localStorage.setItem("fullName", profile.fullName);
 
     document.getElementById("profileName")
-        .innerText =
-        profile.fullName || "Student";
-
-    // popup
+        .innerText = profile.fullName || "Student";
 
     showSavePopup();
 }
@@ -143,8 +156,6 @@ document.getElementById("logoutBtn")
 
 function logout() {
 
-    // ลบเฉพาะ token login
-
     localStorage.removeItem("idToken");
 
     localStorage.removeItem("accessToken");
@@ -152,8 +163,6 @@ function logout() {
     localStorage.removeItem("refreshToken");
 
     localStorage.removeItem("username");
-
-    // กลับหน้า login
 
     window.location.href = "/index.html";
 }
