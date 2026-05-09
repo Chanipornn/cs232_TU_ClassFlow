@@ -69,12 +69,10 @@ async function loadCourseInfo() {
 	          opacity: 0.9;
 	        ">
 
-	          Instructor :
-	          ${course.instructorName ||
-	      course.instructor ||
-	      "Unknown Instructor"}
-
-	          &nbsp;&nbsp;|&nbsp;&nbsp;
+			Instructor :
+			${course.instructorName ||
+			  course.instructor?.email?.split("@")[0] ||
+			  "Unknown Instructor"}
 
 	          Section :
 	          ${course.section || "-"}
