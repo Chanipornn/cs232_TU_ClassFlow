@@ -234,3 +234,33 @@ body{
 
   font-size:15px;
 }
+
+#logoutBtn{
+
+  width:100%;
+
+  padding:16px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:transparent;
+
+  color:#e74c3c;
+
+  font-size:17px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:0.2s;
+
+  margin-top:15px;
+}
+
+#logoutBtn:hover{
+
+  background:rgba(231,76,60,0.08);
+}

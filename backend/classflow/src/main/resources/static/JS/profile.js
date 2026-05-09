@@ -134,3 +134,26 @@ function showSavePopup() {
 
     }, 1800);
 }
+
+document.getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        logout
+    );
+
+function logout() {
+
+    // ลบเฉพาะ token login
+
+    localStorage.removeItem("idToken");
+
+    localStorage.removeItem("accessToken");
+
+    localStorage.removeItem("refreshToken");
+
+    localStorage.removeItem("username");
+
+    // กลับหน้า login
+
+    window.location.href = "/index.html";
+}
