@@ -156,7 +156,29 @@ Amazon RDS และ Amazon Cognito
 
 ## นางสาวอชิรญา ขำปลอดภัย 
 
-หน้าที่:
-- 
+### หน้าที่รับผิดชอบ
+- พัฒนา Frontend ของระบบ
+- ออกแบบและพัฒนา User Interface ของเว็บไซต์ให้ตรงตามโครงสร้างที่กำหนด 
+- รองรับการใช้งานของผู้ใช้ทั้งฝั่ง Student และ Instructor
 
-หลักฐาน:
+### งานที่พัฒนา
+
+#### Frontend Development
+- พัฒนาหน้า Notification และการแสดงสถานะงาน ฝั่ง Student และ Instructor
+- พัฒนาหน้า สถานะการส่งงาน ฝั่ง Student
+- พัฒนาหน้า View all assignment
+- พัฒนาหน้า Add Assignment และ Assignment Detail
+
+### หลักฐานการทำงาน
+### ตัวอย่าง Commit
+- Create view all assignment instructor
+- Create Add_assignment instructor Assignment_detail_instructor
+- update view all assignment page and create late submitted page
+- Update Done-submitted Page UI + edit submitted_before.css
+- Update notification Page UI
+
+### ผลลัพธ์ที่ได้
+- ระบบ Frontend สามารถใช้งานได้ทั้งฝั่ง Student และ Instructor
+- ผู้ใช้งานสามารถดู Assignment, สถานะการส่งงาน และ Feedback ได้
+- ระบบสามารถแสดงสถานะการส่งงานและ Notification ได้
+- รองรับการเชื่อมต่อกับ Backend
