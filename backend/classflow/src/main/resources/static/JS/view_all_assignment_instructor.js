@@ -104,6 +104,111 @@ function renderTable(data) {
             ? submittedDate.toLocaleTimeString("th-TH")
             : "-";
 
+        // ===== STATUS =====
+
+        let checkedStatus = "";
+
+        if (item.grade != null) {
+
+            checkedStatus = `
+                <span class="status-checked">
+                    Checked (${item.grade}/${item.maxScore || 50})
+                </span>
+            `;
+
+        } else if (item.late) {
+
+            checkedStatus = `
+                <span class="status-late">
+                    Late
+                </span>
+            `;
+
+        } else {
+
+            checkedStatus = `
+                <span class="status-pending">
+                    Pending
+                </span>
+            `;
+        }
+
+        // ===== ROW =====
+
+        const row = `
+            <tr
+                onclick="openSubmission(${item.id})"
+                style="cursor:pointer;"
+            >
+
+                <td>${item.id}</td>
+
+                <td>
+                  ${item.studentCode || "-"}
+                </td>
+
+                <td>
+                    ${item.studentName || "-"}
+                </td>
+
+                <td>
+                    ${date}
+                </td>
+
+                <td>
+                    ${time}
+                </td>
+
+                <td>
+                    ${checkedStatus}
+                </td>
+
+                <td>
+                    <a href="${item.fileUrl}"
+                       target="_blank"
+                       onclick="event.stopPropagation()">
+
+                        ${item.fileName}
+
+                        <i class="fas fa-download icon-red"></i>
+                    </a>
+                </td>
+
+            </tr>
+        `;
+
+        tableBody.insertAdjacentHTML(
+            'beforeend',
+            row
+        );
+
+    });
+}
+/*
+function renderTable(data) {
+
+    const tableBody =
+        document.getElementById('submission-list');
+
+    tableBody.innerHTML = '';
+
+    data.forEach(item => {
+
+        const submittedDate =
+            item.submittedAt
+            ? new Date(item.submittedAt)
+            : null;
+
+        const date =
+            submittedDate
+            ? submittedDate.toLocaleDateString("th-TH")
+            : "-";
+
+        const time =
+            submittedDate
+            ? submittedDate.toLocaleTimeString("th-TH")
+            : "-";
+
         const row = `
             <tr
                 onclick="openSubmission(${item.id})"
@@ -149,7 +254,7 @@ function renderTable(data) {
 
     });
 }
-
+*/
 function openSubmission(submissionId) {
 
     window.location.href =

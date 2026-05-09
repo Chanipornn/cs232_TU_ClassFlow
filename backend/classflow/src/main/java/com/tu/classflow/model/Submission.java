@@ -13,16 +13,17 @@ public class Submission {
 	
 	private String fileName;
 	private boolean isLate;
+	
 	private Double grade;
 	private String gradedBy;
 
     private String fileUrl; // S3 link
-
     private String status; // SUBMITTED / PENDING
     
     private String studentName;
-    
     private String studentCode;
+
+    private Double maxScore;
 
     private LocalDateTime submittedAt;
 
@@ -34,8 +35,8 @@ public class Submission {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
     
-    @Column(length = 1000)
-	private String comment;
+    @Column(columnDefinition = "TEXT")
+    private String comment;
 
     public Submission() {}
 
@@ -106,6 +107,14 @@ public class Submission {
 
     public void setGradedBy(String gradedBy) {
         this.gradedBy = gradedBy;
+    }
+
+    public Double getMaxScore() {
+        return maxScore;
+    }
+
+    public void setMaxScore(Double maxScore) {
+        this.maxScore = maxScore;
     }
 
 }

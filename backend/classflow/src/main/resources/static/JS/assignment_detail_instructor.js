@@ -5,11 +5,28 @@ document.getElementById('editFeedback').addEventListener('click', function() {
     
     // ดึงค่าปัจจุบันมาเก็บไว้ (ดักกรณีถ้ามีตัวอักษรปนมาด้วย)
     const currentGrade = gradeTd.innerText.split('/')[0].trim();
+	const currentMaxScore =
+	    gradeTd.innerText
+	        .split('/')[1]
+	        ?.trim();
     const currentComment = commentTd.innerText.trim();
 
     // เปลี่ยนจาก Text เป็น Input/Textarea
-    gradeTd.innerHTML = `<input type="number" id="input-grade" value="${currentGrade}" class="form-control" style="width: 80px; display: inline-block;"> / 50.0`;
-    commentTd.innerHTML = `<textarea id="input-comment" class="form-control" rows="3" style="width: 100%;">${currentComment}</textarea>`;
+    //gradeTd.innerHTML = `<input type="number" id="input-grade" value="${currentGrade}" class="form-control" style="width: 80px; display: inline-block;"> / 50.0`;
+	gradeTd.innerHTML = `
+	    <input type="number"
+	           id="input-grade"
+	           value="${currentGrade}"
+	           style="width:80px;">
+
+	    /
+
+	    <input type="number"
+	           id="input-max-score"
+	           value="${currentMaxScore || 50}"
+	           style="width:80px;">
+	`;
+	commentTd.innerHTML = `<textarea id="input-comment" class="form-control" rows="3" style="width: 100%;">${currentComment}</textarea>`;
     
     // สลับปุ่ม
     document.getElementById('saveFeedback').style.display = 'block';
@@ -19,21 +36,51 @@ document.getElementById('editFeedback').addEventListener('click', function() {
 document.getElementById('saveFeedback').addEventListener('click', async function() {
     const saveBtn = this;
     const newGrade = document.getElementById('input-grade').value;
+	const newMaxScore =
+	    document.getElementById(
+	        "input-max-score"
+	    ).value;
     const newComment = document.getElementById('input-comment').value;
 
     // Validation เบื้องต้น
-    if (!newGrade || newGrade < 0 || newGrade > 50) {
-        alert("กรุณากรอกคะแนนให้ถูกต้อง (0-50)");
-        return;
-    }
+	if (
+	    newGrade === "" ||
+	    newMaxScore === "" ||
+	    newGrade < 0 ||
+	    newMaxScore <= 0 ||
+	    parseFloat(newGrade) > parseFloat(newMaxScore)
+	) {
 
+	    alert(
+	        "คะแนนต้องไม่ติดลบ และต้องไม่เกินคะแนนเต็ม"
+	    );
+
+	    return;
+	}
+	
+	const feedbackData = {
+
+	    grade:
+	        parseFloat(newGrade),
+
+	    maxScore:
+	        parseFloat(newMaxScore),
+
+	    comment:
+	        newComment,
+
+	    gradedBy:
+	        localStorage.getItem("instructorName")
+	        || "Instructor"
+	};
+/*
     const feedbackData = {
         grade: parseFloat(newGrade), // ส่งเป็นตัวเลข
         comment: newComment,
         gradedBy: "Instructor",
         updatedAt: new Date().toISOString() // เพิ่ม Timestamp ให้เพื่อนฝั่ง Java ด้วย
     };
-
+*/
     // เปลี่ยนสถานะปุ่มตอนกำลังบันทึก
     saveBtn.disabled = true;
     saveBtn.innerText = "Saving...";
@@ -67,8 +114,12 @@ const response = await fetch(
         alert('บันทึกและส่งคะแนนเรียบร้อยแล้ว!');
         
         // อัปเดตหน้าจอโดยไม่ต้อง Reload (เพื่อให้ดูสมูท)
-        document.getElementById('grade-val').innerText = `${newGrade} / 50.0`;
+        document.getElementById('grade-val').innerText = `${newGrade} / ${newMaxScore}`;
         document.getElementById('comment-val').innerText = newComment;
+		document.getElementById(
+		    'graded-by-val'
+		).innerText =
+		    feedbackData.gradedBy;
         
         // สลับปุ่มกลับ
         saveBtn.style.display = 'none';
@@ -241,7 +292,7 @@ async function loadSubmissionDetail() {
         // ===== FEEDBACK =====
         document.getElementById("grade-val")
             .innerText =
-                `${submission.grade || 0} / 50.0`;
+                `${submission.grade || 0} / ${submission.maxScore || 50}`;
 
         document.getElementById("comment-val")
             .innerText =

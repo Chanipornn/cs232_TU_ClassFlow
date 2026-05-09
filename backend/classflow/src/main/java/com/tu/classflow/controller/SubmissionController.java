@@ -16,6 +16,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import com.tu.classflow.model.*;
 import com.tu.classflow.repository.*;
+import com.tu.classflow.dto.FeedbackRequest;
 
 import com.tu.classflow.config.S3Service;
 
@@ -202,7 +203,7 @@ public class SubmissionController {
     @PostMapping("/feedback/{submissionId}")
     public Submission saveFeedback(
             @PathVariable Long submissionId,
-            @RequestBody Map<String, Object> body
+            @RequestBody FeedbackRequest request
     ) {
 
         Submission submission =
@@ -211,21 +212,27 @@ public class SubmissionController {
                         .orElseThrow();
 
         submission.setGrade(
-                Double.parseDouble(
-                        body.get("grade").toString()
-                )
+                request.getGrade()
+        );
+
+        submission.setMaxScore(
+                request.getMaxScore()
         );
 
         submission.setComment(
-                body.get("comment").toString()
+                request.getComment()
         );
 
         submission.setGradedBy(
-                body.get("gradedBy").toString()
+                request.getGradedBy()
         );
 
-        return submissionRepository.save(submission);
+        return submissionRepository.save(
+                submission
+        );
     }
+    
+    
     /*
     @PostMapping("/upload")
     public Map<String, String> uploadSubmission(
