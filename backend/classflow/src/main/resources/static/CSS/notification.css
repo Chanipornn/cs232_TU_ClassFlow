@@ -5,14 +5,13 @@ body {
 }
 
 .main-container {
-    max-width: 900px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 0px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(111, 78, 78, 0.05);
-    padding-bottom: 20px;
+    width: 100%;
     min-height: 100vh;
+
+    background: white;
+
+    overflow: hidden;
+
     display: flex;
     flex-direction: column;
 }

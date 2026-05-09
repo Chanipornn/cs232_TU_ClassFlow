@@ -12,8 +12,13 @@
   <div class="header-inner">
 
     <div class="top-bar">
-      <div class="back-btn" onclick="window.location.href='../HTML/dashboard_student.html'" style="cursor:pointer;">←</div>
+      <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+      <div class="back-btn"
+           onclick="window.location.href='../HTML/dashboard_student.html'">
+        <i class="fa-solid fa-arrow-left"></i>
+      </div>
       <div class="tabs">
         <button class="tab active" onclick="switchTab('assignment_all.html')">All</button>
         <button class="tab" onclick="switchTab('assignment_todo.html')">To do</button>

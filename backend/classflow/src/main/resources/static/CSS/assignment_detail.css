@@ -393,3 +393,13 @@
       padding: 14px 16px;
     }
   }
+
+.upload-box {
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.upload-box:hover {
+  border-color: #4f58a3;
+  background: #f7f7ff;
+}

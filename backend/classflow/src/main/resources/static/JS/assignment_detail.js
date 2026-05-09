@@ -86,14 +86,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // File upload handler
     const fileBtn = document.getElementById("fileBtn");
     const fileInput = document.getElementById("fileInput");
+    const uploadBox = document.getElementById("uploadBox");
+
     const submitBtn = document.getElementById("submitBtn");
     const cancelBtn = document.getElementById("cancelBtn");
     const fileName = document.getElementById("fileName");
-
     if (fileBtn) {
         fileBtn.addEventListener("click", () => {
             if (fileInput) fileInput.click();
         });
+    }
+
+    if (uploadBox) {
+
+        uploadBox.addEventListener("click", () => {
+
+            if (fileInput) {
+                fileInput.click();
+            }
+
+        });
+
     }
 
     if (fileInput) {

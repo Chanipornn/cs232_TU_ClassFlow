@@ -29,10 +29,15 @@ body{
 .profile-header{
   background:#5658b8;
   color:white;
-  padding:40px;
-  text-align:center;
-}
 
+  padding:40px;
+
+  text-align:center;
+
+  position:relative;
+
+  border-radius:25px 25px 0 0;
+}
 .profile-image{
   width:120px;
   height:120px;
@@ -99,4 +104,40 @@ body{
 
 #saveBtn:hover{
   opacity:0.9;
+}
+
+.back-btn {
+
+  position:absolute;
+
+  top:25px;
+  left:25px;
+
+  background: transparent;
+
+  border: 2px solid white;
+
+  color: white;
+
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255,255,255,0.1);
 }
