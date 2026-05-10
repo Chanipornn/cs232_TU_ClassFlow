@@ -77,11 +77,11 @@ public class EventBridgeService {
     }
 
 
-    public void sendDeadlineReminderEvent(String title, String courseCode, String deadline) {
+    public void sendDeadlineReminderEvent(String title, String courseCode, String deadline, String studentEmail) {
     try {
         String detail = String.format(
-            "{\"title\":\"%s\",\"courseCode\":\"%s\",\"deadline\":\"%s\"}",
-            title, courseCode, deadline
+            "{\"title\":\"%s\",\"courseCode\":\"%s\",\"deadline\":\"%s\",\"studentEmail\":\"%s\"}",
+            title, courseCode, deadline, studentEmail  // ✅ เพิ่ม studentEmail
         );
 
         PutEventsRequestEntry entry = PutEventsRequestEntry.builder()
@@ -96,6 +96,7 @@ public class EventBridgeService {
         );
 
         System.out.println("=== Deadline EventBridge result: failedCount=" + response.failedEntryCount());
+        System.out.println("=== Sent to: " + studentEmail);  // ✅ log ดู
 
     } catch (Exception e) {
         System.err.println("=== EventBridge ERROR: " + e.getMessage());

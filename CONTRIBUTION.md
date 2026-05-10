@@ -67,10 +67,33 @@ Amazon RDS และ Amazon Cognito
 ## นางสาวชนิภรณ์ คิมประเสริฐ
 
 หน้าที่:
-- 
+- พัฒนา Frontend ของระบบ
+- ออกแบบและพัฒนา User Interface ของเว็บไซต์ให้ตรงตามโครงสร้างที่กำหนด
+- ปรับปรุงแก้ไข UI ให้สอดคล้องกันทั้งเว็บฝั่ง student และ instructor
+
+### งานที่พัฒนา
+
+#### Frontend Development
+- พัฒนาหน้า Login และ Sign Up โดยเขียน JS เพื่อทำ mock data รอเชื่อมต่อกับ Amazon Cognito
+- พัฒนาหน้า Dashboard ฝั่ง Student และ Instructor
+- พัฒนาหน้า all_courses โดยเขียน JS เพื่อทำ mock data
+- พัฒนาฟังก์ชันสร้างวิชาสำหรับเว็บ instructor
+
+### ตัวอย่าง Commit
+- Update create courses
+- Edit css and Add js
+- Fix Layout for Student
+- Create Profile Page and Edit Header color
+- Update dashboard_instructor and integrate course, enrollment, and calendar functionality
+- Update validation Profile
+
+### ผลลัพธ์ที่ได้
+
 
 หลักฐาน:
-
+- ผู้ใช้สามารถกรอกข้อมูลสำหรับ Login และ Sign Up ได้
+- หน้า Dashboard แสดงข้อมูลและ UI ครบทั้งฝั่ง Student และ Instructor
+- สามารถกดสร้างวิชาและเลือกวิชาได้ (mock data)
 
 ---
 
@@ -88,46 +111,13 @@ Amazon RDS และ Amazon Cognito
 
 ## นางสาวพัทธนันท์ บรรทัด
 
-### หน้าที่รับผิดชอบ
-- พัฒนาระบบ Email Notification ผ่าน Amazon SNS และ EventBridge
-- ตั้งค่า EventBridge Rule และ Input Transformer
-- เชื่อมต่อระบบแจ้งเตือนใน Assignment และ Announcement
-
-### งานที่พัฒนา
-
-#### Backend Development (Instructor Side & Student Side)
 หน้าที่:
 - เชื่อม Amazon SNS
 - ตั้งค่า Amazon EventBridge
 - พัฒนาระบบ Deadline Notification
 - ทดสอบระบบ Email Notification
 
-#### Amazon Simple Notification Service
-
-- พัฒนาระบบ Email Notification แจ้งเตือนนักศึกษาผ่าน Amazon SNS
-- ตั้งค่า SNS Topic และ Subscription สำหรับนักศึกษาในแต่ละวิชา
-
-#### Amazon EventBridge 
-
-- เชื่อม Spring Boot กับ Amazon EventBridge เพื่อส่ง Event เมื่อมีการสร้าง Assignment และ Announcement
-- ตั้งค่า EventBridge Rule ให้ trigger SNS Topic อัตโนมัติ
-- จัดรูปแบบข้อความแจ้งเตือนด้วย Input Transformer
-
-
-### หลักฐานการทำงาน
-### ตัวอย่าง Commit
-- Update_Notification_View assignment detail& mask as done notification
-- Update_Announcement_Notification
-- Email Notification
-- Notification_Student_update
-- Update_Notification_View assignment detail& mask as done notification
-
-### ผลลัพธ์ที่ได้
-
-- ระบบสามารถส่ง Email แจ้งเตือนนักศึกษาอัตโนมัติเมื่ออาจารย์สร้าง Assignment และ Announcement
-- นักศึกษาได้รับ Email แจ้งเตือนพร้อมรายละเอียดชื่องาน รหัสวิชา และผู้มอบหมายงาน
-- ระบบบันทึก Notification ลงฐานข้อมูลควบคู่กับการส่ง Email ผ่าน SNS
-- EventBridge ทำหน้าที่เป็นตัวกลางเชื่อม Spring Boot กับ SNS ได้สำเร็จ
+หลักฐาน:
 
 
 ---
@@ -149,7 +139,7 @@ Amazon RDS และ Amazon Cognito
 หน้าที่:
 - 
 
-หลักฐาน:
+หลักฐาน: 
 
 
 ---

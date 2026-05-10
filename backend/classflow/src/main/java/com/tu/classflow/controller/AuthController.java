@@ -2,11 +2,14 @@ package com.tu.classflow.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.tu.classflow.model.User;
 import com.tu.classflow.repository.UserRepository;
+import com.tu.classflow.service.SesVerificationService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -14,6 +17,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SesVerificationService sesVerificationService;
     
     @PostMapping("/sync-user")
     public ResponseEntity<?> syncUser(
@@ -57,13 +63,27 @@ public class AuthController {
                 );
             }
 
+
+            if (user.getEmail() == null || 
+                !user.getEmail().endsWith("@dome.tu.ac.th")) {
+                return ResponseEntity.badRequest()
+                        .body("Email ต้องเป็น @dome.tu.ac.th เท่านั้น");
+            }
+
+
             // ยังไม่มี
             User savedUser =
                     userRepository.save(user);
 
+            sesVerificationService.sendVerificationEmail(savedUser.getEmail());
+            
+
             return ResponseEntity.ok(
                     savedUser
             );
+
+
+            
 
         } catch (Exception e) {
 

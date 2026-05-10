@@ -17,59 +17,55 @@ import com.tu.classflow.repository.NotificationRepository;
 @Service
 public class DeadlineNotificationService {
 
-    @Autowired
-    private AssignmentRepository assignmentRepository;
+    @Autowired private AssignmentRepository assignmentRepository;
+    @Autowired private EnrollmentRepository enrollmentRepository;
+    @Autowired private NotificationRepository notificationRepository;
+    @Autowired private EventBridgeService eventBridgeService;
 
-    @Autowired
-    private EnrollmentRepository enrollmentRepository;
+    @Scheduled(cron = "0 * * * * *") // every minute for testing
+    public void checkDeadlines() {
+        System.out.println("=== Checking deadlines...");
 
-    @Autowired
-    private NotificationRepository notificationRepository;
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tomorrow = now.plusDays(1);
 
-    @Autowired
-    private EventBridgeService eventBridgeService;
+        List<Assignment> assignments = assignmentRepository
+                .findByDeadlineBetween(now, tomorrow);
 
-    // รันทุกวันตอน 08:00 น.
-    @Scheduled(cron = "0 * * * * *")
-public void checkDeadlines() {
-    System.out.println("=== Checking deadlines...");
+        System.out.println("=== Found: " + assignments.size() + " assignments");
 
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime tomorrow = now.plusDays(1);
+        for (Assignment assignment : assignments) {
+            List<Enrollment> enrollments = enrollmentRepository
+                    .findByCourse_Id(assignment.getCourse().getId());
 
-    System.out.println("=== Now: " + now);
-    System.out.println("=== Tomorrow: " + tomorrow);
+            for (Enrollment e : enrollments) {
+                // 1. บันทึก Notification ใน DB
+                Notification notif = new Notification();
+                notif.setUser(e.getStudent());
+                notif.setTitle("⏰ ใกล้ถึง Deadline: " + assignment.getTitle());
+                notif.setMessage("งาน " + assignment.getTitle()
+                    + " ในวิชา " + assignment.getCourse().getCode()
+                    + " จะหมดเขตพรุ่งนี้!");
+                notif.setType("DEADLINE");
+                notif.setRelatedId(assignment.getId());
+                notif.setIsRead(false);
+                notif.setCreatedAt(LocalDateTime.now());
+                notificationRepository.save(notif);
 
-    List<Assignment> assignments = assignmentRepository
-            .findByDeadlineBetween(now, tomorrow);
+                // 2. ✅ ส่ง email เฉพาะ @dome ของนศแต่ละคน
+                String studentEmail = e.getStudent().getEmail();
+                if (studentEmail != null && studentEmail.endsWith("@dome.tu.ac.th")) {
+                    eventBridgeService.sendDeadlineReminderEvent(
+                        assignment.getTitle(),
+                        assignment.getCourse().getCode(),
+                        assignment.getDeadline().toString(),
+                        studentEmail  // ✅ ส่ง email นศ
+                    );
+                    System.out.println("=== Email sent to: " + studentEmail);
+                }
+            }
 
-    System.out.println("=== Found: " + assignments.size() + " assignments");
-
-    for (Assignment assignment : assignments) {
-        List<Enrollment> enrollments = enrollmentRepository
-                .findByCourse_Id(assignment.getCourse().getId());
-
-        for (Enrollment e : enrollments) {
-            Notification notif = new Notification();
-            notif.setUser(e.getStudent());
-            notif.setTitle("⏰ ใกล้ถึง Deadline: " + assignment.getTitle());
-            notif.setMessage("งาน " + assignment.getTitle()
-                + " ในวิชา " + assignment.getCourse().getCode()
-                + " จะหมดเขตพรุ่งนี้!");
-            notif.setType("DEADLINE");
-            notif.setRelatedId(assignment.getId());
-            notif.setIsRead(false);
-            notif.setCreatedAt(LocalDateTime.now());
-            notificationRepository.save(notif);
+            System.out.println("=== Deadline reminder sent for: " + assignment.getTitle());
         }
-
-        eventBridgeService.sendDeadlineReminderEvent(
-            assignment.getTitle(),
-            assignment.getCourse().getCode(),
-            assignment.getDeadline().toString()
-        );
-
-        System.out.println("=== Deadline reminder sent for: " + assignment.getTitle());
     }
-}
 }
