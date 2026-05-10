@@ -172,11 +172,34 @@ Amazon RDS และ Amazon Cognito
 
 ## นางสาวมณีรัตน์ อุ่นตาล
 
-หน้าที่:
-- 
+### หน้าที่รับผิดชอบ
+- พัฒนา Frontend ของระบบ
+- ออกแบบและพัฒนา User Interface ของเว็บไซต์ให้ตรงตามโครงสร้างที่กำหนด 
+- รองรับการใช้งานของผู้ใช้ทั้งฝั่ง Student และ Instructor
 
-หลักฐาน: 
+### งานที่พัฒนา
 
+#### Frontend Development
+- พัฒนาหน้า Assignment page (All, To do, Submitted) ฝั่ง Student และ Instructor
+- พัฒนาหน้า Assignment details
+- พัฒนาหน้า Edit submission
+- พัฒนาหน้า Setting assignments
+
+### หลักฐานการทำงาน
+### ตัวอย่าง Commit
+- Update Assignment page UI
+- added edit submission
+- added created assignment
+- removemockup and add filter
+- Update Assignment Detail page UI
+
+### ผลลัพธ์ที่ได้
+- ได้ระบบหน้า Assignment ที่รองรับการใช้งานทั้งฝั่ง Student และ Instructor โดยแบ่งสถานะงานเป็น All, To do และ Submitted อย่างชัดเจน
+- ผู้ใช้งานสามารถดูรายละเอียด Assignment ผ่านหน้า Assignment details ได้ครบถ้วน
+- สามารถแก้ไขและส่งงานผ่านหน้า Edit submission ได้สะดวกมากขึ้น
+- Instructor สามารถตั้งค่าและจัดการ Assignment ผ่านหน้า Setting assignments ได้
+- ระบบมีการเชื่อมโยงระหว่างหน้าและปุ่มการทำงานต่าง ๆ อย่างสมบูรณ์ พร้อมรองรับการใช้งานจริง
+- UI/UX ของระบบมีความเป็นระเบียบ ใช้งานง่าย และตอบสนองต่อผู้ใช้ได้ดีขึ้น
 
 ---
 
