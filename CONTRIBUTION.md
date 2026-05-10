@@ -117,7 +117,42 @@ Amazon RDS และ Amazon Cognito
 - พัฒนาระบบ Deadline Notification
 - ทดสอบระบบ Email Notification
 
-หลักฐาน:
+### งานที่พัฒนา
+
+#### Backend Development (Instructor Side & Student Side)
+- พัฒนาระบบ Notification สำหรับฝั่งอาจารย์และนักศึกษา
+- ออกแบบ Flow การแจ้งเตือน Assignment, Announcement และ Deadline
+- พัฒนาการบันทึก Notification ลงฐานข้อมูล
+- เชื่อมการทำงานระหว่าง Spring Boot, EventBridge และ SNS
+
+#### Amazon Simple Notification Service
+
+- พัฒนาระบบ Email Notification แจ้งเตือนนักศึกษาผ่าน Amazon SNS
+- ตั้งค่า SNS Topic และ Subscription สำหรับผู้ใช้งาน
+- พัฒนาระบบกระจาย Notification ไปยังผู้ใช้งานหลายคน
+- ทดสอบการส่ง Email Notification และตรวจสอบสถานะการส่ง
+
+#### Amazon EventBridge 
+
+- เชื่อม Spring Boot กับ Amazon EventBridge เพื่อส่ง Event เมื่อมีการสร้าง Assignment และ Announcement และ Deadline
+- ตั้งค่า EventBridge Rule ให้ Trigger SNS Topic อัตโนมัติ
+- พัฒนาระบบ Deadline Reminder ผ่าน Scheduled Rule
+- จัดรูปแบบข้อความแจ้งเตือนด้วย Input Transformer
+
+### หลักฐานการทำงาน
+### ตัวอย่าง Commit
+- Update_Notification_View assignment detail& mask as done notification
+- Update_Announcement_Notification
+- Email Notification
+- Notification_Student_update
+- Update_Notification_View assignment detail& mask as done notification
+
+### ผลลัพธ์ที่ได้
+- ระบบสามารถส่ง Email แจ้งเตือนนักศึกษาอัตโนมัติเมื่ออาจารย์สร้าง Assignment และ Announcement
+- นักศึกษาได้รับ Email แจ้งเตือนพร้อมรายละเอียดชื่องาน รหัสวิชา และผู้มอบหมายงาน
+- ระบบบันทึก Notification ลงฐานข้อมูลควบคู่กับการส่ง Email ผ่าน SNS
+- EventBridge ทำหน้าที่เป็นตัวกลางเชื่อม Spring Boot กับ SNS ได้สำเร็จ
+- ระบบ Notification สามารถทำงานร่วมกับ Backend ได้แบบ End-to-End
 
 
 ---
