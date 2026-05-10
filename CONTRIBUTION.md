@@ -128,8 +128,44 @@ Amazon RDS และ Amazon Cognito
 - เชื่อม Amazon S3
 - พัฒนาระบบ Upload File
 - ตั้งค่า S3 Bucket และ Permission
+- อัดและตัดต่อคลิปนำเสนอผลงานของกลุ่ม
 
-หลักฐาน:
+### งานที่พัฒนา
+
+#### Backend Development
+- สร้างและพัฒนาตารางที่เกี่ยวข้องกับระบบ เช่น Course, Enrollment, Assignment และ Notification
+- สร้าง Repository สำหรับเชื่อมต่อข้อมูลระหว่าง Spring Boot และฐานข้อมูล
+- สร้าง Controller สำหรับจัดการข้อมูล Assignment, Course และ Notification
+
+#### Amazon S3 Integration
+- เพิ่ม dependency และ config ที่เกี่ยวข้องกับ Amazon S3 ใน pom.xml และ application.properties
+- ตั้งค่า S3 Bucket สำหรับจัดเก็บไฟล์ submission ของนักศึกษา
+- กำหนดค่า AWS credentials, region และ bucket name ใน application.properties
+- เชื่อมต่อ Spring Boot Backend กับ Amazon S3 เพื่อให้ระบบสามารถอัปโหลดไฟล์ไปยัง bucket ได้
+- ตรวจสอบปัญหาเกี่ยวกับ permission และ credential เช่น access key, secret key และ session token
+
+#### Upload File System
+- ตรวจสอบว่าไฟล์ที่อัปโหลดถูกส่งไปยัง S3 Bucket ได้จริง
+- พัฒนาฟังก์ชันสำหรับให้นักศึกษาอัปโหลดไฟล์งานผ่านหน้าเว็บ
+- ทดสอบการส่งงานของนักศึกษา และตรวจสอบสถานะการส่งงานผ่านฐานข้อมูล
+
+### หลักฐานการทำงาน
+
+### ตัวอย่าง Commit
+
+- สร้าง controller assignment/course/notification
+- สร้าง SecurityConfig
+- เพิ่ม S3 ใน pom/application.properties
+- ลบ Config อันเก่าสุดเพราะมีอยู่แล้ว สร้าง S3Service/SubmissionController
+- แก้ S3Service ให้เชื่อมใน AWS ได้
+
+### ผลลัพธ์ที่ได้
+
+- ระบบ Backend มีตารางและ Repository ที่รองรับข้อมูล Course, Enrollment, Assignment และ Notification
+- ระบบสามารถเชื่อมต่อกับ Amazon S3 ผ่าน S3Service ได้
+- มี SubmissionController สำหรับจัดการการส่งงานและอัปโหลดไฟล์
+- สามารถอัปโหลดไฟล์งานไปยัง S3 Bucket ได้
+- ข้อมูลการส่งงานสามารถนำไปเช็กในฐานข้อมูลได้
 
 
 ---
